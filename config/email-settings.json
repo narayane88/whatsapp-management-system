@@ -1,0 +1,90 @@
+{
+  "provider": "gmail",
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
+    "auth": {
+      "user": "narayane88@gmail.com",
+      "pass": "mimfcignnwttvmfc"
+    }
+  },
+  "from": {
+    "name": "Bizflash Insight Solution",
+    "email": "noreply@Bizflash.in"
+  },
+  "events": {
+    "user_created": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    },
+    "user_activated": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    },
+    "user_deactivated": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    },
+    "whatsapp_connected": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "whatsapp_disconnected": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "package_purchased": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "package_expired": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "payment_successful": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer", "admin"]
+    },
+    "payment_failed": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer", "admin"]
+    },
+    "balance_low": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "commission_earned": {
+      "enabled": true,
+      "recipients": ["subdealer"]
+    },
+    "payout_processed": {
+      "enabled": true,
+      "recipients": ["subdealer", "admin"]
+    },
+    "message_quota_exceeded": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer"]
+    },
+    "account_suspended": {
+      "enabled": true,
+      "recipients": ["customer", "subdealer", "admin"]
+    },
+    "security_alert": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    },
+    "password_reset": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    },
+    "login_attempt": {
+      "enabled": false,
+      "recipients": ["admin"]
+    },
+    "system_maintenance": {
+      "enabled": true,
+      "recipients": ["admin", "subdealer", "customer", "employee"]
+    }
+  }
+}

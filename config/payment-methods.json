@@ -1,0 +1,22 @@
+[
+  {
+    "id": "razorpay",
+    "name": "Razorpay",
+    "provider": "razorpay",
+    "isActive": true,
+    "config": {
+      "keyId": "demo_key_id",
+      "keySecret": "demo_secret",
+      "webhookSecret": "demo_webhook_secret",
+      "isTestMode": true,
+      "mockMode": true
+    },
+    "fees": {
+      "percentage": 2,
+      "fixed": 0,
+      "currency": "INR"
+    },
+    "createdAt": "2025-08-13T10:00:03.911Z",
+    "updatedAt": "2025-08-13T10:00:03.911Z"
+  }
+]

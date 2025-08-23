@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1755834469662_vrpx57orf",
+  "packageId": "basic_plan_001",
+  "customerId": "1",
+  "customerEmail": "owner@demo.com",
+  "customerName": "System Owner",
+  "customerPhone": "",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-22T03:47:52.708Z",
+  "status": "pending"
+}

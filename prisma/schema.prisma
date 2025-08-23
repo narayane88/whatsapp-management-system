@@ -1,0 +1,847 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                                                              Int                    @id @default(autoincrement())
+  name                                                            String                 @db.VarChar(255)
+  email                                                           String                 @unique @db.VarChar(255)
+  password                                                        String                 @db.VarChar(255)
+  isActive                                                        Boolean?               @default(true)
+  parentId                                                        Int?
+  created_at                                                      DateTime?              @default(now()) @db.Timestamp(6)
+  updated_at                                                      DateTime?              @default(now()) @db.Timestamp(6)
+  last_login                                                      DateTime?              @db.Timestamp(6)
+  profile_image                                                   String?                @db.VarChar(500)
+  phone                                                           String?                @db.VarChar(20)
+  address                                                         String?
+  dealer_code                                                     String?                @unique @db.VarChar(20)
+  notes                                                           String?
+  dealer_type                                                     String?                @default("user") @db.VarChar(20)
+  dealer_commission                                               Decimal?               @default(0.00) @db.Decimal(5, 2)
+  dealer_territory                                                String?                @db.VarChar(100)
+  dealer_status                                                   String?                @default("active") @db.VarChar(20)
+  language                                                        String?                @default("en") @db.VarChar(10)
+  account_balance                                                 Decimal?               @default(0.00) @db.Decimal(10, 2)
+  message_balance                                                 Int?                   @default(0)
+  voucher_credits                                                 Decimal?               @default(0.00) @db.Decimal(10, 2)
+  last_voucher_redemption                                         DateTime?              @db.Timestamp(6)
+  mobile                                                          String?                @db.VarChar(20)
+  package_expiry_notification                                     Boolean?               @default(true)
+  customer_status                                                 String?                @default("active") @db.VarChar(20)
+  registration_source                                             String?                @db.VarChar(50)
+  last_package_purchase                                           DateTime?              @db.Timestamp(6)
+  biz_points                                                      Decimal?               @default(0.00) @db.Decimal(10, 2)
+  commission_rate                                                 Decimal?               @default(0.00) @db.Decimal(5, 2)
+  bizpoints_transactions_bizpoints_transactions_created_byTousers BizPointsTransaction[] @relation("bizpoints_transactions_created_byTousers")
+  bizpoints_transactions_bizpoints_transactions_user_idTousers    BizPointsTransaction[] @relation("bizpoints_transactions_user_idTousers")
+  createdSubscriptions                                            CustomerPackage[]      @relation("SubscriptionCreator")
+  dealer_customers_dealer_customers_assigned_byTousers            dealer_customers[]     @relation("dealer_customers_assigned_byTousers")
+  dealer_customers_dealer_customers_customer_idTousers            dealer_customers[]     @relation("dealer_customers_customer_idTousers")
+  dealer_customers_dealer_customers_dealer_idTousers              dealer_customers[]     @relation("dealer_customers_dealer_idTousers")
+  ip_restrictions_ip_restrictions_created_byTousers               ip_restrictions[]      @relation("ip_restrictions_created_byTousers")
+  ip_restrictions_ip_restrictions_user_idTousers                  ip_restrictions[]      @relation("ip_restrictions_user_idTousers")
+  permission_templates                                            permission_templates[]
+  servers                                                         servers[]
+  createdTransactions                                             Transaction[]          @relation("TransactionCreator")
+  user_audit_log                                                  user_audit_log[]
+  user_permissions_user_permissions_assigned_byTousers            user_permissions[]     @relation("user_permissions_assigned_byTousers")
+  user_permissions_user_permissions_user_idTousers                user_permissions[]     @relation("user_permissions_user_idTousers")
+  user_roles_user_roles_assigned_byTousers                        user_roles[]           @relation("user_roles_assigned_byTousers")
+  user_roles_user_roles_user_idTousers                            user_roles[]           @relation("user_roles_user_idTousers")
+  parent                                                          User?                  @relation("UserHierarchy", fields: [parentId], references: [id], onUpdate: NoAction)
+  children                                                        User[]                 @relation("UserHierarchy")
+
+  @@index([account_balance], map: "idx_users_account_balance")
+  @@index([isActive], map: "idx_users_active")
+  @@index([dealer_code], map: "idx_users_dealer_code")
+  @@index([email], map: "idx_users_email")
+  @@index([message_balance], map: "idx_users_message_balance")
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("sessions")
+}
+
+model WhatsAppInstance {
+  id          String          @id @default(cuid())
+  userId      String
+  serverId    String?
+  name        String
+  phoneNumber String?
+  status      InstanceStatus  @default(DISCONNECTED)
+  qrCode      String?
+  sessionData Json?
+  settings    Json?
+  lastSeenAt  DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  chats       Chat[]
+  queue       MessageQueue[]
+  messages    Message[]
+  server      WhatsAppServer? @relation(fields: [serverId], references: [id])
+
+  @@map("whatsapp_instances")
+}
+
+model Chat {
+  id               String           @id @default(cuid())
+  instanceId       String
+  chatId           String
+  name             String?
+  type             ChatType         @default(INDIVIDUAL)
+  participantCount Int?
+  isArchived       Boolean          @default(false)
+  isMuted          Boolean          @default(false)
+  lastMessageAt    DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  instance         WhatsAppInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  messages         Message[]
+
+  @@unique([instanceId, chatId])
+  @@map("chats")
+}
+
+model Message {
+  id          String           @id @default(cuid())
+  instanceId  String
+  chatId      String
+  messageId   String
+  fromUser    String
+  toUser      String?
+  content     String?
+  messageType MessageType      @default(TEXT)
+  status      MessageStatus    @default(PENDING)
+  isFromMe    Boolean          @default(false)
+  timestamp   DateTime         @default(now())
+  createdAt   DateTime         @default(now())
+  mediaFile   MediaFile?
+  chat        Chat             @relation(fields: [instanceId, chatId], references: [instanceId, chatId])
+  instance    WhatsAppInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@unique([instanceId, messageId])
+  @@map("messages")
+}
+
+model MediaFile {
+  id         String   @id @default(cuid())
+  messageId  String   @unique
+  fileName   String
+  filePath   String
+  fileType   String
+  fileSize   Int
+  mimeType   String?
+  thumbnail  String?
+  uploadedAt DateTime @default(now())
+  message    Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@map("media_files")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  resource  String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+model AutomationRule {
+  id         String   @id @default(cuid())
+  instanceId String?
+  name       String
+  trigger    Json
+  actions    Json
+  isActive   Boolean  @default(true)
+  priority   Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("automation_rules")
+}
+
+model Analytics {
+  id         String   @id @default(cuid())
+  instanceId String?
+  metric     String
+  value      Float
+  dimension  String?
+  timestamp  DateTime @default(now())
+
+  @@map("analytics")
+}
+
+model Package {
+  id                    String            @id @default(cuid())
+  name                  String
+  description           String?
+  price                 Float
+  duration              Int
+  messageLimit          Int
+  instanceLimit         Int
+  features              Json
+  isActive              Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  mobile_accounts_limit Int?              @default(1)
+  contact_limit         Int?              @default(1000)
+  api_key_limit         Int?              @default(1)
+  receive_msg_limit     Int?              @default(1000)
+  webhook_limit         Int?              @default(1)
+  footmark_enabled      Boolean?          @default(false)
+  footmark_text         String?           @default("Sent by bizflash.in") @db.VarChar(255)
+  package_color         String?           @default("blue") @db.VarChar(50)
+  offer_price           Decimal?          @db.Decimal(10, 2)
+  offer_enabled         Boolean?          @default(false)
+  customerPackages      CustomerPackage[]
+
+  @@index([isActive], map: "idx_packages_active")
+  @@map("packages")
+}
+
+model CustomerPackage {
+  id            String   @id @default(cuid())
+  userId        String
+  packageId     String
+  startDate     DateTime @default(now())
+  endDate       DateTime
+  isActive      Boolean  @default(true)
+  messagesUsed  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     Int?
+  paymentMethod String?  @default("CASH")
+  creator       User?    @relation("SubscriptionCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_packages_createdby_fkey")
+  package       Package  @relation(fields: [packageId], references: [id])
+
+  @@index([userId, isActive], map: "idx_customer_packages_user_active")
+  @@map("customer_packages")
+}
+
+model Voucher {
+  id                      Int       @id @default(autoincrement())
+  code                    String    @unique @db.VarChar(50)
+  description             String?
+  type                    String    @db.VarChar(20)
+  value                   Decimal   @db.Decimal(10, 2)
+  usage_limit             Int?
+  usage_count             Int?      @default(0)
+  is_active               Boolean?  @default(true)
+  expires_at              DateTime? @db.Timestamp(6)
+  created_by              String    @db.VarChar(255)
+  created_at              DateTime? @default(now()) @db.Timestamp(6)
+  updated_at              DateTime? @default(now()) @db.Timestamp(6)
+  package_id              String?   @db.VarChar(255)
+  min_purchase_amount     Decimal?  @db.Decimal(10, 2)
+  max_discount_amount     Decimal?  @db.Decimal(10, 2)
+  dealer_id               String?   @db.VarChar(255)
+  allow_dealer_redemption Boolean?  @default(false)
+
+  @@index([is_active], map: "idx_vouchers_active")
+  @@index([code], map: "idx_vouchers_code")
+  @@index([dealer_id], map: "idx_vouchers_dealer")
+  @@index([expires_at], map: "idx_vouchers_expires")
+  @@map("vouchers")
+}
+
+model Transaction {
+  id          String            @id @default(cuid())
+  userId      String
+  type        TransactionType
+  method      PaymentMethod
+  amount      Float
+  currency    String            @default("USD")
+  status      TransactionStatus @default(PENDING)
+  reference   String?
+  gatewayData Json?
+  description String?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  createdBy   Int?
+  creator     User?             @relation("TransactionCreator", fields: [createdBy], references: [id], onUpdate: NoAction, map: "fk_transactions_created_by")
+
+  @@map("transactions")
+}
+
+model BizPointsTransaction {
+  id                                             String        @id @default(cuid()) @db.VarChar
+  user_id                                        Int
+  created_by                                     Int?
+  type                                           BizPointsType
+  amount                                         Decimal       @db.Decimal(10, 2)
+  description                                    String?
+  reference                                      String?       @db.VarChar
+  metadata                                       Json?
+  created_at                                     DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at                                     DateTime?     @default(now()) @db.Timestamp(6)
+  balance                                        Decimal       @default(0.0) @db.Decimal(10, 2)
+  users_bizpoints_transactions_created_byTousers User?         @relation("bizpoints_transactions_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_bizpoints_transactions_user_idTousers    User          @relation("bizpoints_transactions_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("bizpoints_transactions")
+}
+
+model Payout {
+  id          String       @id @default(cuid())
+  userId      String
+  amount      Float
+  type        PayoutType   @default(CASH)
+  status      PayoutStatus @default(PENDING)
+  method      String?
+  reference   String?
+  processedBy String?
+  processedAt DateTime?
+  notes       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("payouts")
+}
+
+model ApiKey {
+  id               String    @id @default(cuid())
+  userId           String
+  name             String
+  key              String    @unique
+  permissions      Json
+  defaultPermissions Boolean   @default(false)
+  neverExpires     Boolean   @default(false)
+  isActive         Boolean   @default(true)
+  lastUsedAt       DateTime?
+  expiresAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  logs             ApiLog[]
+
+  @@index([userId], map: "idx_api_keys_user_id")
+  @@index([isActive], map: "idx_api_keys_active")
+  @@index([neverExpires], map: "idx_api_keys_never_expires")
+  @@map("api_keys")
+}
+
+model ApiLog {
+  id         String   @id @default(cuid())
+  apiKeyId   String
+  endpoint   String
+  method     String
+  request    Json?
+  response   Json?
+  statusCode Int
+  ip         String?
+  userAgent  String?
+  timestamp  DateTime @default(now())
+  apiKey     ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@map("api_logs")
+}
+
+model WhatsAppServer {
+  id             String             @id @default(cuid())
+  name           String
+  url            String
+  port           Int
+  maxDevices     Int                @default(10)
+  currentDevices Int                @default(0)
+  isActive       Boolean            @default(true)
+  status         String             @default("OFFLINE")
+  lastPing       DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  instances      WhatsAppInstance[]
+
+  @@map("whatsapp_servers")
+}
+
+model MessageQueue {
+  id          String           @id @default(cuid())
+  instanceId  String
+  toNumber    String
+  message     String
+  mediaUrl    String?
+  scheduled   DateTime?
+  priority    Int              @default(0)
+  status      QueueStatus      @default(PENDING)
+  attempts    Int              @default(0)
+  lastError   String?
+  processedAt DateTime?
+  metadata    Json?            @default("{}")
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  instance    WhatsAppInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@map("message_queue")
+}
+
+model ContactGroup {
+  id          String               @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  contacts    ContactGroupMember[]
+
+  @@map("contact_groups")
+}
+
+model ContactGroupMember {
+  id        String       @id @default(cuid())
+  groupId   String
+  contactId String
+  createdAt DateTime     @default(now())
+  contact   Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  group     ContactGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, contactId])
+  @@map("contact_group_members")
+}
+
+model Contact {
+  id           String               @id @default(cuid())
+  userId       String
+  phoneNumber  String
+  name         String?
+  email        String?
+  isBlocked    Boolean              @default(false)
+  isSubscribed Boolean              @default(true)
+  notes        String?
+  tags         String[]
+  metadata     Json?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  groups       ContactGroupMember[]
+
+  @@unique([userId, phoneNumber])
+  @@map("contacts")
+}
+
+model company_profile {
+  id               Int       @id @default(autoincrement())
+  company_name     String    @db.VarChar(255)
+  address          String?
+  city             String?   @db.VarChar(100)
+  state            String?   @db.VarChar(100)
+  country          String?   @db.VarChar(100)
+  postal_code      String?   @db.VarChar(20)
+  mobile_number    String?   @db.VarChar(20)
+  phone_number     String?   @db.VarChar(20)
+  email            String?   @db.VarChar(255)
+  website          String?   @db.VarChar(255)
+  gstin_number     String?   @db.VarChar(50)
+  pan_number       String?   @db.VarChar(20)
+  favicon_url      String?
+  light_logo_url   String?
+  dark_logo_url    String?
+  established_year Int?
+  business_type    String?   @db.VarChar(100)
+  description      String?
+  social_media     Json?
+  bank_details     Json?
+  is_active        Boolean?  @default(true)
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model dealer_customers {
+  id                                        Int       @id @default(autoincrement())
+  dealer_id                                 Int
+  customer_id                               Int
+  assigned_at                               DateTime? @default(now()) @db.Timestamp(6)
+  assigned_by                               Int?
+  commission_rate                           Decimal?  @default(0.00) @db.Decimal(5, 2)
+  territory                                 String?   @db.VarChar(100)
+  status                                    String?   @default("active") @db.VarChar(20)
+  notes                                     String?
+  users_dealer_customers_assigned_byTousers User?     @relation("dealer_customers_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_dealer_customers_customer_idTousers User      @relation("dealer_customers_customer_idTousers", fields: [customer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_dealer_customers_dealer_idTousers   User      @relation("dealer_customers_dealer_idTousers", fields: [dealer_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([dealer_id, customer_id])
+}
+
+model ip_restrictions {
+  id                                      Int                 @id @default(autoincrement())
+  role_id                                 Int?
+  user_id                                 Int?
+  ip_address                              Unsupported("cidr")
+  description                             String?
+  is_whitelist                            Boolean?            @default(true)
+  is_active                               Boolean?            @default(true)
+  created_by                              Int?
+  created_at                              DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at                              DateTime?           @default(now()) @db.Timestamp(6)
+  users_ip_restrictions_created_byTousers User?               @relation("ip_restrictions_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  roles                                   roles?              @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_ip_restrictions_user_idTousers    User?               @relation("ip_restrictions_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model permission_templates {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(100)
+  description String?
+  permissions Int[]
+  created_by  Int?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  is_system   Boolean?  @default(false)
+  users       User?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model permissions {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique @db.VarChar(100)
+  description      String?
+  category         String             @db.VarChar(50)
+  resource         String             @db.VarChar(50)
+  action           String             @db.VarChar(50)
+  is_system        Boolean?           @default(false)
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  role_permissions role_permissions[]
+  user_permissions user_permissions[]
+
+  @@index([category], map: "idx_permissions_category")
+  @@index([name], map: "idx_permissions_name")
+  @@index([resource, action], map: "idx_permissions_resource_action")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model role_permissions {
+  id            Int         @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+  granted       Boolean?    @default(true)
+  created_at    DateTime?   @default(now()) @db.Timestamp(6)
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  roles         roles       @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([role_id, permission_id])
+  @@index([role_id, permission_id], map: "idx_role_permissions_lookup")
+  @@index([permission_id], map: "idx_role_permissions_permission")
+  @@index([role_id], map: "idx_role_permissions_role")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model roles {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique @db.VarChar(100)
+  description      String?
+  is_system        Boolean?           @default(false)
+  level            Int?               @default(1)
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?          @default(now()) @db.Timestamp(6)
+  ip_restrictions  ip_restrictions[]
+  role_permissions role_permissions[]
+  user_roles       user_roles[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model security_events {
+  id         Int       @id @default(autoincrement())
+  event_type String    @db.VarChar(100)
+  user_email String?   @db.VarChar(255)
+  user_id    Int?
+  ip_address String?   @db.Inet
+  user_agent String?
+  severity   String?   @default("low") @db.VarChar(20)
+  details    String?
+  metadata   Json?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model sent_messages {
+  id              String    @id @db.VarChar(255)
+  userId          String    @db.VarChar(50)
+  recipientNumber String    @db.VarChar(50)
+  recipientName   String?   @db.VarChar(255)
+  message         String
+  messageType     String    @default("text") @db.VarChar(50)
+  deviceName      String    @db.VarChar(255)
+  status          String    @default("sent") @db.VarChar(50)
+  sentAt          DateTime  @default(now()) @db.Timestamptz(6)
+  deliveredAt     DateTime? @db.Timestamptz(6)
+  readAt          DateTime? @db.Timestamptz(6)
+  errorMessage    String?
+  messageId       String?   @db.VarChar(255)
+  queueMessageId  String?   @db.VarChar(255)
+  attachmentUrl   String?
+  metadata        Json?
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@index([deviceName], map: "idx_sent_messages_device_name")
+  @@index([recipientNumber], map: "idx_sent_messages_recipient")
+  @@index([sentAt], map: "idx_sent_messages_sent_at")
+  @@index([status], map: "idx_sent_messages_status")
+  @@index([userId], map: "idx_sent_messages_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model servers {
+  id                 Int       @id @default(autoincrement())
+  name               String    @unique @db.VarChar(255)
+  hostname           String    @db.VarChar(255)
+  ip_address         String    @db.Inet
+  port               Int       @default(3001)
+  status             String    @default("Offline") @db.VarChar(50)
+  environment        String    @default("Development") @db.VarChar(50)
+  location           String?   @db.VarChar(100)
+  capacity           Int       @default(100)
+  active_users       Int       @default(0)
+  messages_per_day   Int       @default(0)
+  uptime_percentage  Decimal   @default(0.0) @db.Decimal(5, 2)
+  last_heartbeat     DateTime? @default(now()) @db.Timestamptz(6)
+  version            String?   @default("1.0.0") @db.VarChar(20)
+  cpu_usage          Decimal   @default(0.0) @db.Decimal(5, 2)
+  memory_usage       Decimal   @default(0.0) @db.Decimal(5, 2)
+  storage_usage      Decimal   @default(0.0) @db.Decimal(5, 2)
+  network_usage      Decimal   @default(0.0) @db.Decimal(5, 2)
+  whatsapp_instances Int       @default(0)
+  created_by         Int?
+  created_at         DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime? @default(now()) @db.Timestamptz(6)
+  is_active          Boolean   @default(true)
+  users              User?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([is_active], map: "idx_servers_active")
+  @@index([environment], map: "idx_servers_environment")
+  @@index([last_heartbeat], map: "idx_servers_last_heartbeat")
+  @@index([location], map: "idx_servers_location")
+  @@index([status], map: "idx_servers_status")
+}
+
+model user_audit_log {
+  id           Int       @id @default(autoincrement())
+  user_id      Int?
+  action       String    @db.VarChar(100)
+  performed_by String    @db.VarChar(255)
+  details      Json?
+  ip_address   String?   @db.VarChar(45)
+  user_agent   String?
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  users        User?     @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+
+  @@index([action], map: "idx_audit_action")
+  @@index([created_at], map: "idx_audit_created_at")
+  @@index([performed_by], map: "idx_audit_performed_by")
+  @@index([user_id], map: "idx_audit_user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user_balance_history {
+  id                Int       @id @default(autoincrement())
+  user_id           String    @db.VarChar(255)
+  user_email        String    @db.VarChar(255)
+  transaction_type  String    @db.VarChar(50)
+  amount            Decimal?  @db.Decimal(10, 2)
+  message_count     Int?
+  previous_balance  Decimal?  @db.Decimal(10, 2)
+  new_balance       Decimal?  @db.Decimal(10, 2)
+  previous_messages Int?
+  new_messages      Int?
+  reference_type    String?   @db.VarChar(50)
+  reference_id      String?   @db.VarChar(255)
+  description       String?
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([created_at], map: "idx_user_balance_history_date")
+  @@index([transaction_type], map: "idx_user_balance_history_type")
+  @@index([user_id], map: "idx_user_balance_history_user")
+}
+
+model user_permissions {
+  id                                        Int         @id @default(autoincrement())
+  user_id                                   Int
+  permission_id                             Int
+  granted                                   Boolean?    @default(true)
+  reason                                    String?
+  assigned_by                               Int?
+  assigned_at                               DateTime?   @default(now()) @db.Timestamp(6)
+  expires_at                                DateTime?   @db.Timestamp(6)
+  users_user_permissions_assigned_byTousers User?       @relation("user_permissions_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  permissions                               permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_user_permissions_user_idTousers     User        @relation("user_permissions_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id, permission_id])
+  @@index([granted], map: "idx_user_permissions_granted")
+  @@index([permission_id], map: "idx_user_permissions_permission_id")
+  @@index([user_id], map: "idx_user_permissions_user_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user_roles {
+  id                                  Int       @id @default(autoincrement())
+  user_id                             Int
+  role_id                             Int
+  is_primary                          Boolean?  @default(false)
+  assigned_by                         Int?
+  assigned_at                         DateTime? @default(now()) @db.Timestamp(6)
+  expires_at                          DateTime? @db.Timestamp(6)
+  users_user_roles_assigned_byTousers User?     @relation("user_roles_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  roles                               roles     @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users_user_roles_user_idTousers     User      @relation("user_roles_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id, role_id])
+  @@index([user_id, role_id], map: "idx_user_roles_lookup")
+  @@index([role_id], map: "idx_user_roles_role")
+  @@index([user_id], map: "idx_user_roles_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model voucher_redemption_attempts {
+  id             Int       @id @default(autoincrement())
+  voucher_id     Int
+  user_id        String    @db.VarChar(255)
+  user_email     String    @db.VarChar(255)
+  attempt_status String    @db.VarChar(20)
+  failure_reason String?   @db.VarChar(255)
+  ip_address     String?   @db.Inet
+  user_agent     String?
+  attempted_at   DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([attempt_status], map: "idx_voucher_attempts_status")
+  @@index([user_id], map: "idx_voucher_attempts_user")
+}
+
+model voucher_usage {
+  id              Int       @id @default(autoincrement())
+  voucher_id      Int
+  user_id         String    @db.VarChar(255)
+  user_email      String    @db.VarChar(255)
+  used_at         DateTime? @default(now()) @db.Timestamp(6)
+  discount_amount Decimal?  @db.Decimal(10, 2)
+  original_amount Decimal?  @db.Decimal(10, 2)
+  final_amount    Decimal?  @db.Decimal(10, 2)
+  package_id      String?   @db.VarChar(255)
+  notes           String?
+  redemption_type String?   @default("manual") @db.VarChar(20)
+
+  @@unique([voucher_id, user_id], map: "unique_user_voucher_usage")
+  @@index([user_id], map: "idx_voucher_usage_user_id")
+  @@index([user_id, voucher_id], map: "idx_voucher_usage_user_voucher")
+  @@index([voucher_id], map: "idx_voucher_usage_voucher_id")
+}
+
+enum UserRole {
+  OWNER
+  SUBDEALER
+  EMPLOYEE
+  CUSTOMER
+}
+
+enum VoucherType {
+  CREDIT
+  PACKAGE
+  DISCOUNT
+}
+
+enum TransactionType {
+  RECHARGE
+  PURCHASE
+  REFUND
+  COMMISSION
+}
+
+enum PaymentMethod {
+  CASH
+  BANK
+  UPI
+  RAZORPAY
+  GATEWAY
+  WALLET
+  CREDIT
+  BIZPOINTS
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum PayoutType {
+  CASH
+  CREDIT
+  BANK_TRANSFER
+}
+
+enum PayoutStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
+enum QueueStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum InstanceStatus {
+  CONNECTED
+  DISCONNECTED
+  CONNECTING
+  ERROR
+  AUTHENTICATING
+}
+
+enum ChatType {
+  INDIVIDUAL
+  GROUP
+  BROADCAST
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  STICKER
+  LOCATION
+  CONTACT
+  POLL
+  REACTION
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum BizPointsType {
+  EARNED
+  PURCHASED
+  SPENT
+  ADMIN_GRANTED
+  COMMISSION_EARNED
+  ADMIN_CREDIT
+  ADMIN_DEBIT
+  SETTLEMENT_WITHDRAW
+  BONUS
+}

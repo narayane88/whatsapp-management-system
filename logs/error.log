@@ -1,0 +1,322 @@
+2025-08-23 19:48:20 +05:30: Failed to fetch data for server Wa-Server-1: TypeError: fetch failed
+    at async (.next/server/app/api/customer/host/servers/route.js:11:12844)
+    at async k (.next/server/app/api/customer/host/servers/route.js:11:13908)
+    at async k (.next/server/app/api/customer/host/servers/route.js:11:9465) {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:3110
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:3110) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 3110
+  }
+}
+2025-08-23 19:48:20 +05:30: Customer host connections GET error: ReferenceError: serverAccountId is not defined
+    at n (.next/server/app/api/customer/host/connections/route.js:23:239)
+    at async k (.next/server/app/api/customer/host/connections/route.js:1:3343)
+    at async g (.next/server/app/api/customer/host/connections/route.js:1:4346)
+    at async x (.next/server/app/api/customer/host/connections/route.js:1:5468)
+2025-08-23 19:48:35 +05:30: Customer host connections GET error: ReferenceError: serverAccountId is not defined
+    at n (.next/server/app/api/customer/host/connections/route.js:23:239)
+    at async k (.next/server/app/api/customer/host/connections/route.js:1:3343)
+    at async g (.next/server/app/api/customer/host/connections/route.js:1:4346)
+    at async x (.next/server/app/api/customer/host/connections/route.js:1:5468)
+2025-08-23 22:31:09 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:10 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:10 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:10 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:11 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:12 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:12 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:12 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 22:31:13 +05:30: API Key PUT Error: error: invalid input syntax for type json
+    at async m (.next/server/app/api/customer/api-keys/[keyId]/route.js:24:233)
+    at async k (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:4006)
+    at async g (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:5009)
+    at async x (.next/server/app/api/customer/api-keys/[keyId]/route.js:29:6131) {
+  length: 167,
+  severity: 'ERROR',
+  code: '22P02',
+  detail: 'Expected ":", but found ",".',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'JSON data, line 1: {"messages.send",...',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'json.c',
+  line: '1203',
+  routine: 'report_parse_error'
+}
+2025-08-23 23:10:33 +05:30: Check WhatsApp error: error: relation "whatsapp_connections" does not exist
+    at async j (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:9:695)
+    at async k (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:4483)
+    at async g (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:5486)
+    at async x (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:6608) {
+  length: 119,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '52',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1180',
+  routine: 'parserOpenTable'
+}
+2025-08-23 23:14:30 +05:30: Check WhatsApp error: error: relation "whatsapp_connections" does not exist
+    at async j (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:9:695)
+    at async k (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:4483)
+    at async g (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:5486)
+    at async x (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:6608) {
+  length: 119,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '52',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1180',
+  routine: 'parserOpenTable'
+}
+2025-08-23 23:16:15 +05:30: Check WhatsApp error: error: column wi.server_id does not exist
+    at async j (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:9:695)
+    at async k (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:4483)
+    at async g (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:5486)
+    at async x (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:6608) {
+  length: 169,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: 'Perhaps you meant to reference the column "wi.serverId".',
+  position: '103',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3337',
+  routine: 'errorMissingColumn'
+}
+2025-08-23 23:18:21 +05:30: Check WhatsApp error: error: column wi.server_id does not exist
+    at async j (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:9:695)
+    at async k (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:4483)
+    at async g (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:5486)
+    at async x (.next/server/app/api/v1/accounts/[id]/check-whatsapp/route.js:25:6608) {
+  length: 169,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: 'Perhaps you meant to reference the column "wi.serverId".',
+  position: '103',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3337',
+  routine: 'errorMissingColumn'
+}

@@ -1,0 +1,16 @@
+{
+  "provider": "gmail",
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
+    "auth": {
+      "user": "your-email@gmail.com",
+      "pass": "your-app-password"
+    }
+  },
+  "from": {
+    "name": "Your Company Name",
+    "email": "your-email@gmail.com"
+  }
+}

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baileys WhatsApp Server - Frontend</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #128c7e;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #25d366;
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #25d366;
+            outline: none;
+        }
+
+        button {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #128c7e;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .response {
+            background: #f8f9fa;
+            border-left: 4px solid #25d366;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .account-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .account-card.connected {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .account-card.connecting {
+            border-color: #ffc107;
+            background: #fff3cd;
+        }
+
+        .account-card.disconnected {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .qr-code img {
+            max-width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-connected { background: #28a745; color: white; }
+        .status-connecting { background: #ffc107; color: black; }
+        .status-disconnected { background: #dc3545; color: white; }
+
+        .message-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .message-type {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .message-type.active {
+            border-color: #25d366;
+            background: #f0f8ff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border: 2px solid #ddd;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #25d366;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Baileys WhatsApp Server</h1>
+            <p>Frontend Interface for Managing WhatsApp Accounts</p>
+            <div id="server-status"></div>
+        </div>
+
+        <!-- Server Health Section -->
+        <div class="section">
+            <h2>📊 Server Status</h2>
+            <button onclick="checkHealth()">Check Server Health</button>
+            <button onclick="getServerStats()">Get Server Statistics</button>
+            <div id="health-response" class="response hidden"></div>
+        </div>
+
+        <!-- Connect Account Section -->
+        <div class="section">
+            <h2>📱 Connect WhatsApp Account</h2>
+            <form onsubmit="connectAccount(event)">
+                <div class="form-group">
+                    <label for="account-id">Account ID (Optional):</label>
+                    <input type="text" id="account-id" placeholder="Leave empty for auto-generation">
+                </div>
+                <div class="form-group">
+                    <label for="phone-number">Phone Number (For Pairing Code):</label>
+                    <input type="text" id="phone-number" placeholder="+1234567890">
+                </div>
+                <div class="form-group">
+                    <label for="webhook-url">Webhook URL (Optional):</label>
+                    <input type="url" id="webhook-url" placeholder="https://your-app.com/webhook">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="use-pairing-code"> Use Pairing Code (instead of QR)
+                    </label>
+                </div>
+                <button type="submit">Connect Account</button>
+            </form>
+            <div id="connect-response" class="response hidden"></div>
+        </div>
+
+        <!-- Accounts List Section -->
+        <div class="section">
+            <h2>📋 Connected Accounts</h2>
+            <button onclick="loadAccounts()">Refresh Accounts</button>
+            <div id="accounts-container"></div>
+        </div>
+
+        <!-- Send Message Section -->
+        <div class="section">
+            <h2>💬 Send Message</h2>
+            <form onsubmit="sendMessage(event)">
+                <div class="form-group">
+                    <label for="sender-account">Select Account:</label>
+                    <select id="sender-account" required>
+                        <option value="">Select an account...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="recipient">Recipient (WhatsApp Number):</label>
+                    <input type="text" id="recipient" placeholder="1234567890@s.whatsapp.net" required>
+                    <small>Format: 1234567890@s.whatsapp.net (for individuals) or groupid@g.us (for groups)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Message Type:</label>
+                    <div class="message-types">
+                        <div class="message-type active" onclick="selectMessageType('text')">
+                            📝 Text
+                        </div>
+                        <div class="message-type" onclick="selectMessageType('image')">
+                            🖼️ Image
+                        </div>
+                        <div class="message-type" onclick="selectMessageType('video')">
+                            🎥 Video
+                        </div>
+                        <div class="message-type" onclick="selectMessageType('audio')">
+                            🔊 Audio
+                        </div>
+                        <div class="message-type" onclick="selectMessageType('document')">
+                            📄 Document
+                        </div>
+                        <div class="message-type" onclick="selectMessageType('location')">
+                            📍 Location
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Message Fields -->
+                <div id="text-fields" class="message-fields">
+                    <div class="form-group">
+                        <label for="message-text">Message:</label>
+                        <textarea id="message-text" rows="4" placeholder="Enter your message here..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Media Message Fields -->
+                <div id="media-fields" class="message-fields hidden">
+                    <div class="form-group">
+                        <label for="media-url">Media URL:</label>
+                        <input type="url" id="media-url" placeholder="https://example.com/media.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="media-caption">Caption (Optional):</label>
+                        <input type="text" id="media-caption" placeholder="Optional caption">
+                    </div>
+                </div>
+
+                <!-- Document Fields -->
+                <div id="document-fields" class="message-fields hidden">
+                    <div class="form-group">
+                        <label for="document-url">Document URL:</label>
+                        <input type="url" id="document-url" placeholder="https://example.com/document.pdf">
+                    </div>
+                    <div class="form-group">
+                        <label for="document-filename">Filename:</label>
+                        <input type="text" id="document-filename" placeholder="document.pdf">
+                    </div>
+                    <div class="form-group">
+                        <label for="document-caption">Caption (Optional):</label>
+                        <input type="text" id="document-caption" placeholder="Optional caption">
+                    </div>
+                </div>
+
+                <!-- Location Fields -->
+                <div id="location-fields" class="message-fields hidden">
+                    <div class="form-group">
+                        <label for="location-lat">Latitude:</label>
+                        <input type="number" id="location-lat" step="any" placeholder="37.7749">
+                    </div>
+                    <div class="form-group">
+                        <label for="location-lng">Longitude:</label>
+                        <input type="number" id="location-lng" step="any" placeholder="-122.4194">
+                    </div>
+                    <div class="form-group">
+                        <label for="location-name">Name (Optional):</label>
+                        <input type="text" id="location-name" placeholder="San Francisco">
+                    </div>
+                    <div class="form-group">
+                        <label for="location-address">Address (Optional):</label>
+                        <input type="text" id="location-address" placeholder="San Francisco, CA, USA">
+                    </div>
+                </div>
+
+                <button type="submit">Send Message</button>
+            </form>
+            <div id="message-response" class="response hidden"></div>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div class="section">
+            <h2>⚡ Quick Actions</h2>
+            <button onclick="disconnectAllAccounts()">Disconnect All Accounts</button>
+            <button onclick="exportAccountsData()">Export Accounts Data</button>
+            <button onclick="clearAllResponses()">Clear All Responses</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

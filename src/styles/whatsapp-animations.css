@@ -1,0 +1,244 @@
+/* WhatsApp Loading Animations */
+
+.whatsapp-pulse {
+  animation: whatsapp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.whatsapp-bounce {
+  animation: whatsapp-bounce 1s infinite;
+}
+
+@keyframes whatsapp-bounce {
+  0%, 20%, 53%, 80%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -30px, 0) scaleY(1.1);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0) scaleY(1.05);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0) scaleY(1.02);
+  }
+}
+
+.whatsapp-typing-dots {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.whatsapp-typing-dots div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #25d366;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.whatsapp-typing-dots div:nth-child(1) {
+  left: 8px;
+  animation: whatsapp-typing-1 0.6s infinite;
+}
+
+.whatsapp-typing-dots div:nth-child(2) {
+  left: 8px;
+  animation: whatsapp-typing-2 0.6s infinite;
+}
+
+.whatsapp-typing-dots div:nth-child(3) {
+  left: 32px;
+  animation: whatsapp-typing-2 0.6s infinite;
+}
+
+.whatsapp-typing-dots div:nth-child(4) {
+  left: 56px;
+  animation: whatsapp-typing-3 0.6s infinite;
+}
+
+@keyframes whatsapp-typing-1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes whatsapp-typing-3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes whatsapp-typing-2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+.whatsapp-message-bubble {
+  background: linear-gradient(135deg, #dcf8c6 0%, #d4edda 100%);
+  border-radius: 18px 18px 18px 4px;
+  padding: 8px 12px;
+  position: relative;
+  animation: whatsapp-bubble-appear 0.3s ease-out;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes whatsapp-bubble-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.whatsapp-connection-wave {
+  position: absolute;
+  border: 2px solid #25d366;
+  border-radius: 50%;
+  opacity: 0;
+  animation: whatsapp-wave 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes whatsapp-wave {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.whatsapp-check-animation {
+  animation: whatsapp-check-bounce 0.5s ease-in-out;
+}
+
+@keyframes whatsapp-check-bounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.whatsapp-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(37, 211, 102, 0.3);
+  border-radius: 50%;
+  border-top-color: #25d366;
+  animation: whatsapp-spin 1s ease-in-out infinite;
+}
+
+@keyframes whatsapp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .whatsapp-message-bubble {
+    background: linear-gradient(135deg, #056162 0%, #128c7e 100%);
+    color: white;
+  }
+  
+  .whatsapp-typing-dots div {
+    background: #128c7e;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .whatsapp-typing-dots {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .whatsapp-typing-dots div {
+    top: 25px;
+    width: 10px;
+    height: 10px;
+  }
+  
+  .whatsapp-typing-dots div:nth-child(1) {
+    left: 6px;
+  }
+  
+  .whatsapp-typing-dots div:nth-child(3) {
+    left: 26px;
+  }
+  
+  .whatsapp-typing-dots div:nth-child(4) {
+    left: 44px;
+  }
+  
+  @keyframes whatsapp-typing-2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(20px, 0);
+    }
+  }
+}
+
+/* Loading shimmer effect */
+.whatsapp-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: whatsapp-shimmer 1.5s infinite;
+}
+
+@keyframes whatsapp-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .whatsapp-shimmer {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+  }
+}

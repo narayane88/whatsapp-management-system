@@ -1,0 +1,1524 @@
+2025-08-23 19:23:36 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 19:23:36 +05:30:    - Local:        http://localhost:3100
+2025-08-23 19:23:36 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 19:23:36 +05:30: 
+2025-08-23 19:23:36 +05:30:  ✓ Starting...
+2025-08-23 19:23:36 +05:30:  ✓ Ready in 1104ms
+2025-08-23 19:23:59 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."offer_price", "public"."packages"."offer_enabled", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."package_color", "public"."packages"."features", "public"."packages"."createdAt" FROM "public"."packages" WHERE "public"."packages"."isActive" = $1 ORDER BY "public"."packages"."price" ASC OFFSET $2
+2025-08-23 19:23:59 +05:30: ✅ Database connection established
+2025-08-23 19:23:59 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:24:02 +05:30: ✅ Database connection established
+2025-08-23 19:24:02 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:24:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:24:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:24:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:24:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:24:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:24:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:24:33 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:24:33 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:24:33 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:24:33 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:25:04 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:25:04 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:25:04 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:25:04 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:25:35 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:25:35 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:25:35 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:25:35 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:26:06 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:26:06 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:26:06 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:26:06 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:26:37 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:26:37 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:26:37 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:26:37 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:27:08 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:27:08 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:27:08 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:27:08 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:27:39 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:27:39 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:27:39 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:27:39 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:28:10 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:28:10 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:28:10 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:28:10 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:28:41 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:28:41 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:28:41 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:28:41 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:29:12 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:29:12 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:29:12 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:29:12 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:29:43 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:29:43 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:29:43 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:29:43 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:30:14 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:30:14 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:30:14 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:30:14 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:30:45 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:30:45 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:30:45 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:30:45 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:31:16 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:31:16 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:31:16 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:31:16 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:31:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:31:47 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:31:47 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:31:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:32:18 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:32:18 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:32:18 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:32:18 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:32:49 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:32:49 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:32:49 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:32:49 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:33:20 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:33:20 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:33:20 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:33:20 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:33:51 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:33:51 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:33:51 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:33:51 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:34:22 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:34:22 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:34:22 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:34:22 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:34:53 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:34:53 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:34:53 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:34:54 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:35:24 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:35:24 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:35:24 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:35:24 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:35:55 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:35:55 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:35:55 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:35:55 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:36:26 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:36:26 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:36:26 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:36:26 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:36:57 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:36:57 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:36:57 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:36:57 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:37:28 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:37:28 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:37:28 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:37:28 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:37:59 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:37:59 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:37:59 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:37:59 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:38:30 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:38:30 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:38:30 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:38:30 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:39:02 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:39:02 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:39:02 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:39:02 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:39:32 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:39:32 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:39:32 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:39:32 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:40:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:40:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:40:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:40:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:40:34 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:40:34 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:40:34 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:40:34 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:41:05 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:41:05 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:41:05 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:41:05 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:41:36 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:41:36 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:41:36 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:41:36 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:42:07 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:42:07 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:42:07 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:42:07 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:42:38 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:42:38 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:42:38 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:42:38 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:43:09 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:43:09 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:43:09 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:43:09 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:43:40 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:43:40 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:43:40 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:43:40 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:44:11 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:44:11 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:44:11 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:44:11 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:44:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:44:42 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:44:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:44:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:45:13 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:45:13 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:45:13 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:45:13 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:45:44 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:45:44 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:45:44 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:45:44 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:01 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:46:01 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:46:01 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:46:02 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 19:46:03 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 19:46:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 19:46:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 19:46:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 19:46:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:12 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-23 19:46:12 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'owner@demo.com'
+2025-08-23 19:46:12 +05:30: ✅ Authenticated user: owner@demo.com
+2025-08-23 19:46:12 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-23 19:46:12 +05:30: 👤 Current user: { id: 1, level: 1, role: 'OWNER', accessType: 'filtered' }
+2025-08-23 19:46:12 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-23 19:46:12 +05:30: 👑 Level 1 (SUPER USER) - Full unrestricted access to all data
+2025-08-23 19:46:12 +05:30: 📊 Found 7 users
+2025-08-23 19:46:12 +05:30: 🔍 Fetching recent transactions...
+2025-08-23 19:46:12 +05:30: 👑 Level 1 (SUPER USER) - Full access to all transactions
+2025-08-23 19:46:12 +05:30: 📊 Found 5 transactions
+2025-08-23 19:46:12 +05:30: 🔍 Calculating summary statistics...
+2025-08-23 19:46:12 +05:30: 👑 Level 1 (SUPER USER) - Global summary statistics
+2025-08-23 19:46:12 +05:30: 📈 Summary calculated: {
+  total_biz_points: '42000.00',
+  users_with_points: '5',
+  total_transactions: '5',
+  total_commissions: '0',
+  total_settlements: '3000.00'
+}
+2025-08-23 19:46:12 +05:30: ✅ Returning data: { usersCount: 7, transactionsCount: 5, totalBizPoints: undefined }
+2025-08-23 19:46:12 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:12 +05:30: ✅ Database connection established
+2025-08-23 19:46:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:15 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:46:15 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:46:15 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:46:15 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:27 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:28 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:46:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:28 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:46:28 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:46:28 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:30 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-23 19:46:30 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:46:30 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-23 19:46:30 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 19:46:30 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 19:46:30 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-23 19:46:30 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-23 19:46:30 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:30 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:46:30 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 19:46:30 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 19:46:30 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:32 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 19:46:32 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:32 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 19:46:32 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 19:46:32 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 19:46:32 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 19:46:33 +05:30: ✅ Database connection established
+2025-08-23 19:46:33 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:33 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:35 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:35 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:35 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:35 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:46:35 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:46:35 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:46:35 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:43 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:43 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:53 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:46:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:53 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:46:53 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:46:53 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:46:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:03 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 19:47:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 19:47:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 19:47:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 19:47:03 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 19:47:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:47:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:47:15 +05:30: prisma:query SELECT 1
+2025-08-23 19:47:15 +05:30: prisma:query 
+      SELECT u.id, u.email, u.name, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:47:15 +05:30: prisma:query 
+      SELECT u.id, u.email, u.name, u."isActive", r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE u.id = $1 AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:47:15 +05:30: 🎭 IMPERSONATION START: Admin System Owner (owner@demo.com) started impersonating customer Suraj Pol (suraj@gmail.com) at 2025-08-23T14:17:15.422Z
+2025-08-23 19:47:16 +05:30: 🎭 Admin user accessing customer dashboard for customer ID: 7
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:32 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:33 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:33 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:47:33 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-23 19:48:01 +05:30: prisma:query SELECT 1
+2025-08-23 19:48:01 +05:30: prisma:query 
+      SELECT u.id, u.email, u.name
+      FROM users u
+      WHERE LOWER(u.email) = LOWER($1)
+      LIMIT 1
+    
+2025-08-23 19:48:01 +05:30: 🎭 IMPERSONATION END: Admin System Owner (owner@demo.com) ended impersonation session at 2025-08-23T14:18:01.669Z
+2025-08-23 19:48:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:48:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:48:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:48:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:48:15 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 19:48:15 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 19:48:15 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 19:48:15 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 19:48:15 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 19:48:15 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:15 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:16 +05:30: 🔐 NextAuth authorize called with email: customer@demo.com
+2025-08-23 19:48:16 +05:30: 🔍 Testing database connection...
+2025-08-23 19:48:16 +05:30: ✅ Database connection successful
+2025-08-23 19:48:16 +05:30: 🔍 Looking up user: customer@demo.com
+2025-08-23 19:48:16 +05:30: ✅ User found: { id: 5, email: 'customer@demo.com', role: 'CUSTOMER' }
+2025-08-23 19:48:16 +05:30: 🔍 Verifying password...
+2025-08-23 19:48:16 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:48:16 +05:30: ✅ Authentication successful for: customer@demo.com Role: CUSTOMER
+2025-08-23 19:48:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:22 +05:30: ✅ Permission granted: 'packages.read' for user 'owner@demo.com'
+2025-08-23 19:48:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:31 +05:30: ✅ Permission granted: 'vouchers.read' for user 'owner@demo.com'
+2025-08-23 19:48:31 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:31 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:38 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-23 19:48:38 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'owner@demo.com'
+2025-08-23 19:48:38 +05:30: ✅ Authenticated user: owner@demo.com
+2025-08-23 19:48:38 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-23 19:48:38 +05:30: 👤 Current user: { id: 1, level: 1, role: 'OWNER', accessType: 'filtered' }
+2025-08-23 19:48:38 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-23 19:48:38 +05:30: 👑 Level 1 (SUPER USER) - Full unrestricted access to all data
+2025-08-23 19:48:38 +05:30: 📊 Found 7 users
+2025-08-23 19:48:38 +05:30: 🔍 Fetching recent transactions...
+2025-08-23 19:48:38 +05:30: 👑 Level 1 (SUPER USER) - Full access to all transactions
+2025-08-23 19:48:38 +05:30: 📊 Found 5 transactions
+2025-08-23 19:48:38 +05:30: 🔍 Calculating summary statistics...
+2025-08-23 19:48:38 +05:30: 👑 Level 1 (SUPER USER) - Global summary statistics
+2025-08-23 19:48:38 +05:30: 📈 Summary calculated: {
+  total_biz_points: '42000.00',
+  users_with_points: '5',
+  total_transactions: '5',
+  total_commissions: '0',
+  total_settlements: '3000.00'
+}
+2025-08-23 19:48:38 +05:30: ✅ Returning data: { usersCount: 7, transactionsCount: 5, totalBizPoints: undefined }
+2025-08-23 19:48:38 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:38 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:48:52 +05:30: 🔐 NextAuth authorize called with email: admin@demo.com
+2025-08-23 19:48:52 +05:30: 🔍 Testing database connection...
+2025-08-23 19:48:52 +05:30: ✅ Database connection successful
+2025-08-23 19:48:52 +05:30: 🔍 Looking up user: admin@demo.com
+2025-08-23 19:48:52 +05:30: ✅ User found: { id: 2, email: 'admin@demo.com', role: 'ADMIN' }
+2025-08-23 19:48:52 +05:30: 🔍 Verifying password...
+2025-08-23 19:48:52 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:48:52 +05:30: ✅ Authentication successful for: admin@demo.com Role: ADMIN
+2025-08-23 19:48:52 +05:30: ❌ Permission denied: 'company.profile.read' for user 'admin@demo.com' (Level 2 - ADMIN)
+2025-08-23 19:48:52 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: admin@demo.com
+2025-08-23 19:48:52 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 19:48:59 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-23 19:48:59 +05:30: prisma:query SELECT 1
+2025-08-23 19:48:59 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-23 19:48:59 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-23 19:48:59 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-23 19:48:59 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:48:59 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 19:48:59 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 19:48:59 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 19:48:59 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 19:48:59 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 19:49:00 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:00 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:08 +05:30: 🔐 NextAuth authorize called with email: subdealer@demo.com
+2025-08-23 19:49:08 +05:30: 🔍 Testing database connection...
+2025-08-23 19:49:08 +05:30: ✅ Database connection successful
+2025-08-23 19:49:08 +05:30: 🔍 Looking up user: subdealer@demo.com
+2025-08-23 19:49:08 +05:30: ✅ User found: { id: 3, email: 'subdealer@demo.com', role: 'SUBDEALER' }
+2025-08-23 19:49:08 +05:30: 🔍 Verifying password...
+2025-08-23 19:49:08 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:49:08 +05:30: ✅ Authentication successful for: subdealer@demo.com Role: SUBDEALER
+2025-08-23 19:49:08 +05:30: ❌ Permission denied: 'company.profile.read' for user 'subdealer@demo.com' (Level 3 - SUBDEALER)
+2025-08-23 19:49:08 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: subdealer@demo.com
+2025-08-23 19:49:08 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 19:49:12 +05:30: 🔐 NextAuth authorize called with email: employee@demo.com
+2025-08-23 19:49:12 +05:30: 🔍 Testing database connection...
+2025-08-23 19:49:12 +05:30: ✅ Database connection successful
+2025-08-23 19:49:12 +05:30: 🔍 Looking up user: employee@demo.com
+2025-08-23 19:49:12 +05:30: ✅ User found: { id: 4, email: 'employee@demo.com', role: 'EMPLOYEE' }
+2025-08-23 19:49:12 +05:30: 🔍 Verifying password...
+2025-08-23 19:49:12 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:49:12 +05:30: ✅ Authentication successful for: employee@demo.com Role: EMPLOYEE
+2025-08-23 19:49:12 +05:30: ❌ Permission denied: 'company.profile.read' for user 'employee@demo.com' (Level 4 - EMPLOYEE)
+2025-08-23 19:49:12 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: employee@demo.com
+2025-08-23 19:49:12 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 19:49:18 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-23 19:49:18 +05:30: 🔍 Testing database connection...
+2025-08-23 19:49:18 +05:30: ✅ Database connection successful
+2025-08-23 19:49:18 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-23 19:49:18 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-23 19:49:18 +05:30: 🔍 Verifying password...
+2025-08-23 19:49:19 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:49:19 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:49:19 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:49:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:49:19 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:49:49 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:49:49 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:49:49 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:49:49 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:50:20 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:50:20 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:50:20 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:50:20 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:50:51 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:50:51 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:50:51 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:50:51 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:50:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:50:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:50:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:51:06 +05:30: prisma:query SELECT 1
+2025-08-23 19:51:06 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."offer_price", "public"."packages"."offer_enabled", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."package_color", "public"."packages"."features", "public"."packages"."createdAt" FROM "public"."packages" WHERE "public"."packages"."isActive" = $1 ORDER BY "public"."packages"."price" ASC OFFSET $2
+2025-08-23 19:51:06 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:51:08 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:51:08 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:51:08 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:51:08 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:51:08 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:51:08 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:51:08 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:51:22 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:51:22 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:51:22 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:51:22 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:51:53 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:51:53 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:51:53 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:51:53 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:52:24 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:52:24 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:52:24 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:52:24 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:52:55 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:52:55 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:52:55 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:52:55 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:53:26 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:53:26 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:53:26 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:53:26 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:53:57 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:53:57 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:53:57 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:53:57 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:54:13 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-23 19:54:13 +05:30: 🔍 Testing database connection...
+2025-08-23 19:54:13 +05:30: ✅ Database connection successful
+2025-08-23 19:54:13 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-23 19:54:13 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-23 19:54:13 +05:30: 🔍 Verifying password...
+2025-08-23 19:54:13 +05:30: ✅ Password verified, updating last login...
+2025-08-23 19:54:13 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-23 19:54:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:54:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:54:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:54:13 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:54:14 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:54:14 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:54:14 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:54:22 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 19:54:22 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 19:54:22 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 19:54:22 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 19:54:22 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 19:54:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:54:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 19:54:28 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:54:28 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:54:28 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:54:28 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:54:59 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:54:59 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:54:59 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:54:59 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:55:30 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:55:30 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:55:30 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:55:30 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:56:01 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:56:01 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:56:01 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:56:02 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:56:32 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:56:32 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:56:32 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:56:32 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:57:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:57:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:57:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:57:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:57:34 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:57:34 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:57:34 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:57:34 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:58:05 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:58:05 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:58:05 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:58:05 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:58:36 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:58:36 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:58:36 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:58:36 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:59:07 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:59:07 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:59:07 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:59:07 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 19:59:38 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 19:59:38 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 19:59:38 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 19:59:38 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:00:09 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:00:09 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:00:09 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:00:09 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:00:40 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:00:40 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:00:40 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:00:40 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:01:11 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:01:11 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:01:11 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:01:11 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:01:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:01:42 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:01:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:01:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:02:13 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:02:13 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:02:13 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:02:13 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:02:44 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:02:44 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:02:44 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:02:44 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:03:15 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:03:15 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:03:15 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:03:15 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:03:46 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:03:46 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:03:46 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:03:46 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:04:17 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:04:17 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:04:17 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:04:17 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:04:48 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:04:48 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:04:48 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:04:48 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:05:19 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:05:19 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:05:19 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:05:19 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:05:50 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:05:50 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:05:50 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:05:50 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:06:21 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:06:21 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:06:21 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:06:21 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:06:52 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:06:52 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:06:52 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:06:52 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:07:23 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:07:23 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:07:23 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:07:23 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:07:54 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:07:54 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:07:54 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:07:54 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:08:25 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:08:25 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:08:25 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:08:25 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:08:56 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:08:56 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:08:56 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:08:56 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:09:27 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:09:27 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:09:27 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:09:27 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:09:58 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:09:58 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:09:58 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:09:58 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:10:29 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:10:29 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:10:29 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:10:29 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:11:00 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:11:00 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:11:00 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:11:00 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:11:31 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:11:31 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:11:31 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:11:31 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:12:02 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:12:02 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:12:02 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:12:02 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:12:33 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:12:33 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:12:33 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:12:33 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:13:04 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:13:04 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:13:04 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:13:04 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:13:35 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:13:35 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:13:35 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:13:35 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:14:06 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:14:06 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:14:06 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:14:06 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:14:37 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:14:37 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:14:37 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:14:37 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:15:08 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:15:08 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:15:08 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:15:08 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:15:39 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:15:39 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:15:39 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:15:39 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:16:10 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:16:10 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:16:10 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:16:10 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:16:41 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:16:41 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:16:41 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:16:41 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:17:12 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:17:12 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:17:12 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:17:12 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:17:43 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:17:43 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:17:43 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:17:43 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:18:14 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:18:14 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:18:14 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:18:14 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:18:45 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:18:45 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:18:45 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:18:45 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:19:16 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:19:16 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:19:16 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:19:16 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:19:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:19:47 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:19:47 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:19:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:20:18 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:20:18 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:20:18 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:20:18 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:20:49 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:20:49 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:20:49 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:20:49 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:21:20 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:21:20 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:21:20 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:21:20 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:21:51 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:21:51 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:21:51 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:21:51 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:22:22 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:22:22 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:22:22 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:22:22 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:22:53 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:22:53 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:22:53 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:22:53 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:23:24 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:23:24 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:23:24 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:23:24 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:23:55 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:23:55 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:23:55 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:23:56 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:24:26 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:24:26 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:24:26 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:24:26 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:24:57 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:24:57 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:24:57 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:24:57 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:25:28 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:25:28 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:25:28 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:25:28 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:25:59 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:25:59 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:25:59 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:25:59 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:26:30 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:26:30 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:26:30 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:26:30 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:27:01 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:27:01 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:27:01 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:27:02 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:27:32 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:27:32 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:27:32 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:27:32 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:28:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:28:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:28:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:28:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:28:34 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:28:34 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:28:34 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:28:34 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:29:05 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:29:05 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:29:05 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:29:05 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:29:36 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:29:36 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:29:36 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:29:36 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:30:09 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:30:09 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:30:09 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:30:09 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:30:40 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:30:40 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:30:40 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:30:40 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:31:11 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:31:11 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:31:11 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:31:11 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:31:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:31:42 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:31:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:31:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:32:13 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:32:13 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:32:13 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:32:13 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:42:42 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 20:42:42 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 20:42:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:42:42 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 20:42:42 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 20:42:42 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 20:42:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:42:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:00 +05:30: 🔐 NextAuth authorize called with email: customer@demo.com
+2025-08-23 20:46:00 +05:30: 🔍 Testing database connection...
+2025-08-23 20:46:00 +05:30: ✅ Database connection successful
+2025-08-23 20:46:00 +05:30: 🔍 Looking up user: customer@demo.com
+2025-08-23 20:46:00 +05:30: ✅ User found: { id: 5, email: 'customer@demo.com', role: 'CUSTOMER' }
+2025-08-23 20:46:00 +05:30: 🔍 Verifying password...
+2025-08-23 20:46:00 +05:30: ✅ Password verified, updating last login...
+2025-08-23 20:46:00 +05:30: ✅ Authentication successful for: customer@demo.com Role: CUSTOMER
+2025-08-23 20:46:12 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 20:46:12 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 20:46:12 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 20:46:19 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-23 20:46:19 +05:30: 🔍 Testing database connection...
+2025-08-23 20:46:19 +05:30: ✅ Database connection successful
+2025-08-23 20:46:19 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-23 20:46:19 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-23 20:46:19 +05:30: 🔍 Verifying password...
+2025-08-23 20:46:19 +05:30: ✅ Password verified, updating last login...
+2025-08-23 20:46:19 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-23 20:46:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:19 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:19 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 20:46:19 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 20:46:19 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 20:46:19 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 20:46:23 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 20:46:23 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 20:46:23 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 20:46:23 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 20:46:23 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 20:46:23 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:23 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'packages.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full subscription access
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full subscription count
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-23 20:46:27 +05:30: prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+2025-08-23 20:46:27 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."footmark_enabled", "public"."packages"."footmark_text", "public"."packages"."package_color", "public"."packages"."offer_price", "public"."packages"."offer_enabled" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full subscription access
+2025-08-23 20:46:27 +05:30: 👑 Level 1 (SUPER USER) - Full subscription count
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:27 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 20:46:48 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:48 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 20:46:48 +05:30: 👑 Level 1 (SUPER USER) - Full subscription access
+2025-08-23 20:46:48 +05:30: 👑 Level 1 (SUPER USER) - Full subscription count
+2025-08-23 20:47:08 +05:30: 🔐 NextAuth authorize called with email: customer@demo.com
+2025-08-23 20:47:08 +05:30: 🔍 Testing database connection...
+2025-08-23 20:47:08 +05:30: ✅ Database connection successful
+2025-08-23 20:47:08 +05:30: 🔍 Looking up user: customer@demo.com
+2025-08-23 20:47:08 +05:30: ✅ User found: { id: 5, email: 'customer@demo.com', role: 'CUSTOMER' }
+2025-08-23 20:47:08 +05:30: 🔍 Verifying password...
+2025-08-23 20:47:08 +05:30: ✅ Password verified, updating last login...
+2025-08-23 20:47:08 +05:30: ✅ Authentication successful for: customer@demo.com Role: CUSTOMER
+2025-08-23 20:47:36 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 20:47:36 +05:30: Loading package with ID: basic_plan_001
+2025-08-23 20:47:36 +05:30: Package loaded successfully: {
+  id: 'basic_plan_001',
+  name: 'Basic Plan',
+  price: 1000,
+  offer_price: null,
+  offer_enabled: false,
+  duration: 30,
+  currency: 'INR'
+}
+2025-08-23 20:47:36 +05:30: 🔍 Using real user data: { userId: '5', email: 'customer@demo.com', name: 'Demo Customer' }
+2025-08-23 20:47:36 +05:30: Initializing Razorpay with credentials: {
+  keyId: 'rzp_test_gVa74ELuwwBodF',
+  keySecret: 'VGRK5Bl7Rv...',
+  isTestMode: true
+}
+2025-08-23 20:47:36 +05:30: Razorpay service initialized successfully
+2025-08-23 20:47:36 +05:30: Creating Razorpay order with data: {
+  amount: 1000,
+  currency: 'INR',
+  receipt: 'iframe_session_1755962255176_77stt6uwe'
+}
+2025-08-23 20:47:37 +05:30: Razorpay order created successfully: order_R8p3TEKW94Tvpd
+2025-08-23 20:47:37 +05:30: Payment iframe session created: {
+  sessionId: 'session_1755962255176_77stt6uwe',
+  orderId: 'order_R8p3TEKW94Tvpd',
+  amount: 1000,
+  currency: 'INR',
+  customerId: '5'
+}
+2025-08-23 20:47:37 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 20:47:37 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 20:47:37 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 20:47:37 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:01:03 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."offer_price", "public"."packages"."offer_enabled", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."package_color", "public"."packages"."features", "public"."packages"."createdAt" FROM "public"."packages" WHERE "public"."packages"."isActive" = $1 ORDER BY "public"."packages"."price" ASC OFFSET $2
+2025-08-23 22:01:03 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:01:03 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:01:03 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:01:21 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:01:21 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:01:21 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:01:27 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:01:27 +05:30: Loading package with ID: basic_plan_001
+2025-08-23 22:01:27 +05:30: Package loaded successfully: {
+  id: 'basic_plan_001',
+  name: 'Basic Plan',
+  price: 1000,
+  offer_price: null,
+  offer_enabled: false,
+  duration: 30,
+  currency: 'INR'
+}
+2025-08-23 22:01:27 +05:30: 🔍 Using real user data: { userId: '5', email: 'customer@demo.com', name: 'Demo Customer' }
+2025-08-23 22:01:27 +05:30: Initializing Razorpay with credentials: {
+  keyId: 'rzp_test_gVa74ELuwwBodF',
+  keySecret: 'VGRK5Bl7Rv...',
+  isTestMode: true
+}
+2025-08-23 22:01:27 +05:30: Razorpay service initialized successfully
+2025-08-23 22:01:27 +05:30: Creating Razorpay order with data: {
+  amount: 1000,
+  currency: 'INR',
+  receipt: 'iframe_session_1755966686217_uere89c6q'
+}
+2025-08-23 22:01:28 +05:30: Razorpay order created successfully: order_R8qJTxvoJxAZKL
+2025-08-23 22:01:28 +05:30: Payment iframe session created: {
+  sessionId: 'session_1755966686217_uere89c6q',
+  orderId: 'order_R8qJTxvoJxAZKL',
+  amount: 1000,
+  currency: 'INR',
+  customerId: '5'
+}
+2025-08-23 22:01:28 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:01:28 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:01:28 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:01:28 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:03:08 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:03:08 +05:30: ✅ Payment verification using real CSV credentials for razorpay
+2025-08-23 22:03:08 +05:30: 🚀 Activating subscription with real user data: {
+  realUserId: '5',
+  realUserEmail: 'customer@demo.com',
+  realUserName: 'Demo Customer',
+  packageId: 'basic_plan_001',
+  paymentId: 'pay_R8qKm4XeQJTIJb',
+  orderId: 'order_R8qJTxvoJxAZKL',
+  amount: 1000
+}
+2025-08-23 22:03:08 +05:30: ✅ Transaction record created: tx_1755966788733_j7tvmlf
+2025-08-23 22:03:08 +05:30: ✅ Active subscription created: {
+  subscriptionId: 'cs_1755966788736_06niljp',
+  realUserId: '5',
+  realUserEmail: 'customer@demo.com',
+  realUserName: 'Demo Customer',
+  packageId: 'basic_plan_001',
+  packageName: 'Basic Plan',
+  startDate: '2025-08-23T16:33:08.736Z',
+  endDate: '2025-09-22T16:33:08.736Z',
+  duration: '30 days'
+}
+2025-08-23 22:03:08 +05:30: 🎯 Processing dealer commission for subscription payment... {
+  customerId: '5',
+  transactionAmount: 1000,
+  transactionReference: 'tx_1755966788733_j7tvmlf'
+}
+2025-08-23 22:03:08 +05:30: 🔄 Processing commission for customer 5, amount: ₹1000
+2025-08-23 22:03:08 +05:30: 💼 SUBDEALER Demo SubDealer: Using custom commission rate: 10%
+2025-08-23 22:03:08 +05:30: 💰 Awarding 10% commission (₹100) to SUBDEALER Demo SubDealer
+2025-08-23 22:03:08 +05:30: ✅ Commission processed for SUBDEALER Demo SubDealer: ₹100
+2025-08-23 22:03:08 +05:30: 💼 OWNER System Owner: Using custom commission rate: 1%
+2025-08-23 22:03:08 +05:30: 💰 Awarding 1% commission (₹10) to OWNER System Owner
+2025-08-23 22:03:08 +05:30: ✅ Commission processed for OWNER System Owner: ₹10
+2025-08-23 22:03:08 +05:30: ✅ Commission processing completed. Total distributed: ₹110 to 2 dealers
+2025-08-23 22:03:08 +05:30: ✅ Dealer commission processed successfully: { totalCommissionDistributed: 110, commissionsProcessed: 2 }
+2025-08-23 22:12:20 +05:30: 🔐 NextAuth authorize called with email: suraj@gmail.com
+2025-08-23 22:12:20 +05:30: 🔍 Testing database connection...
+2025-08-23 22:12:20 +05:30: ✅ Database connection successful
+2025-08-23 22:12:20 +05:30: 🔍 Looking up user: suraj@gmail.com
+2025-08-23 22:12:20 +05:30: ✅ User found: { id: 7, email: 'suraj@gmail.com', role: 'CUSTOMER' }
+2025-08-23 22:12:20 +05:30: 🔍 Verifying password...
+2025-08-23 22:12:20 +05:30: ✅ Password verified, updating last login...
+2025-08-23 22:12:20 +05:30: ✅ Authentication successful for: suraj@gmail.com Role: CUSTOMER
+2025-08-23 22:13:18 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:13:18 +05:30: ✅ Updated razorpay with CSV credentials - Mock mode disabled
+2025-08-23 22:13:28 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:13:28 +05:30: Loading package with ID: 471719
+2025-08-23 22:13:28 +05:30: Package loaded successfully: {
+  id: '471719',
+  name: 'Professional',
+  price: 2000,
+  offer_price: 1500,
+  offer_enabled: true,
+  duration: 365,
+  currency: 'INR'
+}
+2025-08-23 22:13:28 +05:30: 🔍 Using real user data: { userId: '7', email: 'suraj@gmail.com', name: 'Suraj Pol' }
+2025-08-23 22:13:28 +05:30: Initializing Razorpay with credentials: {
+  keyId: 'rzp_test_gVa74ELuwwBodF',
+  keySecret: 'VGRK5Bl7Rv...',
+  isTestMode: true
+}
+2025-08-23 22:13:28 +05:30: Razorpay service initialized successfully
+2025-08-23 22:13:28 +05:30: Creating Razorpay order with data: {
+  amount: 1500,
+  currency: 'INR',
+  receipt: 'iframe_session_1755967405644_jsb54g460'
+}
+2025-08-23 22:13:28 +05:30: Razorpay order created successfully: order_R8qWASqsvppzi8
+2025-08-23 22:13:28 +05:30: Payment iframe session created: {
+  sessionId: 'session_1755967405644_jsb54g460',
+  orderId: 'order_R8qWASqsvppzi8',
+  amount: 1500,
+  currency: 'INR',
+  customerId: '7'
+}
+2025-08-23 22:13:29 +05:30: ❌ Permission denied: 'company.profile.read' for user 'suraj@gmail.com' (Level 5 - CUSTOMER)
+2025-08-23 22:13:29 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: suraj@gmail.com
+2025-08-23 22:13:29 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:13:29 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:14:39 +05:30: ✅ Loaded credentials for razorpay from CSV
+2025-08-23 22:14:39 +05:30: ✅ Payment verification using real CSV credentials for razorpay
+2025-08-23 22:14:39 +05:30: 🚀 Activating subscription with real user data: {
+  realUserId: '7',
+  realUserEmail: 'suraj@gmail.com',
+  realUserName: 'Suraj Pol',
+  packageId: '471719',
+  paymentId: 'pay_R8qX9BmAaQU86U',
+  orderId: 'order_R8qWASqsvppzi8',
+  amount: 1500
+}
+2025-08-23 22:14:39 +05:30: ✅ Transaction record created: tx_1755967479813_eziriyh
+2025-08-23 22:14:39 +05:30: ✅ Active subscription created: {
+  subscriptionId: 'cs_1755967479814_6aq5qe1',
+  realUserId: '7',
+  realUserEmail: 'suraj@gmail.com',
+  realUserName: 'Suraj Pol',
+  packageId: '471719',
+  packageName: 'Professional',
+  startDate: '2025-08-23T16:44:39.814Z',
+  endDate: '2026-08-23T16:44:39.814Z',
+  duration: '365 days'
+}
+2025-08-23 22:14:39 +05:30: 🎯 Processing dealer commission for subscription payment... {
+  customerId: '7',
+  transactionAmount: 1500,
+  transactionReference: 'tx_1755967479813_eziriyh'
+}
+2025-08-23 22:14:39 +05:30: 🔄 Processing commission for customer 7, amount: ₹1500
+2025-08-23 22:14:39 +05:30: 💼 SUBDEALER Reshama Nitinkumar Narayane: Using custom commission rate: 10%
+2025-08-23 22:14:39 +05:30: 💰 Awarding 10% commission (₹150) to SUBDEALER Reshama Nitinkumar Narayane
+2025-08-23 22:14:39 +05:30: ✅ Commission processed for SUBDEALER Reshama Nitinkumar Narayane: ₹150
+2025-08-23 22:14:39 +05:30: ✅ Commission processing completed. Total distributed: ₹150 to 1 dealers
+2025-08-23 22:14:39 +05:30: ✅ Dealer commission processed successfully: { totalCommissionDistributed: 150, commissionsProcessed: 1 }
+2025-08-23 22:19:58 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-23 22:19:58 +05:30: 🔍 Testing database connection...
+2025-08-23 22:19:58 +05:30: ✅ Database connection successful
+2025-08-23 22:19:58 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-23 22:19:58 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-23 22:19:58 +05:30: 🔍 Verifying password...
+2025-08-23 22:19:58 +05:30: ✅ Password verified, updating last login...
+2025-08-23 22:19:58 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-23 22:20:00 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:00 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:00 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:20:00 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:20:00 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:20:00 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:20:00 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:19 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-23 22:20:19 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-23 22:20:19 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-23 22:20:19 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-23 22:20:19 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-23 22:20:20 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:20 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:32 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:32 +05:30: ✅ Permission granted: 'packages.read' for user 'owner@demo.com'
+2025-08-23 22:20:32 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:40 +05:30: ✅ Permission granted: 'vouchers.read' for user 'owner@demo.com'
+2025-08-23 22:20:40 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:40 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:48 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-23 22:20:48 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-23 22:20:48 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 22:20:48 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 22:20:48 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-23 22:20:48 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-23 22:20:48 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 22:20:48 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-23 22:20:48 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-23 22:20:48 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-23 22:20:48 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:48 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full subscription access
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full subscription count
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'packages.page.access' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."footmark_enabled", "public"."packages"."footmark_text", "public"."packages"."package_color", "public"."packages"."offer_price", "public"."packages"."offer_enabled" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+2025-08-23 22:20:52 +05:30: prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full subscription access
+2025-08-23 22:20:52 +05:30: 👑 Level 1 (SUPER USER) - Full subscription count
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:20:52 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:21:16 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:21:16 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:21:16 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:21:18 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:21:18 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:21:18 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:21:19 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:21:19 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:21:19 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:21:20 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:21:20 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:21:20 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:21:20 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 22:21:20 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 22:21:20 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-23 22:21:21 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-23 22:21:21 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'owner@demo.com'
+2025-08-23 22:21:21 +05:30: ✅ Authenticated user: owner@demo.com
+2025-08-23 22:21:21 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-23 22:21:21 +05:30: 👤 Current user: { id: 1, level: 1, role: 'OWNER', accessType: 'filtered' }
+2025-08-23 22:21:21 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-23 22:21:21 +05:30: 👑 Level 1 (SUPER USER) - Full unrestricted access to all data
+2025-08-23 22:21:21 +05:30: 📊 Found 7 users
+2025-08-23 22:21:21 +05:30: 🔍 Fetching recent transactions...
+2025-08-23 22:21:21 +05:30: 👑 Level 1 (SUPER USER) - Full access to all transactions
+2025-08-23 22:21:21 +05:30: 📊 Found 8 transactions
+2025-08-23 22:21:21 +05:30: 🔍 Calculating summary statistics...
+2025-08-23 22:21:21 +05:30: 👑 Level 1 (SUPER USER) - Global summary statistics
+2025-08-23 22:21:21 +05:30: 📈 Summary calculated: {
+  total_biz_points: '59590.00',
+  users_with_points: '8',
+  total_transactions: '8',
+  total_commissions: '260.00',
+  total_settlements: '3000.00'
+}
+2025-08-23 22:21:21 +05:30: ✅ Returning data: { usersCount: 7, transactionsCount: 8, totalBizPoints: undefined }
+2025-08-23 22:21:21 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:21:21 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:27 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-23 22:24:27 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'owner@demo.com'
+2025-08-23 22:24:27 +05:30: ✅ Authenticated user: owner@demo.com
+2025-08-23 22:24:27 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-23 22:24:27 +05:30: 👤 Current user: { id: 1, level: 1, role: 'OWNER', accessType: 'filtered' }
+2025-08-23 22:24:27 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-23 22:24:27 +05:30: 👑 Level 1 (SUPER USER) - Full unrestricted access to all data
+2025-08-23 22:24:27 +05:30: 📊 Found 7 users
+2025-08-23 22:24:27 +05:30: 🔍 Fetching recent transactions...
+2025-08-23 22:24:27 +05:30: 👑 Level 1 (SUPER USER) - Full access to all transactions
+2025-08-23 22:24:27 +05:30: 📊 Found 8 transactions
+2025-08-23 22:24:27 +05:30: 🔍 Calculating summary statistics...
+2025-08-23 22:24:27 +05:30: 👑 Level 1 (SUPER USER) - Global summary statistics
+2025-08-23 22:24:27 +05:30: 📈 Summary calculated: {
+  total_biz_points: '59590.00',
+  users_with_points: '8',
+  total_transactions: '8',
+  total_commissions: '260.00',
+  total_settlements: '3000.00'
+}
+2025-08-23 22:24:27 +05:30: ✅ Returning data: { usersCount: 7, transactionsCount: 8, totalBizPoints: undefined }
+2025-08-23 22:24:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:24:46 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:24:46 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:24:46 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:24:46 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:24:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:25:17 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:25:17 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:25:17 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:25:17 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:25:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:25:47 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:25:47 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:25:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:26:17 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:26:17 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:26:17 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:26:17 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:27:05 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:27:05 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:27:05 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:27:05 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:29:15 +05:30: 🔐 NextAuth authorize called with email: customer@demo.com
+2025-08-23 22:29:15 +05:30: 🔍 Testing database connection...
+2025-08-23 22:29:15 +05:30: ✅ Database connection successful
+2025-08-23 22:29:15 +05:30: 🔍 Looking up user: customer@demo.com
+2025-08-23 22:29:15 +05:30: ✅ User found: { id: 5, email: 'customer@demo.com', role: 'CUSTOMER' }
+2025-08-23 22:29:15 +05:30: 🔍 Verifying password...
+2025-08-23 22:29:15 +05:30: ✅ Password verified, updating last login...
+2025-08-23 22:29:15 +05:30: ✅ Authentication successful for: customer@demo.com Role: CUSTOMER
+2025-08-23 22:30:05 +05:30: Looking for device: 5_bizflashindevice202508230721_1755933681864 for user: 5
+2025-08-23 22:30:05 +05:30: Routing message to server Wa-Server-1 (http://127.0.0.1:3110) for device 5_bizflashindevice202508230721_1755933681864
+2025-08-23 22:30:06 +05:30: Updated message count for direct send by user: 5
+2025-08-23 22:30:06 +05:30: Stored direct send message in database: 1755968406367
+2025-08-23 22:30:06 +05:30: Message count updated for user 5
+2025-08-23 22:46:41 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:46:41 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:46:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:46:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-23 22:46:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-23 22:46:42 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-23 22:46:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-23 22:46:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-23 22:46:54 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 22:46:54 +05:30:    - Local:        http://localhost:3100
+2025-08-23 22:46:54 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 22:46:54 +05:30: 
+2025-08-23 22:46:54 +05:30:  ✓ Starting...
+2025-08-23 22:46:55 +05:30:  ✓ Ready in 972ms
+2025-08-23 23:10:00 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:10:00 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:10:00 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:10:00 +05:30: 
+2025-08-23 23:10:00 +05:30:  ✓ Starting...
+2025-08-23 23:10:01 +05:30:  ✓ Ready in 1383ms
+2025-08-23 23:13:05 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:13:05 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:13:05 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:13:05 +05:30: 
+2025-08-23 23:13:05 +05:30:  ✓ Starting...
+2025-08-23 23:13:06 +05:30:  ✓ Ready in 1078ms
+2025-08-23 23:15:36 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:15:36 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:15:36 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:15:36 +05:30: 
+2025-08-23 23:15:36 +05:30:  ✓ Starting...
+2025-08-23 23:15:37 +05:30:  ✓ Ready in 1028ms
+2025-08-23 23:17:49 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:17:49 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:17:49 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:17:49 +05:30: 
+2025-08-23 23:17:49 +05:30:  ✓ Starting...
+2025-08-23 23:17:50 +05:30:  ✓ Ready in 977ms
+2025-08-23 23:19:28 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:19:28 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:19:28 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:19:28 +05:30: 
+2025-08-23 23:19:28 +05:30:  ✓ Starting...
+2025-08-23 23:19:29 +05:30:  ✓ Ready in 1042ms
+2025-08-23 23:21:35 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:21:35 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:21:35 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:21:35 +05:30: 
+2025-08-23 23:21:35 +05:30:  ✓ Starting...
+2025-08-23 23:21:36 +05:30:  ✓ Ready in 1012ms
+2025-08-23 23:23:03 +05:30:    ▲ Next.js 15.4.6
+2025-08-23 23:23:03 +05:30:    - Local:        http://localhost:3100
+2025-08-23 23:23:03 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-23 23:23:03 +05:30: 
+2025-08-23 23:23:03 +05:30:  ✓ Starting...
+2025-08-23 23:23:04 +05:30:  ✓ Ready in 1133ms
+2025-08-23 23:26:32 +05:30: ✅ Database connection established
+2025-08-23 23:26:32 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
+2025-08-23 23:26:32 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
+2025-08-23 23:26:32 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read

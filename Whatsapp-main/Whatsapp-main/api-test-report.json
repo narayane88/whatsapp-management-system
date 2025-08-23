@@ -1,0 +1,220 @@
+{
+  "timestamp": "2025-08-12T08:30:33.353Z",
+  "summary": {
+    "total": 17,
+    "passed": 0,
+    "failed": 17,
+    "passRate": "0.0%"
+  },
+  "configuration": {
+    "baseUrl": "http://localhost:3000",
+    "baileysUrl": "http://localhost:3005",
+    "apiKey": "sk_test_f53d452c26ba..."
+  },
+  "results": [
+    {
+      "name": "Get API Keys",
+      "method": "GET",
+      "endpoint": "/api/customer/api-keys",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Fetch all API keys for the user"
+    },
+    {
+      "name": "Create API Key",
+      "method": "POST",
+      "endpoint": "/api/customer/api-keys",
+      "expectedStatus": 201,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Create a new API key with limited permissions"
+    },
+    {
+      "name": "Customer Dashboard",
+      "method": "GET",
+      "endpoint": "/api/customer/dashboard",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Get dashboard statistics and overview"
+    },
+    {
+      "name": "Customer Profile",
+      "method": "GET",
+      "endpoint": "/api/customer/profile",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Get customer profile information"
+    },
+    {
+      "name": "Get Host Servers",
+      "method": "GET",
+      "endpoint": "/api/customer/host/servers",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "List available WhatsApp host servers"
+    },
+    {
+      "name": "Get Host Connections",
+      "method": "GET",
+      "endpoint": "/api/customer/host/connections",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "List user WhatsApp connections"
+    },
+    {
+      "name": "Get Queue Messages",
+      "method": "GET",
+      "endpoint": "/api/customer/whatsapp/queue",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Fetch message queue with statistics"
+    },
+    {
+      "name": "Get Queue Settings",
+      "method": "GET",
+      "endpoint": "/api/customer/whatsapp/queue?action=settings",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Fetch queue configuration settings"
+    },
+    {
+      "name": "Update Queue Settings",
+      "method": "POST",
+      "endpoint": "/api/customer/whatsapp/queue",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Update queue processing settings"
+    },
+    {
+      "name": "Add Message to Queue",
+      "method": "POST",
+      "endpoint": "/api/customer/whatsapp/queue",
+      "expectedStatus": 201,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Add a new message to the queue"
+    },
+    {
+      "name": "Send Message via v1 API",
+      "method": "POST",
+      "endpoint": "/api/v1/messages/send",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Send message through v1 messages API"
+    },
+    {
+      "name": "API Documentation",
+      "method": "GET",
+      "endpoint": "/api/customer/docs",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Get API documentation and endpoints"
+    },
+    {
+      "name": "API Health Check",
+      "method": "GET",
+      "endpoint": "/api/health",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Check API server health status"
+    },
+    {
+      "name": "Baileys Health",
+      "method": "GET",
+      "endpoint": "http://localhost:3005/api/health",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Check Baileys server health"
+    },
+    {
+      "name": "Baileys Accounts",
+      "method": "GET",
+      "endpoint": "http://localhost:3005/api/accounts",
+      "expectedStatus": 200,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "List WhatsApp accounts on Baileys server"
+    },
+    {
+      "name": "Invalid Endpoint",
+      "method": "GET",
+      "endpoint": "/api/non-existent-endpoint",
+      "expectedStatus": 404,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Test 404 error handling"
+    },
+    {
+      "name": "Invalid API Key",
+      "method": "GET",
+      "endpoint": "/api/customer/api-keys",
+      "expectedStatus": 401,
+      "actualStatus": 0,
+      "passed": false,
+      "response": {
+        "error": "fetch is not a function"
+      },
+      "description": "Test unauthorized access"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "sessionId": "session_1755092198803_6q5zys2qw",
+  "packageId": "1",
+  "customerId": "demo-customer-id",
+  "customerEmail": "demo@example.com",
+  "customerPhone": "+1234567890",
+  "amount": 29.99,
+  "currency": "INR",
+  "createdAt": "2025-08-13T13:36:40.462Z",
+  "status": "pending"
+}

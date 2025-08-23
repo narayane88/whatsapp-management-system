@@ -1,0 +1,20 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="60" fill="white" rx="8"/>
+  
+  <!-- Logo Icon -->
+  <circle cx="30" cy="30" r="15" fill="#10B981"/>
+  <path d="M22 28 L26 32 L38 20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Company Name -->
+  <text x="55" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937">
+    Bizflash Insight
+  </text>
+  <text x="55" y="40" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">
+    Solution
+  </text>
+  
+  <!-- WhatsApp Icon -->
+  <circle cx="170" cy="30" r="12" fill="#25D366"/>
+  <path d="M165 27 Q167 25 170 25 Q173 25 175 27 Q177 29 177 32 Q177 35 175 37 L173 39 L167 33 L165 35 Q163 33 163 30 Q163 27 165 27Z" fill="white"/>
+</svg>

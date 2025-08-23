@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(timeout 10 curl -I http://localhost:3000)",
+      "Bash(find:*)",
+      "Bash(npx jest:*)",
+      "Bash(npm test:*)",
+      "Bash(grep:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)",
+      "Bash(timeout 10 curl -I http://localhost:3000/admin/customers)",
+      "Bash(psql:*)",
+      "Bash(timeout 10 curl -I http://localhost:3000/customer/host)",
+      "Bash(npm run test:whatsapp:*)",
+      "Bash(timeout:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm show:*)",
+      "Bash(npm outdated:*)",
+      "Bash(npm update:*)",
+      "Bash(dir:*)",
+      "Bash(npm uninstall:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:baileys.wiki)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:web.whatsapp.com)",
+      "WebFetch(domain:localhost)",
+      "Bash(true)",
+      "Bash(PORT=3100 npm run dev)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,1428 @@
+'use client'
+
+import {
+  Box,
+  Title,
+  Text,
+  Stack,
+  Group,
+  Button,
+  TextInput,
+  Badge,
+  Card,
+  Table,
+  SimpleGrid,
+  ActionIcon,
+  Modal,
+  Code,
+  Select,
+  NumberInput,
+  Textarea,
+  Loader,
+  Alert,
+  Menu,
+  Tooltip,
+  Progress,
+  FileInput,
+  Avatar
+} from '@mantine/core'
+import { 
+  FiPlus, 
+  FiCopy, 
+  FiEye, 
+  FiTrash2, 
+  FiUsers, 
+  FiUserCheck,
+  FiClock, 
+  FiEdit3, 
+  FiInfo, 
+  FiDownload,
+  FiUserX,
+  FiMoreVertical,
+  FiLogIn,
+  FiGift
+} from 'react-icons/fi'
+import { FaRupeeSign } from 'react-icons/fa'
+import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { notifications } from '@mantine/notifications'
+import { useDisclosure } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
+import AdminLayout from '@/components/layout/AdminLayout'
+import { usePermissions } from '@/hooks/usePermissions'
+import PermissionGuard from '@/components/auth/PermissionGuard'
+
+interface Customer {
+  id: number
+  name: string
+  email: string
+  phone?: string
+  mobile?: string
+  isActive: boolean
+  parentId?: number
+  dealer_code?: string
+  customer_status: string
+  created_at: string
+  account_balance: number
+  message_balance: number
+  last_login?: string
+  registration_source?: string
+  dealer_name?: string
+  dealer_dealer_code?: string
+  role: string
+  package_id?: string
+  package_expiry?: string
+  package_name?: string
+  package_price?: number
+  package_status: string
+  avatar?: string
+  language?: string
+  address?: string
+  notes?: string
+}
+
+interface CustomerStats {
+  totalCustomers: number
+  activeCustomers: number
+  customersWithDealers: number
+  customersWithPackages: number
+  customersWithExpiredPackages: number
+  totalCustomerBalance: number
+}
+
+export default function CustomersPage() {
+  const { data: session } = useSession()
+  const { hasPermission } = usePermissions()
+  const [customers, setCustomers] = useState<Customer[]>([])
+  const [stats, setStats] = useState<CustomerStats>({
+    totalCustomers: 0,
+    activeCustomers: 0,
+    customersWithDealers: 0,
+    customersWithPackages: 0,
+    customersWithExpiredPackages: 0,
+    totalCustomerBalance: 0
+  })
+  const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterStatus, setFilterStatus] = useState('')
+  const [filterDealer, setFilterDealer] = useState('')
+  const [filterPackage, setFilterPackage] = useState('')
+  const [filterExpiry, setFilterExpiry] = useState('')
+  const [expiryDays, setExpiryDays] = useState(30)
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
+  const [isCreateModalOpen, { open: openCreateModal, close: closeCreateModal }] = useDisclosure(false)
+  const [isViewModalOpen, { open: openViewModal, close: closeViewModal }] = useDisclosure(false)
+  const [isEditModalOpen, { open: openEditModal, close: closeEditModal }] = useDisclosure(false)
+  const [isVoucherModalOpen, { open: openVoucherModal, close: closeVoucherModal }] = useDisclosure(false)
+  const [dealers, setDealers] = useState<Array<{id: number, name: string, dealer_code: string}>>([])
+  const [packages, setPackages] = useState<Array<{id: string, name: string, price: number}>>([])  
+  const [currentUserRole, setCurrentUserRole] = useState<string>('')
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [editAvatarFile, setEditAvatarFile] = useState<File | null>(null)
+
+  const form = useForm({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+      mobile: '',
+      address: '',
+      notes: '',
+      dealerId: '',
+      packageId: '',
+      language: 'en'
+    },
+    validate: {
+      name: (value) => (!value ? 'Name is required' : null),
+      email: (value) => (!value ? 'Email is required' : /\S+@\S+\.\S+/.test(value) ? null : 'Invalid email'),
+      password: (value) => (!value ? 'Password is required' : value.length < 6 ? 'Password must be at least 6 characters' : null),
+    },
+  })
+
+  const editForm = useForm({
+    initialValues: {
+      name: '',
+      email: '',
+      phone: '',
+      mobile: '',
+      address: '',
+      notes: '',
+      dealerId: '',
+      packageId: '',
+      language: 'en',
+      customerStatus: 'active'
+    },
+    validate: {
+      name: (value) => (!value ? 'Name is required' : null),
+      email: (value) => (!value ? 'Email is required' : /\S+@\S+\.\S+/.test(value) ? null : 'Invalid email'),
+    },
+  })
+
+  const voucherForm = useForm({
+    initialValues: {
+      voucherCode: ''
+    },
+    validate: {
+      voucherCode: (value) => (!value ? 'Voucher code is required' : null),
+    },
+  })
+
+  // Load customers from database
+  useEffect(() => {
+    if (session?.user) {
+      loadCurrentUserInfo()
+      loadCustomers()
+      loadDealers()
+      loadPackages()
+    }
+  }, [session, searchTerm, filterStatus, filterDealer, filterPackage, filterExpiry, expiryDays])
+
+  const loadCurrentUserInfo = async () => {
+    try {
+      const response = await fetch('/api/users/current')
+      const data = await response.json()
+      if (response.ok && data.user) {
+        console.log('🔍 Current user loaded:', data.user)
+        setCurrentUserRole(data.user.role)
+        setCurrentUserId(data.user.id)
+        
+        // Handle different user levels
+        if (data.user.role === 'SUBDEALER') {
+          console.log('👤 Level 3 SUBDEALER detected, auto-setting dealer...')
+          setFilterDealer(data.user.id.toString())
+          // Auto-set form field but don't disable it
+          form.setFieldValue('dealerId', data.user.id.toString())
+        } else if (data.user.role === 'OWNER' || data.user.role === 'ADMIN') {
+          console.log('👤 Level 1/2 user detected, showing all dealers...')
+          // Level 1 & 2 can see all dealers with blank option
+        } else if (data.user.role === 'EMPLOYEE') {
+          console.log('👤 Level 4 EMPLOYEE detected, can select blank or no dealer...')
+          // Level 4 can leave blank or select "No Dealer"
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load current user info:', error)
+    }
+  }
+
+  const loadCustomers = async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams()
+      if (searchTerm) params.append('search', searchTerm)
+      if (filterStatus) params.append('status', filterStatus)
+      if (filterDealer) params.append('dealer', filterDealer)
+      if (filterPackage) params.append('package', filterPackage)
+      if (filterExpiry) params.append('expiry', filterExpiry)
+      if (expiryDays !== 30) params.append('expiry_days', expiryDays.toString())
+
+      const apiUrl = `/api/customers?${params.toString()}`
+      console.log('🔍 Loading customers from:', apiUrl)
+
+      const response = await fetch(apiUrl)
+      const data = await response.json()
+
+      console.log('📦 API Response:', { status: response.status, ok: response.ok, data })
+
+      if (response.ok) {
+        console.log('✅ Setting customers:', data.customers?.length || 0, 'customers')
+        setCustomers(data.customers || [])
+        setStats(data.stats || {
+          totalCustomers: 0,
+          activeCustomers: 0,
+          customersWithDealers: 0,
+          customersWithPackages: 0,
+          customersWithExpiredPackages: 0,
+          totalCustomerBalance: 0
+        })
+      } else {
+        console.error('❌ API Error:', data.error)
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to load customers',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      console.error('💥 Connection Error:', error)
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to connect to API',
+        color: 'red'
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadDealers = async () => {
+    try {
+      // Load Level 3 dealers using dedicated API
+      const response = await fetch('/api/dealers')
+      const data = await response.json()
+      if (response.ok) {
+        console.log('🏪 Dealers loaded:', data.dealers?.length || 0, 'Level 3 dealers')
+        setDealers(data.dealers || [])
+      } else {
+        console.error('Failed to load dealers from API:', data.error)
+        throw new Error(data.error)
+      }
+    } catch (error) {
+      console.error('Failed to load dealers:', error)
+      // For debugging, use mock Level 3 dealer list
+      setDealers([
+        {
+          id: 6,
+          name: 'SAGAR NARAYANE', 
+          dealer_code: 'WA-SNW4-0000',
+          email: 'narayanesagar@gmail.com',
+          role: 'SUBDEALER',
+          isActive: true
+        },
+        {
+          id: 8,
+          name: 'Sub Dealer',
+          dealer_code: 'SUB001', 
+          email: 'subdealer@demo.com',
+          role: 'SUBDEALER',
+          isActive: true
+        }
+      ])
+    }
+  }
+
+  const loadPackages = async () => {
+    try {
+      const response = await fetch('/api/packages')
+      const data = await response.json()
+      if (response.ok) {
+        setPackages(data.packages || [])
+      }
+    } catch (error) {
+      console.error('Failed to load packages:', error)
+    }
+  }
+
+  const handleCreateCustomer = async (values: typeof form.values) => {
+    try {
+      // Handle avatar upload if file is selected
+      let avatarUrl = null
+      if (avatarFile) {
+        const formData = new FormData()
+        formData.append('avatar', avatarFile)
+        
+        const avatarResponse = await fetch('/api/upload/avatar', { 
+          method: 'POST', 
+          body: formData 
+        })
+        
+        if (avatarResponse.ok) {
+          const avatarData = await avatarResponse.json()
+          avatarUrl = avatarData.url
+        } else {
+          throw new Error('Failed to upload avatar')
+        }
+      }
+
+      const response = await fetch('/api/customers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...values,
+          dealerId: values.dealerId || null,
+          packageId: values.packageId || null,
+          language: values.language || 'en',
+          avatar: avatarUrl,
+          registrationSource: 'admin_created'
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        notifications.show({
+          title: 'Success',
+          message: data.message,
+          color: 'green'
+        })
+        form.reset()
+        setAvatarFile(null)
+        closeCreateModal()
+        loadCustomers()
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to create customer',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to create customer',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleDeleteCustomer = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this customer?')) return
+
+    try {
+      const response = await fetch(`/api/customers?id=${id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        notifications.show({
+          title: 'Success',
+          message: data.message,
+          color: 'green'
+        })
+        loadCustomers()
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to delete customer',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to delete customer',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleEditCustomer = (customer: Customer) => {
+    setSelectedCustomer(customer)
+    editForm.setValues({
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone || '',
+      mobile: customer.mobile || '',
+      address: customer.address || '',
+      notes: customer.notes || '',
+      dealerId: customer.parentId ? customer.parentId.toString() : '',
+      packageId: customer.package_id || '',
+      language: customer.language || 'en',
+      customerStatus: customer.customer_status || 'active'
+    })
+    setEditAvatarFile(null)
+    openEditModal()
+  }
+
+  const handleUpdateCustomer = async (values: typeof editForm.values) => {
+    if (!selectedCustomer) return
+    
+    try {
+      // Handle avatar upload if file is selected
+      let avatarUrl = selectedCustomer.avatar
+      if (editAvatarFile) {
+        const formData = new FormData()
+        formData.append('avatar', editAvatarFile)
+        
+        const avatarResponse = await fetch('/api/upload/avatar', { 
+          method: 'POST', 
+          body: formData 
+        })
+        
+        if (avatarResponse.ok) {
+          const avatarData = await avatarResponse.json()
+          avatarUrl = avatarData.url
+        } else {
+          throw new Error('Failed to upload avatar')
+        }
+      }
+
+      const response = await fetch(`/api/customers?id=${selectedCustomer.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...values,
+          dealerId: values.dealerId || null,
+          packageId: values.packageId || null,
+          avatar: avatarUrl,
+          isActive: values.customerStatus === 'active'
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        notifications.show({
+          title: 'Success',
+          message: data.message,
+          color: 'green'
+        })
+        editForm.reset()
+        setEditAvatarFile(null)
+        closeEditModal()
+        loadCustomers()
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to update customer',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to update customer',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleViewCustomer = (customer: Customer) => {
+    setSelectedCustomer(customer)
+    openViewModal()
+  }
+
+  const handleImpersonate = async (customerId: number) => {
+    try {
+      const response = await fetch('/api/customers/impersonate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ customerId })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        notifications.show({
+          title: 'Success',
+          message: 'Impersonation session created. Redirecting...',
+          color: 'green'
+        })
+        // Store impersonation token and redirect
+        sessionStorage.setItem('impersonationToken', data.impersonationToken)
+        window.location.href = data.redirectUrl
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to start impersonation',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to start impersonation',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleRedeemVoucher = async (values: typeof voucherForm.values) => {
+    if (!selectedCustomer) return
+
+    try {
+      const response = await fetch('/api/customers/redeem-voucher', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          voucherCode: values.voucherCode,
+          customerId: selectedCustomer.id
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        notifications.show({
+          title: 'Success',
+          message: data.message,
+          color: 'green'
+        })
+        voucherForm.reset()
+        closeVoucherModal()
+        loadCustomers()
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to redeem voucher',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to redeem voucher',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleExport = async (format: string) => {
+    try {
+      const params = new URLSearchParams()
+      if (searchTerm) params.append('search', searchTerm)
+      if (filterStatus) params.append('status', filterStatus)
+      if (filterDealer) params.append('dealer', filterDealer)
+      if (filterPackage) params.append('package', filterPackage)
+      if (filterExpiry) params.append('expiry', filterExpiry)
+      params.append('format', format)
+
+      const response = await fetch(`/api/customers/export?${params.toString()}`)
+
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.style.display = 'none'
+        a.href = url
+        a.download = `customers_${new Date().toISOString().split('T')[0]}.${format === 'csv' ? 'csv' : format === 'excel' ? 'xlsx' : 'pdf'}`
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+
+        notifications.show({
+          title: 'Success',
+          message: `Customer report exported as ${format.toUpperCase()}`,
+          color: 'green'
+        })
+      } else {
+        throw new Error('Export failed')
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to export customers',
+        color: 'red'
+      })
+    }
+  }
+
+  const handleOpenVoucher = (customer: Customer) => {
+    setSelectedCustomer(customer)
+    openVoucherModal()
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'green'
+      case 'inactive': return 'red'
+      case 'deleted': return 'gray'
+      default: return 'gray'
+    }
+  }
+
+  const getPackageStatusColor = (status: string) => {
+    switch (status) {
+      case 'Active': return 'green'
+      case 'Expired': return 'red'
+      case 'Expiring Soon': return 'orange'
+      case 'No Package': return 'gray'
+      default: return 'gray'
+    }
+  }
+
+  const getPlaceholderByRole = (role: string) => {
+    switch (role) {
+      case 'OWNER':
+      case 'ADMIN':
+        return 'Select dealer (Level 3 only)'
+      case 'SUBDEALER':
+        return 'Select dealer (auto-filled with your info)'
+      case 'EMPLOYEE':
+        return 'Select dealer or leave blank'
+      default:
+        return 'Select dealer (optional)'
+    }
+  }
+
+  const getDealerDataByRole = (role: string) => {
+    const dealerOptions = dealers.map(dealer => ({
+      value: dealer.id.toString(),
+      label: `${dealer.name} (${dealer.dealer_code})`
+    }))
+
+    switch (role) {
+      case 'OWNER':
+      case 'ADMIN':
+        // Level 1 & 2: Show list of Level 3 dealers with blank option
+        return [
+          { value: '', label: 'Select dealer...' },
+          ...dealerOptions
+        ]
+      case 'SUBDEALER':
+        // Level 3: Show all dealers (auto-filled but can be changed)
+        return [
+          { value: '', label: 'No dealer' },
+          ...dealerOptions
+        ]
+      case 'EMPLOYEE':
+        // Level 4: Can select blank or "No Dealer"
+        return [
+          { value: '', label: 'No dealer' },
+          ...dealerOptions
+        ]
+      default:
+        return [
+          { value: '', label: 'No dealer' },
+          ...dealerOptions
+        ]
+    }
+  }
+
+  return (
+    <AdminLayout>
+      <Stack gap="lg">
+        {/* Header */}
+        <Box>
+          <Title order={1} c="gray.8" mb="xs">
+            Customer Management
+          </Title>
+          <Text c="gray.6">
+            Manage customers, their packages, dealers, and voucher redemptions
+          </Text>
+        </Box>
+
+        {/* Stats */}
+        <SimpleGrid cols={{ base: 2, md: 4 }} spacing="lg">
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack align="center" gap="xs">
+              <Group gap="xs">
+                <Box component={FiUsers} size={20} c="blue.5" />
+                <Text size="xl" fw="bold" c="blue.5">
+                  {stats.totalCustomers}
+                </Text>
+              </Group>
+              <Text size="sm" c="dimmed">Total Customers</Text>
+            </Stack>
+          </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack align="center" gap="xs">
+              <Group gap="xs">
+                <Box component={FiUserCheck} size={20} c="green.5" />
+                <Text size="xl" fw="bold" c="green.5">
+                  {stats.activeCustomers}
+                </Text>
+              </Group>
+              <Text size="sm" c="dimmed">Active Customers</Text>
+            </Stack>
+          </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack align="center" gap="xs">
+              <Group gap="xs">
+                <Box component={FiClock} size={20} c="violet.5" />
+                <Text size="xl" fw="bold" c="violet.5">
+                  {stats.customersWithPackages}
+                </Text>
+              </Group>
+              <Text size="sm" c="dimmed">With Packages</Text>
+            </Stack>
+          </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack align="center" gap="xs">
+              <Group gap="xs">
+                <Box component={FaRupeeSign} size={20} c="orange.5" />
+                <Text size="xl" fw="bold" c="orange.5">
+                  {(stats.totalCustomerBalance || 0).toFixed(2)}
+                </Text>
+              </Group>
+              <Text size="sm" c="dimmed">Total Balance</Text>
+            </Stack>
+          </Card>
+        </SimpleGrid>
+
+        {/* Filters and Actions */}
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Group justify="space-between" wrap="wrap" gap="md">
+            <Group gap="md" style={{ flex: 1 }}>
+              <TextInput
+                placeholder="Search customers..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ maxWidth: '300px' }}
+              />
+              <Select
+                placeholder="All Status"
+                value={filterStatus}
+                onChange={(value) => setFilterStatus(value || '')}
+                data={[
+                  { value: '', label: 'All Status' },
+                  { value: 'active', label: 'Active' },
+                  { value: 'inactive', label: 'Inactive' }
+                ]}
+                style={{ minWidth: '120px' }}
+              />
+              <Select
+                placeholder="All Dealers"
+                value={filterDealer}
+                onChange={(value) => setFilterDealer(value || '')}
+                data={
+                  currentUserRole === 'SUBDEALER' 
+                    ? [
+                        { value: '', label: 'All Dealers' },
+                        { value: currentUserId?.toString() || '', label: 'My Customers' },
+                        { value: 'no_dealer', label: 'No Dealer' },
+                        ...dealers.map(dealer => ({
+                          value: dealer.id.toString(),
+                          label: `${dealer.name} (${dealer.dealer_code})`
+                        }))
+                      ]
+                    : [
+                        { value: '', label: 'All Dealers' },
+                        { value: 'no_dealer', label: 'No Dealer' },
+                        ...dealers.map(dealer => ({
+                          value: dealer.id.toString(),
+                          label: `${dealer.name} (${dealer.dealer_code})`
+                        }))
+                      ]
+                }
+                style={{ minWidth: '150px' }}
+              />
+              <Select
+                placeholder="Package Status"
+                value={filterExpiry}
+                onChange={(value) => setFilterExpiry(value || '')}
+                data={[
+                  { value: '', label: 'All Packages' },
+                  { value: 'active', label: 'Active' },
+                  { value: 'expiring_soon', label: 'Expiring Soon' },
+                  { value: 'expired', label: 'Expired' },
+                  { value: 'no_package', label: 'No Package' }
+                ]}
+                style={{ minWidth: '150px' }}
+              />
+              {filterExpiry === 'expiring_soon' && (
+                <NumberInput
+                  placeholder="Days"
+                  value={expiryDays}
+                  onChange={(value) => setExpiryDays(Number(value) || 30)}
+                  min={1}
+                  max={365}
+                  style={{ width: '80px' }}
+                />
+              )}
+            </Group>
+            <Group gap="md">
+              <Menu shadow="md" width={200}>
+                <Menu.Target>
+                  <Button variant="outline" leftSection={<Box component={FiDownload} />}>
+                    Export
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item onClick={() => handleExport('csv')}>
+                    Export as CSV
+                  </Menu.Item>
+                  <Menu.Item onClick={() => handleExport('excel')}>
+                    Export as Excel
+                  </Menu.Item>
+                  <Menu.Item onClick={() => handleExport('pdf')}>
+                    Export as PDF
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+              <PermissionGuard requiredPermission="customers.create">
+                <Button
+                  color="green"
+                  onClick={openCreateModal}
+                  leftSection={<Box component={FiPlus} />}
+                >
+                  Add Customer
+                </Button>
+              </PermissionGuard>
+            </Group>
+          </Group>
+        </Card>
+
+        {/* Customers Table */}
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
+          {loading ? (
+            <Group justify="center" p="xl">
+              <Loader size="lg" />
+            </Group>
+          ) : (
+            <Table.ScrollContainer minWidth={1200}>
+              <Table striped highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Customer Details</Table.Th>
+                    <Table.Th>Mobile Number</Table.Th>
+                    <Table.Th>Status</Table.Th>
+                    <Table.Th>Dealer Code</Table.Th>
+                    <Table.Th>Package Name</Table.Th>
+                    <Table.Th>Package Expiry</Table.Th>
+                    <Table.Th>Package Status</Table.Th>
+                    <Table.Th>Actions</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {customers.map((customer) => (
+                    <Table.Tr key={customer.id}>
+                      <Table.Td>
+                        <Group gap="md">
+                          <Avatar 
+                            src={customer.avatar} 
+                            alt={customer.name}
+                            size="md" 
+                            radius="md"
+                          >
+                            {customer.name?.charAt(0) || 'U'}
+                          </Avatar>
+                          <Stack gap="xs">
+                            <Text fw="bold">{customer.name}</Text>
+                            <Text size="sm" c="dimmed">{customer.email}</Text>
+                            <Text size="xs" c="dimmed">ID: {customer.id}</Text>
+                          </Stack>
+                        </Group>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text>{customer.mobile || customer.phone || 'Not provided'}</Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Badge color={customer.isActive ? 'green' : 'red'} variant="light">
+                          {customer.isActive ? 'Active' : 'Inactive'}
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>
+                        <Text>{customer.dealer_dealer_code || 'None'}</Text>
+                        {customer.dealer_name && (
+                          <Text size="xs" c="dimmed">{customer.dealer_name}</Text>
+                        )}
+                      </Table.Td>
+                      <Table.Td>
+                        <Text>{customer.package_name || 'None'}</Text>
+                        {customer.package_price && (
+                          <Text size="xs" c="dimmed">₹{customer.package_price}</Text>
+                        )}
+                      </Table.Td>
+                      <Table.Td>
+                        <Text size="sm">
+                          {customer.package_expiry 
+                            ? new Date(customer.package_expiry).toLocaleDateString() 
+                            : 'No expiry'}
+                        </Text>
+                      </Table.Td>
+                      <Table.Td>
+                        <Badge color={getPackageStatusColor(customer.package_status)} variant="light">
+                          {customer.package_status}
+                        </Badge>
+                      </Table.Td>
+                      <Table.Td>
+                        <Group gap="xs">
+                          <ActionIcon
+                            size="sm"
+                            variant="subtle"
+                            onClick={() => handleViewCustomer(customer)}
+                            aria-label="View customer"
+                          >
+                            <Box component={FiEye} />
+                          </ActionIcon>
+                          <PermissionGuard requiredPermission="customers.update">
+                            <ActionIcon
+                              size="sm"
+                              variant="subtle"
+                              color="blue"
+                              onClick={() => handleEditCustomer(customer)}
+                              aria-label="Edit customer"
+                            >
+                              <Box component={FiEdit3} />
+                            </ActionIcon>
+                          </PermissionGuard>
+                          <PermissionGuard requiredPermission="customers.delete">
+                            <ActionIcon
+                              size="sm"
+                              variant="subtle"
+                              color="red"
+                              onClick={() => handleDeleteCustomer(customer.id)}
+                              aria-label="Delete customer"
+                            >
+                              <Box component={FiTrash2} />
+                            </ActionIcon>
+                          </PermissionGuard>
+                          <Menu shadow="md" width={200}>
+                            <Menu.Target>
+                              <ActionIcon
+                                size="sm"
+                                variant="subtle"
+                                color="gray"
+                                aria-label="More actions"
+                              >
+                                <Box component={FiMoreVertical} />
+                              </ActionIcon>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                              <PermissionGuard requiredPermission="customers.impersonate">
+                                <Menu.Item
+                                  leftSection={<Box component={FiLogIn} size={14} />}
+                                  onClick={() => handleImpersonate(customer.id)}
+                                >
+                                  Impersonate
+                                </Menu.Item>
+                              </PermissionGuard>
+                              <Menu.Item
+                                leftSection={<Box component={FiGift} size={14} />}
+                                onClick={() => handleOpenVoucher(customer)}
+                              >
+                                Redeem Voucher
+                              </Menu.Item>
+                            </Menu.Dropdown>
+                          </Menu>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          )}
+
+          {customers.length === 0 && !loading && (
+            <Alert
+              icon={<FiInfo size={16} />}
+              title="No customers found"
+              color="blue"
+              variant="light"
+              mt="md"
+            >
+              {searchTerm || filterStatus || filterDealer
+                ? 'No customers match your current filters.'
+                : 'Create your first customer to get started.'}
+            </Alert>
+          )}
+        </Card>
+
+        {/* Create Customer Modal */}
+        <Modal
+          opened={isCreateModalOpen}
+          onClose={closeCreateModal}
+          title="Create New Customer"
+          size="lg"
+        >
+          <form onSubmit={form.onSubmit(handleCreateCustomer)}>
+            <Stack gap="md">
+              {/* Avatar Upload */}
+              <Group gap="md" align="center">
+                <Avatar 
+                  src={avatarFile ? URL.createObjectURL(avatarFile) : null} 
+                  size="lg" 
+                  radius="md"
+                />
+                <Stack gap="xs" style={{ flex: 1 }}>
+                  <Text size="sm" fw={500}>Profile Avatar</Text>
+                  <FileInput
+                    placeholder="Choose avatar image"
+                    accept="image/*"
+                    value={avatarFile}
+                    onChange={setAvatarFile}
+                    clearable
+                  />
+                </Stack>
+              </Group>
+
+              <SimpleGrid cols={2} spacing="md">
+                <TextInput
+                  label="Name"
+                  placeholder="Enter customer name"
+                  required
+                  {...form.getInputProps('name')}
+                />
+                <TextInput
+                  label="Email"
+                  placeholder="Enter email address"
+                  required
+                  {...form.getInputProps('email')}
+                />
+              </SimpleGrid>
+
+              <TextInput
+                label="Password"
+                type="password"
+                placeholder="Enter initial password"
+                required
+                {...form.getInputProps('password')}
+              />
+
+              <SimpleGrid cols={2} spacing="md">
+                <TextInput
+                  label="Phone"
+                  placeholder="Enter phone number"
+                  {...form.getInputProps('phone')}
+                />
+                <TextInput
+                  label="Mobile"
+                  placeholder="Enter mobile number"
+                  {...form.getInputProps('mobile')}
+                />
+              </SimpleGrid>
+
+              <Textarea
+                label="Address"
+                placeholder="Enter address"
+                rows={3}
+                {...form.getInputProps('address')}
+              />
+
+              <SimpleGrid cols={3} spacing="md">
+                <Select
+                  label="Assign to Dealer"
+                  placeholder={getPlaceholderByRole(currentUserRole)}
+                  description="Only Level 3 (SUBDEALER) users shown"
+                  data={getDealerDataByRole(currentUserRole)}
+                  {...form.getInputProps('dealerId')}
+                />
+                <Select
+                  label="Assign Package"
+                  placeholder="Select package (optional)"
+                  data={[
+                    { value: '', label: 'No package' },
+                    ...packages.map(pkg => ({
+                      value: pkg.id,
+                      label: `${pkg.name} - ₹${pkg.price}`
+                    }))
+                  ]}
+                  {...form.getInputProps('packageId')}
+                />
+                <Select
+                  label="Language"
+                  placeholder="Select language"
+                  data={[
+                    { value: 'en', label: 'English' },
+                    { value: 'hi', label: 'Hindi (हिंदी)' },
+                    { value: 'gu', label: 'Gujarati (ગુજરાતી)' },
+                    { value: 'mr', label: 'Marathi (मराठी)' },
+                    { value: 'bn', label: 'Bengali (বাংলা)' },
+                    { value: 'ta', label: 'Tamil (தமிழ்)' },
+                    { value: 'te', label: 'Telugu (తెలుగు)' },
+                    { value: 'kn', label: 'Kannada (ಕನ್ನಡ)' },
+                    { value: 'ml', label: 'Malayalam (മലയാളം)' },
+                    { value: 'pa', label: 'Punjabi (ਪੰਜਾਬੀ)' },
+                    { value: 'or', label: 'Odia (ଓଡ଼ିଆ)' },
+                    { value: 'as', label: 'Assamese (অসমীয়া)' },
+                    { value: 'ur', label: 'Urdu (اردو)' }
+                  ]}
+                  {...form.getInputProps('language')}
+                />
+              </SimpleGrid>
+
+              <Textarea
+                label="Notes"
+                placeholder="Enter any notes"
+                rows={3}
+                {...form.getInputProps('notes')}
+              />
+
+              <Group justify="flex-end" mt="lg">
+                <Button variant="outline" onClick={closeCreateModal}>
+                  Cancel
+                </Button>
+                <Button color="green" type="submit">
+                  Create Customer
+                </Button>
+              </Group>
+            </Stack>
+          </form>
+        </Modal>
+
+        {/* View Customer Modal */}
+        <Modal
+          opened={isViewModalOpen}
+          onClose={closeViewModal}
+          title="Customer Details"
+          size="md"
+        >
+          {selectedCustomer && (
+            <Stack gap="md">
+              {/* Avatar */}
+              <Group justify="center">
+                <Avatar 
+                  src={selectedCustomer.avatar} 
+                  alt={selectedCustomer.name}
+                  size="xl" 
+                  radius="md"
+                >
+                  {selectedCustomer.name?.charAt(0) || 'U'}
+                </Avatar>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Name:</Text>
+                <Text>{selectedCustomer.name}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Email:</Text>
+                <Text>{selectedCustomer.email}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Language:</Text>
+                <Text>{selectedCustomer.language || 'English'}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Phone:</Text>
+                <Text>{selectedCustomer.phone || 'Not provided'}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Mobile:</Text>
+                <Text>{selectedCustomer.mobile || 'Not provided'}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Status:</Text>
+                <Badge color={selectedCustomer.isActive ? 'green' : 'red'} variant="light">
+                  {selectedCustomer.isActive ? 'Active' : 'Inactive'}
+                </Badge>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Account Balance:</Text>
+                <Text>₹{selectedCustomer.account_balance || 0}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Message Balance:</Text>
+                <Text>{selectedCustomer.message_balance || 0} messages</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Dealer:</Text>
+                <Text>{selectedCustomer.dealer_name || 'None'}</Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text fw={600}>Package:</Text>
+                <Text>{selectedCustomer.package_name || 'None'}</Text>
+              </Group>
+
+              {selectedCustomer.package_expiry && (
+                <Group justify="space-between">
+                  <Text fw={600}>Package Expiry:</Text>
+                  <Text>{new Date(selectedCustomer.package_expiry).toLocaleDateString()}</Text>
+                </Group>
+              )}
+
+              {selectedCustomer.address && (
+                <Group justify="space-between" align="flex-start">
+                  <Text fw={600}>Address:</Text>
+                  <Text style={{ textAlign: 'right', maxWidth: '60%' }}>{selectedCustomer.address}</Text>
+                </Group>
+              )}
+
+              {selectedCustomer.notes && (
+                <Group justify="space-between" align="flex-start">
+                  <Text fw={600}>Notes:</Text>
+                  <Text style={{ textAlign: 'right', maxWidth: '60%' }}>{selectedCustomer.notes}</Text>
+                </Group>
+              )}
+
+              <Group justify="space-between">
+                <Text fw={600}>Created:</Text>
+                <Text>{new Date(selectedCustomer.created_at).toLocaleDateString()}</Text>
+              </Group>
+
+              {selectedCustomer.last_login && (
+                <Group justify="space-between">
+                  <Text fw={600}>Last Login:</Text>
+                  <Text>{new Date(selectedCustomer.last_login).toLocaleDateString()}</Text>
+                </Group>
+              )}
+            </Stack>
+          )}
+        </Modal>
+
+        {/* Edit Customer Modal */}
+        <Modal
+          opened={isEditModalOpen}
+          onClose={closeEditModal}
+          title="Edit Customer"
+          size="lg"
+        >
+          {selectedCustomer && (
+            <form onSubmit={editForm.onSubmit(handleUpdateCustomer)}>
+              <Stack gap="md">
+                {/* Avatar Upload */}
+                <Group gap="md" align="center">
+                  <Avatar 
+                    src={editAvatarFile ? URL.createObjectURL(editAvatarFile) : selectedCustomer.avatar} 
+                    size="lg" 
+                    radius="md"
+                  >
+                    {selectedCustomer.name?.charAt(0) || 'U'}
+                  </Avatar>
+                  <Stack gap="xs" style={{ flex: 1 }}>
+                    <Text size="sm" fw={500}>Customer Avatar</Text>
+                    <FileInput
+                      placeholder="Choose new avatar image"
+                      accept="image/*"
+                      value={editAvatarFile}
+                      onChange={setEditAvatarFile}
+                      clearable
+                    />
+                  </Stack>
+                </Group>
+
+                <SimpleGrid cols={2} spacing="md">
+                  <TextInput
+                    label="Name"
+                    placeholder="Enter full name"
+                    required
+                    {...editForm.getInputProps('name')}
+                  />
+                  <TextInput
+                    label="Email"
+                    placeholder="Enter email address"
+                    required
+                    {...editForm.getInputProps('email')}
+                  />
+                </SimpleGrid>
+
+                <SimpleGrid cols={2} spacing="md">
+                  <TextInput
+                    label="Phone"
+                    placeholder="Enter phone number"
+                    {...editForm.getInputProps('phone')}
+                  />
+                  <TextInput
+                    label="Mobile"
+                    placeholder="Enter mobile number"
+                    {...editForm.getInputProps('mobile')}
+                  />
+                </SimpleGrid>
+
+                <Textarea
+                  label="Address"
+                  placeholder="Enter address"
+                  rows={3}
+                  {...editForm.getInputProps('address')}
+                />
+
+                <SimpleGrid cols={3} spacing="md">
+                  <Select
+                    label="Assign to Dealer"
+                    placeholder="Select dealer"
+                    description="Only Level 3 (SUBDEALER) users shown"
+                    data={[
+                      { value: '', label: 'No dealer' },
+                      ...dealers.map(dealer => ({
+                        value: dealer.id.toString(),
+                        label: `${dealer.name} (${dealer.dealer_code || 'No code'})`
+                      }))
+                    ]}
+                    {...editForm.getInputProps('dealerId')}
+                  />
+                  <Select
+                    label="Assign Package"
+                    placeholder="Select package (optional)"
+                    data={[
+                      { value: '', label: 'No package' },
+                      ...packages.map(pkg => ({
+                        value: pkg.id,
+                        label: `${pkg.name} - ₹${pkg.price}`
+                      }))
+                    ]}
+                    {...editForm.getInputProps('packageId')}
+                  />
+                  <Select
+                    label="Language"
+                    placeholder="Select language"
+                    data={[
+                      { value: 'en', label: 'English' },
+                      { value: 'hi', label: 'Hindi (हिंदी)' },
+                      { value: 'gu', label: 'Gujarati (ગુજરાતી)' },
+                      { value: 'mr', label: 'Marathi (मराठी)' },
+                      { value: 'bn', label: 'Bengali (বাংলা)' },
+                      { value: 'ta', label: 'Tamil (தமிழ்)' },
+                      { value: 'te', label: 'Telugu (తెలుగు)' },
+                      { value: 'kn', label: 'Kannada (ಕನ್ನಡ)' },
+                      { value: 'ml', label: 'Malayalam (മലയാളം)' },
+                      { value: 'pa', label: 'Punjabi (ਪੰਜਾਬੀ)' },
+                      { value: 'or', label: 'Odia (ଓଡ଼ିଆ)' },
+                      { value: 'as', label: 'Assamese (অসমীয়া)' },
+                      { value: 'ur', label: 'Urdu (اردو)' }
+                    ]}
+                    {...editForm.getInputProps('language')}
+                  />
+                </SimpleGrid>
+
+                <Select
+                  label="Customer Status"
+                  placeholder="Select customer status"
+                  data={[
+                    { value: 'active', label: 'Active' },
+                    { value: 'inactive', label: 'Inactive' },
+                    { value: 'suspended', label: 'Suspended' },
+                    { value: 'pending', label: 'Pending' }
+                  ]}
+                  {...editForm.getInputProps('customerStatus')}
+                />
+
+                <Textarea
+                  label="Notes"
+                  placeholder="Enter any notes"
+                  rows={3}
+                  {...editForm.getInputProps('notes')}
+                />
+
+                <Group justify="flex-end" mt="lg">
+                  <Button variant="outline" onClick={closeEditModal}>
+                    Cancel
+                  </Button>
+                  <Button color="blue" type="submit">
+                    Update Customer
+                  </Button>
+                </Group>
+              </Stack>
+            </form>
+          )}
+        </Modal>
+
+        {/* Voucher Redemption Modal */}
+        <Modal
+          opened={isVoucherModalOpen}
+          onClose={closeVoucherModal}
+          title="Redeem Voucher for Customer"
+          size="md"
+        >
+          {selectedCustomer && (
+            <form onSubmit={voucherForm.onSubmit(handleRedeemVoucher)}>
+              <Stack gap="md">
+                <Text>
+                  Redeeming voucher for: <strong>{selectedCustomer.name}</strong> ({selectedCustomer.email})
+                </Text>
+
+                <TextInput
+                  label="Voucher Code"
+                  placeholder="Enter voucher code"
+                  required
+                  {...voucherForm.getInputProps('voucherCode')}
+                />
+
+                <Group justify="flex-end" mt="lg">
+                  <Button variant="outline" onClick={closeVoucherModal}>
+                    Cancel
+                  </Button>
+                  <Button color="green" type="submit">
+                    Redeem Voucher
+                  </Button>
+                </Group>
+              </Stack>
+            </form>
+          )}
+        </Modal>
+      </Stack>
+    </AdminLayout>
+  )
+}

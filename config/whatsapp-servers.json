@@ -1,0 +1,68 @@
+{
+  "servers": [
+    {
+      "name": "Wa-Server-1",
+      "hostname": "127.0.0.1",
+      "port": 3110,
+      "url": "http://127.0.0.1:3110",
+      "environment": "development",
+      "location": "Local",
+      "status": "active",
+      "maxInstances": 1000,
+      "priority": 999,
+      "features": [
+        "qr-generation",
+        "messaging"
+      ],
+      "healthEndpoint": "/api/health",
+      "statsEndpoint": "/api/stats",
+      "accountsEndpoint": "/api/accounts",
+      "description": "Wa-Server-1 - development environment",
+      "connectionTimeout": 5000,
+      "retryAttempts": 3,
+      "loadBalancing": {
+        "enabled": true,
+        "weight": 1
+      },
+      "id": "server-1755622995233"
+    }
+  ],
+  "configuration": {
+    "loadBalancing": {
+      "enabled": true,
+      "algorithm": "weighted_round_robin",
+      "healthCheckInterval": 30000,
+      "failoverTimeout": 5000
+    },
+    "monitoring": {
+      "enabled": true,
+      "healthCheckInterval": 15000,
+      "alertThresholds": {
+        "responseTime": 5000,
+        "errorRate": 0.1,
+        "capacity": 0.9
+      }
+    },
+    "defaults": {
+      "connectionTimeout": 5000,
+      "retryAttempts": 3,
+      "maxInstances": 50
+    },
+    "environments": {
+      "development": {
+        "autoFailover": false,
+        "strictMode": false
+      },
+      "production": {
+        "autoFailover": true,
+        "strictMode": true
+      },
+      "testing": {
+        "autoFailover": false,
+        "strictMode": false
+      }
+    }
+  },
+  "lastUpdated": "2025-08-20T14:19:24.554Z",
+  "version": "1.0.0"
+}

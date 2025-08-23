@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1755962255176_77stt6uwe",
+  "packageId": "basic_plan_001",
+  "customerId": "5",
+  "customerEmail": "customer@demo.com",
+  "customerName": "Demo Customer",
+  "customerPhone": "+1234567890",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-23T15:17:36.393Z",
+  "status": "pending"
+}

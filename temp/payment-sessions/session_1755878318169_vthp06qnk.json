@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1755878318169_vthp06qnk",
+  "packageId": "basic_plan_001",
+  "customerId": "7",
+  "customerEmail": "reshma@gmail.com",
+  "customerName": "Reshma",
+  "customerPhone": "",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-22T15:58:50.915Z",
+  "status": "pending"
+}

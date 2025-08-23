@@ -1,0 +1,16 @@
+{
+  "sessionId": "bizcoins_1755190483333_qpzmtb0cv2",
+  "purchaseType": "BIZCOINS",
+  "userId": 15,
+  "userName": "resham",
+  "userEmail": "reshma@gmail.com",
+  "userLevel": 3,
+  "baseAmount": 5000,
+  "commissionRate": "5.00",
+  "commissionBonus": 250,
+  "totalCoins": 5250,
+  "description": "Self purchase of BizCoins",
+  "currency": "INR",
+  "createdAt": "2025-08-14T16:54:44.916Z",
+  "status": "pending"
+}

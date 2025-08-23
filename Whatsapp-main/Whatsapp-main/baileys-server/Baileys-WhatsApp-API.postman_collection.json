@@ -1,0 +1,805 @@
+{
+  "info": {
+    "name": "Baileys WhatsApp Server API",
+    "description": "Comprehensive Postman collection for testing Baileys WhatsApp Server API endpoints. Includes account management, messaging, webhooks, and server monitoring.",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set base URL if not already set",
+          "if (!pm.globals.get('baseUrl')) {",
+          "    pm.globals.set('baseUrl', 'http://localhost:3005');",
+          "}",
+          "",
+          "// Generate random account ID if needed",
+          "if (!pm.globals.get('testAccountId')) {",
+          "    const timestamp = Date.now();",
+          "    const randomId = Math.random().toString(36).substring(7);",
+          "    pm.globals.set('testAccountId', `test_${timestamp}_${randomId}`);",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3005",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "📋 Server Information",
+      "item": [
+        {
+          "name": "Get Server Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Get basic server information and available endpoints overview."
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Check if the server is running and healthy. Returns server status, uptime, memory usage, and account count."
+          },
+          "response": []
+        },
+        {
+          "name": "Server Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "stats"]
+            },
+            "description": "Get detailed server statistics including account breakdowns by status, server metrics, and memory usage."
+          },
+          "response": []
+        }
+      ],
+      "description": "Basic server information and monitoring endpoints"
+    },
+    {
+      "name": "🔐 Account Management",
+      "item": [
+        {
+          "name": "Connect Account (QR Code)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.globals.set('connectedAccountId', response.data.id);",
+                  "    pm.test('Account connection initiated', () => {",
+                  "        pm.expect(response.success).to.be.true;",
+                  "        pm.expect(response.data.id).to.exist;",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{testAccountId}}\",\n  \"webhookUrl\": \"https://webhook.site/your-unique-url\",\n  \"usePairingCode\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/connect",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "connect"]
+            },
+            "description": "Connect a new WhatsApp account using QR code authentication. The QR code will be returned in the response for scanning."
+          },
+          "response": []
+        },
+        {
+          "name": "Connect Account (Pairing Code)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"pairing-account\",\n  \"phoneNumber\": \"+1234567890\",\n  \"webhookUrl\": \"https://webhook.site/your-unique-url\",\n  \"usePairingCode\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/connect",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "connect"]
+            },
+            "description": "Connect a new WhatsApp account using pairing code authentication. Requires a valid phone number."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts"]
+            },
+            "description": "Get a list of all WhatsApp accounts on the server with their status and basic information."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "status"]
+            },
+            "description": "Get the current status and detailed information of a specific WhatsApp account."
+          },
+          "response": []
+        },
+        {
+          "name": "Get QR Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/qr",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "qr"]
+            },
+            "description": "Get the QR code for account connection (if available). QR code is returned as base64 encoded PNG image."
+          },
+          "response": []
+        },
+        {
+          "name": "Disconnect Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/disconnect",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "disconnect"]
+            },
+            "description": "Disconnect and remove a WhatsApp account from the server. This will log out the account and delete session data."
+          },
+          "response": []
+        }
+      ],
+      "description": "Account management endpoints for connecting, monitoring, and disconnecting WhatsApp accounts"
+    },
+    {
+      "name": "💬 Messaging",
+      "item": [
+        {
+          "name": "Send Text Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"text\": \"Hello from Baileys API! This is a test message.\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send a plain text message to a WhatsApp contact or group."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Image Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"image\": {\n      \"url\": \"https://picsum.photos/800/600\",\n      \"caption\": \"Check out this beautiful random image!\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send an image message with optional caption. The image URL should be publicly accessible."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Video Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"video\": {\n      \"url\": \"https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4\",\n      \"caption\": \"Sample video message from Baileys API\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send a video message with optional caption. The video URL should be publicly accessible."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Audio Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"audio\": {\n      \"url\": \"https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send an audio message. The audio URL should be publicly accessible and in a supported format."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Document Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"document\": {\n      \"url\": \"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf\",\n      \"filename\": \"sample-document.pdf\",\n      \"caption\": \"Here's an important document for you to review.\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send a document/file message with filename and optional caption."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Location Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"location\": {\n      \"latitude\": 37.7749,\n      \"longitude\": -122.4194,\n      \"name\": \"San Francisco\",\n      \"address\": \"San Francisco, CA, USA\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send a location message with coordinates and optional name/address."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Group Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"1234567890-1234567890@g.us\",\n  \"message\": {\n    \"text\": \"Hello everyone! This is a message to the group.\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/{{testAccountId}}/send-message",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "{{testAccountId}}", "send-message"]
+            },
+            "description": "Send a text message to a WhatsApp group. Note the group JID format ending with @g.us"
+          },
+          "response": []
+        }
+      ],
+      "description": "All messaging endpoints for sending different types of messages"
+    },
+    {
+      "name": "🔧 Debug & Testing",
+      "item": [
+        {
+          "name": "Frontend Debug - Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/debug/whatsapp?action=health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "debug", "whatsapp"],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "health"
+                }
+              ]
+            },
+            "description": "Test the frontend debug API health endpoint (via Next.js proxy)"
+          },
+          "response": []
+        },
+        {
+          "name": "Frontend Debug - List Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/debug/whatsapp?action=accounts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "debug", "whatsapp"],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "accounts"
+                }
+              ]
+            },
+            "description": "Get all accounts through the frontend debug API"
+          },
+          "response": []
+        },
+        {
+          "name": "Frontend Debug - Get QR Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/debug/whatsapp?action=qr&accountId={{testAccountId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "debug", "whatsapp"],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "qr"
+                },
+                {
+                  "key": "accountId",
+                  "value": "{{testAccountId}}"
+                }
+              ]
+            },
+            "description": "Get QR code through the frontend debug API"
+          },
+          "response": []
+        },
+        {
+          "name": "Frontend Debug - Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"connect\",\n  \"accountId\": \"debug_{{$timestamp}}\",\n  \"accountName\": \"Debug Test Account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/debug/whatsapp",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "debug", "whatsapp"]
+            },
+            "description": "Create a test account through the frontend debug API"
+          },
+          "response": []
+        }
+      ],
+      "description": "Debug and testing endpoints including frontend proxy APIs"
+    },
+    {
+      "name": "📊 Webhook Testing",
+      "item": [
+        {
+          "name": "Setup Webhook Site",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://webhook.site/token",
+              "protocol": "https",
+              "host": ["webhook.site"],
+              "path": ["token"]
+            },
+            "description": "Visit webhook.site to get a unique webhook URL for testing webhook deliveries"
+          },
+          "response": []
+        }
+      ],
+      "description": "Tools and endpoints for testing webhook functionality"
+    },
+    {
+      "name": "🧪 Complete Test Workflows",
+      "item": [
+        {
+          "name": "1️⃣ Full Account Test Flow",
+          "item": [
+            {
+              "name": "Step 1: Connect Account",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Account creation successful', () => {",
+                      "    pm.response.to.have.status(201);",
+                      "    const response = pm.response.json();",
+                      "    pm.expect(response.success).to.be.true;",
+                      "    pm.expect(response.data.id).to.exist;",
+                      "    pm.globals.set('workflowAccountId', response.data.id);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"workflow_test_{{$timestamp}}\",\n  \"webhookUrl\": \"https://webhook.site/your-url-here\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/connect",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "connect"]
+                }
+              }
+            },
+            {
+              "name": "Step 2: Check Status",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status check successful', () => {",
+                      "    pm.response.to.have.status(200);",
+                      "    const response = pm.response.json();",
+                      "    pm.expect(response.success).to.be.true;",
+                      "    pm.expect(response.data.status).to.exist;",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/{{workflowAccountId}}/status",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "{{workflowAccountId}}", "status"]
+                }
+              }
+            },
+            {
+              "name": "Step 3: Get QR Code",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('QR code retrieval', () => {",
+                      "    const response = pm.response.json();",
+                      "    if (pm.response.code === 200) {",
+                      "        pm.expect(response.success).to.be.true;",
+                      "        pm.expect(response.data.qrCode).to.exist;",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/{{workflowAccountId}}/qr",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "{{workflowAccountId}}", "qr"]
+                }
+              }
+            },
+            {
+              "name": "Step 4: Send Test Message",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// Only test if account is connected",
+                      "if (pm.response.code === 200) {",
+                      "    pm.test('Message sent successfully', () => {",
+                      "        const response = pm.response.json();",
+                      "        pm.expect(response.success).to.be.true;",
+                      "    });",
+                      "} else {",
+                      "    pm.test('Account not ready for messaging', () => {",
+                      "        pm.expect(pm.response.code).to.equal(400);",
+                      "    });",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"text\": \"Test message from workflow\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/{{workflowAccountId}}/send-message",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "{{workflowAccountId}}", "send-message"]
+                }
+              }
+            },
+            {
+              "name": "Step 5: Cleanup - Disconnect",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Account disconnected successfully', () => {",
+                      "    pm.response.to.have.status(200);",
+                      "    const response = pm.response.json();",
+                      "    pm.expect(response.success).to.be.true;",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/{{workflowAccountId}}/disconnect",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "{{workflowAccountId}}", "disconnect"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "2️⃣ Message Types Test Flow",
+          "item": [
+            {
+              "name": "Setup: Connect Account",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"message_test_{{$timestamp}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/connect",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "connect"]
+                }
+              }
+            },
+            {
+              "name": "Test: Text Message",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"text\": \"Text message test\"\n  }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/message_test_{{$timestamp}}/send-message",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "message_test_{{$timestamp}}", "send-message"]
+                }
+              }
+            },
+            {
+              "name": "Test: Image Message",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"1234567890@s.whatsapp.net\",\n  \"message\": {\n    \"image\": {\n      \"url\": \"https://picsum.photos/200/200\",\n      \"caption\": \"Test image\"\n    }\n  }\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/accounts/message_test_{{$timestamp}}/send-message",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "accounts", "message_test_{{$timestamp}}", "send-message"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

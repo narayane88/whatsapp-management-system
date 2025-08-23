@@ -1,0 +1,1414 @@
+
+> whatsapp-frontend@1.0.0 dev
+> npm run kill-port && next dev
+
+
+> whatsapp-frontend@1.0.0 kill-port
+> npx kill-port 3000
+
+Process on port 3000 killed
+ ⚠ Warning: Found multiple lockfiles. Selecting D:\Whatsapp Programm\package-lock.json.
+   Consider removing the lockfiles at:
+   * D:\Whatsapp Programm\whatsapp-frontend\package-lock.json
+
+   ▲ Next.js 15.4.6
+   - Local:        http://localhost:3000
+   - Network:      http://26.155.17.128:3000
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     ✓ optimizeCss
+
+ ✓ Starting...
+Warning: Reverting webpack devtool to 'false'.
+Changing the webpack devtool in development mode will cause severe performance regressions.
+Read more: https://nextjs.org/docs/messages/improper-devtool
+ ✓ Ready in 5.5s
+ ○ Compiling / ...
+ ✓ Compiled / in 15.9s (2565 modules)
+ GET / 200 in 240ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /auth/signin in 6.4s (2826 modules)
+ GET /api/company/profile 401 in 7118ms
+ GET /auth/signin 200 in 5223ms
+ GET /api/company/profile 401 in 589ms
+ GET /api/auth/session 200 in 10241ms
+ GET /api/auth/providers 200 in 52ms
+ GET /api/auth/csrf 200 in 28ms
+ POST /api/auth/callback/credentials 200 in 478ms
+ GET /api/auth/session 200 in 36ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 1139ms (210 modules)
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 4.2s (2927 modules)
+ GET /admin 200 in 4888ms
+ GET /api/company/profile 200 in 613ms
+ GET /api/company/profile 200 in 159ms
+ GET /api/company/profile 200 in 112ms
+ GET /api/company/profile 200 in 122ms
+ GET /api/company/profile 200 in 107ms
+ GET /api/company/profile 200 in 110ms
+ HEAD / 200 in 293ms
+ ○ Compiling /admin/customers ...
+ ✓ Compiled /admin/customers in 2.3s (2956 modules)
+ GET /admin/customers 200 in 2603ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 6.6s (2966 modules)
+ GET /api/auth/user-permissions 200 in 7402ms
+ GET /api/company/profile 200 in 7238ms
+ GET /api/customers?page=1&limit=20 200 in 8073ms
+ GET /api/customers/stats 404 in 9095ms
+ GET /api/company/profile 200 in 1283ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /api/customers/stats 404 in 1287ms
+ GET /api/customers?page=1&limit=20 200 in 972ms
+ GET /api/company/profile 200 in 683ms
+ GET /admin/customers 200 in 626ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/customers?page=1&limit=20 200 in 344ms
+ GET /api/customers/stats 404 in 720ms
+ GET /api/customers/stats 404 in 623ms
+ GET /api/customers?page=1&limit=20 200 in 252ms
+ GET /api/company/profile 200 in 1099ms
+ GET /api/company/profile 200 in 178ms
+ GET /api/company/profile 200 in 550ms
+ GET /api/company/profile 200 in 118ms
+ GET /api/company/profile 200 in 109ms
+ GET /api/company/profile 200 in 118ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 2s (1909 modules)
+ GET /favicon.ico 200 in 2153ms
+ GET /admin 200 in 928ms
+ GET /api/auth/session 200 in 184ms
+ GET /api/company/profile 200 in 399ms
+ GET /api/company/profile 200 in 471ms
+ GET /api/company/profile 200 in 157ms
+ GET /api/company/profile 200 in 307ms
+ GET /api/company/profile 200 in 208ms
+ GET /api/company/profile 200 in 183ms
+ GET /api/company/profile 200 in 156ms
+ GET /api/company/profile 200 in 157ms
+ ○ Compiling /admin/packages ...
+ ✓ Compiled /admin/packages in 8.4s (3073 modules)
+ GET /admin/packages 200 in 9106ms
+ GET /api/company/profile 200 in 575ms
+ ○ Compiling /api/packages ...
+ ✓ Compiled /api/packages in 7.2s (3285 modules)
+ GET /admin/packages 200 in 4821ms
+ GET /admin/packages 200 in 169ms
+ GET /api/packages 200 in 8176ms
+ GET /api/packages 200 in 39ms
+ GET /api/company/profile 200 in 8033ms
+ GET /api/company/profile 200 in 233ms
+ GET /api/company/profile 200 in 142ms
+ ○ Compiling /admin/vouchers ...
+ ✓ Compiled /admin/vouchers in 2.4s (3088 modules)
+ GET /admin/vouchers 200 in 2640ms
+ ○ Compiling /api/vouchers-debug ...
+ ✓ Compiled /api/vouchers-debug in 3.5s (3088 modules)
+🐛 DEBUG: Vouchers API called without authentication checks
+🔍 DEBUG: Executing query: 
+      SELECT 
+        id, code, description, type, value, usage_limit, usage_count,
+        is_active, expires_at, created_by, created_at, updated_at,
+        package_id, min_purchase_amount, max_discount_amount,
+        CASE 
+          WHEN expires_at < CURRENT_TIMESTAMP THEN 'Expired'
+          WHEN is_active = false THEN 'Paused'
+          ELSE 'Active'
+        END as status
+      FROM vouchers
+      WHERE 1=1
+     ORDER BY created_at DESC LIMIT $1
+📝 DEBUG: Query params: [ 50 ]
+📊 DEBUG: Found 7 vouchers
+✅ DEBUG: Returning response with 7 vouchers
+ GET /api/vouchers-debug? 200 in 3834ms
+ GET /api/company/profile 200 in 3848ms
+ ○ Compiling /admin/transactions ...
+ ✓ Compiled /admin/transactions in 4s (3093 modules)
+🐛 DEBUG: Vouchers API called without authentication checks
+🔍 DEBUG: Executing query: 
+      SELECT 
+        id, code, description, type, value, usage_limit, usage_count,
+        is_active, expires_at, created_by, created_at, updated_at,
+        package_id, min_purchase_amount, max_discount_amount,
+        CASE 
+          WHEN expires_at < CURRENT_TIMESTAMP THEN 'Expired'
+          WHEN is_active = false THEN 'Paused'
+          ELSE 'Active'
+        END as status
+      FROM vouchers
+      WHERE 1=1
+     ORDER BY created_at DESC LIMIT $1
+📝 DEBUG: Query params: [ 50 ]
+📊 DEBUG: Found 7 vouchers
+✅ DEBUG: Returning response with 7 vouchers
+ GET /api/vouchers-debug? 200 in 4250ms
+ GET /admin/transactions 200 in 4584ms
+ GET /api/company/profile 200 in 4382ms
+ GET /api/company/profile 200 in 211ms
+ GET /api/company/profile 200 in 493ms
+ ○ Compiling /api/admin/users/creators ...
+ ✓ Compiled /api/admin/users/creators in 4.6s (3101 modules)
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 4954ms
+prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+ GET /api/admin/users/creators 200 in 5072ms
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 124ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 5192ms
+prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+ GET /api/admin/users/creators 200 in 160ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 102ms
+ GET /api/company/profile 200 in 5224ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 150ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 216ms
+ GET /api/company/profile 200 in 427ms
+ GET /api/company/profile 200 in 176ms
+ GET /api/company/profile 200 in 100ms
+ ○ Compiling /admin/subscriptions ...
+ ✓ Compiled /admin/subscriptions in 4s (3249 modules)
+ GET /admin/subscriptions 200 in 11111ms
+ ○ Compiling /api/admin/packages ...
+ ✓ Compiled /api/admin/packages in 9.3s (3253 modules)
+prisma:query SELECT 1
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query SELECT 1
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/admin/packages 200 in 9696ms
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/users 200 in 9718ms
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 9723ms
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+ GET /api/admin/packages 200 in 220ms
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/users 200 in 227ms
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 232ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 85ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 69ms
+ GET /api/company/profile 200 in 10156ms
+ GET /api/company/profile 200 in 120ms
+ GET /api/company/profile 200 in 198ms
+ GET /api/company/profile 200 in 157ms
+ GET /admin/transactions 200 in 171ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+ GET /api/admin/users/creators 200 in 143ms
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 151ms
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 161ms
+prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+ GET /api/admin/users/creators 200 in 136ms
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 142ms
+ GET /api/admin/users 200 in 139ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 74ms
+ GET /api/company/profile 200 in 256ms
+prisma:query 
+        SELECT 
+          t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+          t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+          u.name as user_name, u.email as user_email,
+          c.name as creator_name, c.email as creator_email, cr.name as creator_role
+        FROM transactions t
+        LEFT JOIN users u ON (
+          CASE 
+            WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+            ELSE CAST(u.id AS TEXT) = t."userId"
+          END
+        )
+        LEFT JOIN users c ON t."createdBy" = c.id
+        LEFT JOIN user_roles cur ON c.id = cur.user_id
+        LEFT JOIN roles cr ON cur.role_id = cr.id
+        ORDER BY t."createdAt" DESC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM transactions
+      
+ GET /api/admin/transactions?page=1&limit=50 200 in 51ms
+ GET /api/company/profile 200 in 202ms
+ GET /api/company/profile 200 in 196ms
+ GET /api/company/profile 200 in 134ms
+ ○ Compiling /admin/bizpoints ...
+ ✓ Compiled /admin/bizpoints in 4.9s (3253 modules)
+ GET /admin/bizpoints 200 in 5753ms
+ ○ Compiling /api/admin/bizpoints ...
+ ✓ Compiled /api/customers/stats in 7s (3257 modules)
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+ HEAD /api/customers/stats 401 in 5004ms
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 7632ms
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 40ms
+ GET /api/company/profile 200 in 7713ms
+ GET /api/company/profile 200 in 143ms
+ GET /api/company/profile 200 in 144ms
+ GET /api/company/profile 200 in 182ms
+ GET /admin/customers 200 in 406ms
+ ○ Compiling /api/customers ...
+ ✓ Compiled /api/customers in 2.5s (2047 modules)
+Customer stats API error: error: relation "user_packages" does not exist
+    at async GET (src\app\api\customers\stats\route.ts:39:19)
+  37 |     `
+  38 |
+> 39 |     const result = await pool.query(statsQuery)
+     |                   ^
+  40 |     const row = result.rows[0]
+  41 |
+  42 |     const stats = { {
+  length: 113,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '658',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1452',
+  routine: 'parserOpenTable'
+}
+ GET /api/customers/stats 500 in 4959ms
+ GET /api/company/profile 200 in 5678ms
+Customer stats API error: error: relation "user_packages" does not exist
+    at async GET (src\app\api\customers\stats\route.ts:39:19)
+  37 |     `
+  38 |
+> 39 |     const result = await pool.query(statsQuery)
+     |                   ^
+  40 |     const row = result.rows[0]
+  41 |
+  42 |     const stats = { {
+  length: 113,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '658',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1452',
+  routine: 'parserOpenTable'
+}
+ GET /api/customers/stats 500 in 1485ms
+ GET /api/customers?page=1&limit=20 200 in 6570ms
+ GET /api/customers?page=1&limit=20 200 in 52ms
+ GET /api/company/profile 200 in 753ms
+ GET /api/company/profile 200 in 161ms
+ GET /api/company/profile 200 in 140ms
+ ✓ Compiled in 2.5s (1777 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 10s (2971 modules)
+ GET /admin/customers 200 in 7570ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/company/profile in 10.1s (3229 modules)
+ GET /api/auth/session 200 in 11312ms
+ GET /admin/customers 200 in 1122ms
+ GET /api/company/profile 200 in 11342ms
+ GET /api/customers/stats 200 in 11350ms
+ GET /api/customers?page=1&limit=20 200 in 11383ms
+ GET /api/customers/stats 200 in 130ms
+ GET /api/customers?page=1&limit=20 200 in 147ms
+ GET /api/company/profile 200 in 431ms
+ GET /api/company/profile 200 in 211ms
+ GET /api/company/profile 200 in 171ms
+ GET /api/company/profile 200 in 415ms
+ GET /api/company/profile 200 in 147ms
+ ✓ Compiled in 12.7s (2971 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.3s (1783 modules)
+ HEAD / 200 in 2886ms
+ GET /admin/customers 200 in 744ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.1s (2033 modules)
+ ✓ Compiled (2041 modules)
+ GET /api/auth/session 200 in 9101ms
+ GET /api/customers/stats 200 in 9423ms
+ GET /api/customers/stats 200 in 33ms
+ GET /api/customers?page=1&limit=20 200 in 9948ms
+ GET /api/company/profile 200 in 9906ms
+ GET /api/customers?page=1&limit=20 200 in 98ms
+ GET /api/company/profile 200 in 316ms
+ GET /api/company/profile 200 in 412ms
+ GET /api/company/profile 200 in 387ms
+ GET /api/company/profile 200 in 169ms
+ GET /api/company/profile 200 in 141ms
+ ✓ Compiled in 4.6s (3235 modules)
+ ✓ Compiled in 1448ms (2035 modules)
+ GET /admin/customers 200 in 590ms
+ GET /admin/bizpoints 200 in 425ms
+ ○ Compiling /api/company/profile ...
+ ✓ Compiled /api/company/profile in 1477ms (2028 modules)
+ ✓ Compiled (2030 modules)
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+ GET /api/company/profile 200 in 3382ms
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 3530ms
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 252ms
+ GET /api/company/profile 200 in 496ms
+ GET /api/company/profile 200 in 165ms
+ GET /api/company/profile 200 in 160ms
+ GET /admin/customers 200 in 263ms
+ ○ Compiling /api/customers/stats ...
+ ✓ Compiled /api/customers/stats in 1191ms (2033 modules)
+ ✓ Compiled (2035 modules)
+ GET /api/customers/stats 200 in 2787ms
+ GET /api/customers/stats 200 in 29ms
+ GET /api/company/profile 200 in 2994ms
+ GET /api/customers?page=1&limit=20 200 in 3154ms
+ GET /api/customers?page=1&limit=20 200 in 87ms
+ GET /api/company/profile 200 in 389ms
+ GET /api/company/profile 200 in 155ms
+ GET /api/company/profile 200 in 132ms
+ ✓ Compiled in 3.8s (3227 modules)
+ ✓ Compiled in 1088ms (1777 modules)
+ GET /admin/packages 200 in 482ms
+ ○ Compiling /api/packages ...
+ ✓ Compiled /api/packages in 3.2s (2025 modules)
+ ✓ Compiled (2031 modules)
+ GET /api/company/profile 200 in 10212ms
+ GET /api/packages 200 in 10211ms
+ GET /api/packages 200 in 42ms
+ GET /api/company/profile 200 in 211ms
+ GET /api/company/profile 200 in 146ms
+ GET /api/company/profile 200 in 235ms
+ GET /admin/customers 200 in 394ms
+ ○ Compiling /api/customers/stats ...
+ ✓ Compiled /api/customers/stats in 1386ms (2033 modules)
+ ✓ Compiled in 3ms (2035 modules)
+ ✓ Compiled in 1ms (2035 modules)
+ ✓ Compiled in 1ms (2035 modules)
+ GET /api/company/profile 200 in 9207ms
+ GET /api/customers?page=1&limit=20 200 in 9602ms
+ ✓ Compiled in 1ms (2035 modules)
+ GET /admin/customers 200 in 8770ms
+ GET /api/customers/stats 200 in 10650ms
+ ✓ Compiled in 1ms (2035 modules)
+ ✓ Compiled in 0ms (2035 modules)
+ ✓ Compiled in 1ms (2035 modules)
+ GET /api/company/profile 200 in 5627ms
+ GET /api/customers?page=1&limit=20 200 in 5655ms
+ ✓ Compiled in 1ms (2035 modules)
+ GET /admin/customers 200 in 5347ms
+ GET /api/customers/stats 200 in 5442ms
+ GET /api/company/profile 200 in 2293ms
+ GET /api/company/profile 200 in 100ms
+ GET /admin/subscriptions 200 in 209ms
+ ○ Compiling /api/admin/packages ...
+ ✓ Compiled /api/admin/packages in 2.6s (2037 modules)
+ ✓ Compiled (2041 modules)
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/admin/packages 200 in 4245ms
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 4260ms
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 4271ms
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+ GET /api/admin/packages 200 in 135ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 187ms
+ GET /api/admin/users 200 in 215ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 112ms
+ GET /api/company/profile 200 in 3670ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 78ms
+ GET /api/company/profile 200 in 151ms
+ GET /api/company/profile 200 in 112ms
+ GET /api/company/profile 200 in 262ms
+ ○ Compiling /api/admin/users/[id]/credit ...
+ ✓ Compiled /api/admin/users/[id]/credit in 3.8s (3237 modules)
+prisma:query SELECT 1
+prisma:query 
+      SELECT 
+        u.id, u.name, u.email, u.message_balance, 
+        r.level, r.name as role_name,
+        CASE 
+          WHEN r.level IN (3, 4) THEN true 
+          ELSE false 
+        END as can_use_credit
+      FROM users u
+      LEFT JOIN user_roles ur ON u.id = ur.user_id AND ur.is_primary = true
+      LEFT JOIN roles r ON ur.role_id = r.id
+      WHERE u.id = $1
+    
+ GET /api/admin/users/12/credit 200 in 5389ms
+ ○ Compiling /api/users/current ...
+ ✓ Compiled /api/users/current in 2.1s (3234 modules)
+ GET /api/users/current 200 in 2356ms
+ ○ Compiling /api/admin/users/[id]/bizpoints ...
+ ✓ Compiled /api/admin/users/[id]/bizpoints in 1924ms (3236 modules)
+prisma:query 
+      SELECT u.id, u.name, u.email, u.biz_points
+      FROM users u 
+      WHERE u.email = $1
+    
+prisma:query 
+      SELECT id, name, price, duration FROM packages WHERE id = $1
+    
+ POST /api/admin/subscriptions 400 in 64ms
+ GET /api/admin/users/1/bizpoints 200 in 4325ms
+ GET /admin/bizpoints 200 in 457ms
+ ○ Compiling /api/company/profile ...
+ ✓ Compiled /api/company/profile in 1102ms (2038 modules)
+ ✓ Compiled (2040 modules)
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 2509ms
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 8 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '200262.05',
+  users_with_points: '10',
+  total_transactions: '8',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 8, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 32ms
+ GET /api/company/profile 200 in 2530ms
+ GET /api/company/profile 200 in 112ms
+ GET /api/company/profile 200 in 141ms
+ GET /api/company/profile 200 in 161ms
+🚀 BizPoints API - FAIL-SAFE VERSION Started
+📋 Session check: {
+  hasSession: true,
+  hasUser: true,
+  userEmail: 'owner@demo.com',
+  userId: '1'
+}
+📥 Raw request body: {
+  "userId": "1",
+  "type": "ADMIN_CREDIT",
+  "amount": 1000000,
+  "description": ""
+}
+📊 Body analysis: {
+  userId: { type: 'string', value: '1' },
+  type: { type: 'string', value: 'ADMIN_CREDIT' },
+  amount: { type: 'number', value: 1000000 },
+  description: { type: 'string', value: '' }
+}
+🔧 Extracted parameters: {
+  userId: { type: 'string', value: '1' },
+  type: { type: 'string', value: 'ADMIN_CREDIT' },
+  amount: { type: 'number', value: 1000000 },
+  description: { type: 'string', value: '' }
+}
+🔍 Looking up current user...
+📧 User email for lookup: { original: 'owner@demo.com', extracted: 'owner@demo.com' }
+👤 Current user query result: { rows: 1 }
+✅ Current user ID: 1
+🎯 Looking up target user...
+🆔 Target user ID: { original: '1', converted: 1 }
+🎯 Target user query result: { rows: 1 }
+💰 Current balance: 101
+📊 Balance calculation: { current: 101, transaction: 1000000, new: 1000101 }
+🆔 Transaction ID: bp1754789735344qsvo8bd
+🔄 Database transaction started
+✅ User balance updated
+✅ Transaction record created
+✅ Database transaction committed
+ POST /api/admin/bizpoints 201 in 145ms
+🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+✅ Authenticated user: owner@demo.com
+🔍 Fetching users with BizPoints...
+📊 Found 10 users
+🔍 Fetching recent transactions...
+📊 Found 9 transactions
+🔍 Calculating summary statistics...
+📈 Summary calculated: {
+  total_biz_points: '3200363.05',
+  users_with_points: '11',
+  total_transactions: '9',
+  total_commissions: '20000.00',
+  total_settlements: '1028.99'
+}
+✅ Returning data: { usersCount: 10, transactionsCount: 9, totalBizPoints: undefined }
+ GET /api/admin/bizpoints 200 in 39ms
+ GET /admin/subscriptions 200 in 183ms
+prisma:query SELECT 1
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 101ms
+ ○ Compiling /api/admin/packages ...
+ ✓ Compiled /api/admin/packages in 1881ms (2036 modules)
+ ✓ Compiled (2038 modules)
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query SELECT 1
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+ GET /api/admin/packages 200 in 3454ms
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 3459ms
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 3349ms
+prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/admin/packages 200 in 114ms
+prisma:query 
+        SELECT id, name, email, "isActive", mobile, created_at as "createdAt", "parentId"
+        FROM users 
+        ORDER BY name ASC
+        LIMIT $1 OFFSET $2
+      
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+        SELECT COUNT(*)::integer as count FROM users
+      
+ GET /api/admin/users 200 in 142ms
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 149ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 140ms
+ GET /api/company/profile 200 in 3604ms
+ GET /api/company/profile 200 in 149ms
+ GET /api/company/profile 200 in 131ms
+ GET /api/company/profile 200 in 182ms
+ ○ Compiling /api/admin/users/[id]/credit ...
+ ✓ Compiled /api/admin/users/[id]/credit in 1183ms (2040 modules)
+prisma:query SELECT 1
+prisma:query 
+      SELECT 
+        u.id, u.name, u.email, u.message_balance, 
+        r.level, r.name as role_name,
+        CASE 
+          WHEN r.level IN (3, 4) THEN true 
+          ELSE false 
+        END as can_use_credit
+      FROM users u
+      LEFT JOIN user_roles ur ON u.id = ur.user_id AND ur.is_primary = true
+      LEFT JOIN roles r ON ur.role_id = r.id
+      WHERE u.id = $1
+    
+ GET /api/admin/users/12/credit 200 in 1313ms
+ ○ Compiling /api/users/current ...
+ ✓ Compiled /api/users/current in 1134ms (2042 modules)
+ GET /api/users/current 200 in 1326ms
+ ○ Compiling /api/admin/users/[id]/bizpoints ...
+ ✓ Compiled /api/admin/users/[id]/bizpoints in 1196ms (2044 modules)
+ GET /api/admin/users/1/bizpoints 200 in 1448ms
+prisma:query SELECT 1
+prisma:query 
+      SELECT u.id, u.name, u.email, u.biz_points
+      FROM users u 
+      WHERE u.email = $1
+    
+prisma:query 
+      SELECT id, name, price, duration FROM packages WHERE id = $1
+    
+prisma:query 
+        SELECT u.id, u.name, u.email
+        FROM users u
+        WHERE u.id = $1
+      
+prisma:query 
+        UPDATE users 
+        SET biz_points = biz_points - $1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+      
+prisma:query 
+        INSERT INTO bizpoints_transactions (
+          id, user_id, type, amount, balance, description, created_by, created_at, updated_at
+        ) VALUES (
+          $1,
+          $2,
+          'SETTLEMENT_WITHDRAW',
+          $3,
+          $4,
+          $5,
+          $6,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+        )
+      
+🪙 BizCoins payment processed: System Owner (ID: 1) paid 999 BizCoins for ramesh's subscription. Remaining balance: 999102
+prisma:query 
+      INSERT INTO customer_packages (id, "userId", "packageId", "createdBy", "paymentMethod", "startDate", "endDate", "isActive", "messagesUsed", "createdAt", "updatedAt")
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0, NOW(), NOW())
+    
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      WHERE cp.id = $1
+    
+ POST /api/admin/subscriptions 201 in 53ms
+prisma:query 
+      SELECT 
+        cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
+        cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."createdAt", cp."updatedAt",
+        u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
+        c.name as creator_name, c.email as creator_email,
+        p.name as package_name, p.description as package_description, 
+        p.price as package_price, p.duration as package_duration,
+        p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
+        CASE 
+          WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+          WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+          WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
+          ELSE 'INACTIVE'
+        END as status
+      FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
+      LEFT JOIN users c ON cp."createdBy" = c.id
+      LEFT JOIN packages p ON cp."packageId" = p.id
+      ORDER BY cp."createdAt" DESC
+      LIMIT 50 OFFSET 0
+    
+prisma:query 
+      SELECT COUNT(*)::integer as count FROM customer_packages cp
+      LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)  
+      LEFT JOIN packages p ON cp."packageId" = p.id
+    
+ GET /api/admin/subscriptions?page=1&limit=50 200 in 31ms
+ GET /admin/customers 200 in 111ms
+ ○ Compiling /api/customers/stats ...
+ ✓ Compiled /api/customers/stats in 1277ms (2045 modules)
+ ✓ Compiled (2047 modules)
+ GET /api/customers/stats 200 in 2877ms
+ GET /api/customers/stats 200 in 51ms
+ GET /api/company/profile 200 in 2864ms
+ GET /api/customers?page=1&limit=20 200 in 3304ms
+ GET /api/company/profile 200 in 317ms
+ GET /api/customers?page=1&limit=20 200 in 41ms
+ GET /api/company/profile 200 in 121ms
+ GET /api/company/profile 200 in 135ms
+ ✓ Compiled in 3s (1777 modules)
+[?25h

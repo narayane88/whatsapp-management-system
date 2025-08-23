@@ -1,0 +1,139 @@
+{
+  "timestamp": "2025-08-07T17:28:14.929Z",
+  "total": 26,
+  "passed": 21,
+  "failed": 5,
+  "success_rate": 81,
+  "tests": [
+    {
+      "name": "Health endpoint responds",
+      "passed": false,
+      "details": "Status: 500"
+    },
+    {
+      "name": "Login endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Invalid login rejected",
+      "passed": false,
+      "details": "Got status 500"
+    },
+    {
+      "name": "Session endpoint accessible",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "WhatsApp instances endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Create instance endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Send message endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Get messages endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Get users endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Create user endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Get packages endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Create package endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Get transactions endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Create transaction endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Get vouchers endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Create voucher endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Database health endpoint responds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Database write operation works",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "404 handled correctly",
+      "passed": false,
+      "details": "Got status 500"
+    },
+    {
+      "name": "Malformed request handled",
+      "passed": true,
+      "details": "Got status 500"
+    },
+    {
+      "name": "Unauthorized access blocked",
+      "passed": false,
+      "details": "Got status 500"
+    },
+    {
+      "name": "API handles concurrent requests",
+      "passed": true,
+      "details": "0 failed requests"
+    },
+    {
+      "name": "API responds within reasonable time",
+      "passed": true,
+      "details": "Took 1247ms for 10 concurrent requests"
+    },
+    {
+      "name": "SQL injection attempt blocked",
+      "passed": true,
+      "details": "Got status 500"
+    },
+    {
+      "name": "XSS attempt handled",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Rate limiting active",
+      "passed": false,
+      "details": "No rate limiting detected"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1755950995515_hydms6xi4",
+  "packageId": "basic_plan_001",
+  "customerId": "7",
+  "customerEmail": "suraj@gmail.com",
+  "customerName": "Suraj Pol",
+  "customerPhone": "+1234567890",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-23T12:09:20.397Z",
+  "status": "pending"
+}

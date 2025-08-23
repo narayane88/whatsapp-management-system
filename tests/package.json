@@ -1,0 +1,15 @@
+{
+  "name": "whatsapp-api-tests",
+  "version": "1.0.0",
+  "description": "Test suite for WhatsApp Customer API",
+  "main": "api-test.js",
+  "scripts": {
+    "test": "node api-test.js",
+    "test:verbose": "DEBUG=true node api-test.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "keywords": ["whatsapp", "api", "testing"],
+  "author": "WhatsApp Management System"
+}

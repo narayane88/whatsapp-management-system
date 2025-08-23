@@ -1,0 +1,29 @@
+user control system
+1 owner
+2 subDealer (can create customer, recharge plan(Whatsapp msg based wich recharge from cash, bank, upi & Payment gatway), )
+3 Employee
+
+
+customer panal 
+1 profile with emailid, Mobile Number, Name , password
+2 Whatsapp - queue , sent, received, compain, schedule msg, Group
+3 host - whatsapp  wich can provide qr code scan interface for customer
+4 contact - Save, Group, Subscribe
+5 api key - for access from api give details of api docuemntation
+6 api docuemntation logger for customer
+
+
+Admin panal
+
+1 Details overview
+2 user 
+3 role - permission can set here
+4 pakages - show pakages & new packae create
+5 vouchers - for recharge whatsapp account
+6 transaction - all tranction see in site owner role
+and other roll filered export report in excel 
+
+7 payout - subDealer wise payout details wich can paid money or rechargibal credit
+8 language multilanguage suppot
+9 whatsapp server - where is running exe url port connected devices allowed subscription on this instance
+10 admin api and documentation like logger
