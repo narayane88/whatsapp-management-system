@@ -98,6 +98,7 @@ const apiEndpoints: ApiEndpoint[] = [
         deviceName: { type: 'string', description: 'WhatsApp device/instance name' },
         to: { type: 'string', description: 'Recipient phone number in international format' },
         message: { type: 'string', description: 'Message content to send' },
+        attachmentUrl: { type: 'string', description: 'URL of the attachment to send (image, video, document, audio)' },
         priority: { type: 'number', description: 'Message priority (0-10, higher = more urgent)' },
         scheduledAt: { type: 'string', format: 'date-time', description: 'Schedule message for future delivery' }
       },
@@ -106,6 +107,7 @@ const apiEndpoints: ApiEndpoint[] = [
         deviceName: '2_bizflashindevice202508210325_1755746719393',
         to: '+919960589622',
         message: 'Hello! This is a test message from the API.',
+        attachmentUrl: 'https://example.com/document.pdf',
         priority: 1,
         scheduledAt: '2025-08-22T10:00:00.000Z'
       }
@@ -227,6 +229,100 @@ const apiEndpoints: ApiEndpoint[] = [
             }
           }
         }
+      },
+      {
+        title: 'Send Message with Image Attachment',
+        description: 'Send a WhatsApp message with an image attachment via URL',
+        request: {
+          method: 'POST',
+          url: `${API_BASE_URL}/messages/send`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here',
+            'Content-Type': 'application/json'
+          },
+          body: {
+            deviceName: '2_bizflashindevice202508210325_1755746719393',
+            to: '+919960589622',
+            message: 'Check out this product image!',
+            attachmentUrl: 'https://example.com/product-image.jpg',
+            priority: 1
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              messageId: 'msg_1755788203817_8',
+              queueId: 'c84767cf-65ae-4d89-b07b-f77fc7f920d5',
+              status: 'QUEUED',
+              attachmentType: 'image',
+              attachmentUrl: 'https://example.com/product-image.jpg'
+            }
+          }
+        }
+      },
+      {
+        title: 'Send Message with PDF Document',
+        description: 'Send a WhatsApp message with a PDF document attachment',
+        request: {
+          method: 'POST',
+          url: `${API_BASE_URL}/messages/send`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here',
+            'Content-Type': 'application/json'
+          },
+          body: {
+            deviceName: '2_bizflashindevice202508210325_1755746719393',
+            to: '+919960589622',
+            message: 'Please find the invoice attached.',
+            attachmentUrl: 'https://example.com/invoice-2025.pdf',
+            priority: 2
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              messageId: 'msg_1755788203818_9',
+              status: 'QUEUED',
+              attachmentType: 'document',
+              attachmentUrl: 'https://example.com/invoice-2025.pdf'
+            }
+          }
+        }
+      },
+      {
+        title: 'Send Message with Video Attachment',
+        description: 'Send a WhatsApp message with a video attachment',
+        request: {
+          method: 'POST',
+          url: `${API_BASE_URL}/messages/send`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here',
+            'Content-Type': 'application/json'
+          },
+          body: {
+            deviceName: '2_bizflashindevice202508210325_1755746719393',
+            to: '+919960589622',
+            message: 'Watch our latest product demo video!',
+            attachmentUrl: 'https://example.com/demo-video.mp4',
+            priority: 1
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              messageId: 'msg_1755788203819_10',
+              status: 'QUEUED',
+              attachmentType: 'video',
+              attachmentUrl: 'https://example.com/demo-video.mp4'
+            }
+          }
+        }
       }
     ],
     useCases: [
@@ -263,6 +359,7 @@ const apiEndpoints: ApiEndpoint[] = [
             properties: {
               to: { type: 'string' },
               message: { type: 'string' },
+              attachmentUrl: { type: 'string', description: 'URL of the attachment to send' },
               priority: { type: 'number' },
               scheduledAt: { type: 'string' }
             }
@@ -278,11 +375,13 @@ const apiEndpoints: ApiEndpoint[] = [
           {
             to: '+919960589622',
             message: 'Welcome to our service!',
+            attachmentUrl: 'https://example.com/welcome-banner.jpg',
             priority: 1
           },
           {
             to: '+918983063144',
             message: 'Special offer just for you!',
+            attachmentUrl: 'https://example.com/offer-details.pdf',
             priority: 2
           }
         ]
@@ -371,6 +470,107 @@ const apiEndpoints: ApiEndpoint[] = [
               queuedMessages: 2,
               failedMessages: 0,
               estimatedCompletionTime: '2025-08-21T14:57:05.720Z'
+            }
+          }
+        }
+      },
+      {
+        title: 'Bulk Messages with Attachments',
+        description: 'Send bulk messages with different attachments for each recipient',
+        request: {
+          method: 'POST',
+          url: `${API_BASE_URL}/messages/bulk`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here',
+            'Content-Type': 'application/json'
+          },
+          body: {
+            deviceName: '2_bizflashindevice202508210325_1755746719393',
+            batchId: 'product_launch_2025',
+            delay: 3000,
+            messages: [
+              {
+                to: '+919960589622',
+                message: 'Introducing our new product line! Check out the catalog.',
+                attachmentUrl: 'https://example.com/catalog-2025.pdf',
+                priority: 1
+              },
+              {
+                to: '+918983063144',
+                message: 'Watch our product demo video!',
+                attachmentUrl: 'https://example.com/product-demo.mp4',
+                priority: 1
+              },
+              {
+                to: '+917890123456',
+                message: 'See our latest collection in this brochure.',
+                attachmentUrl: 'https://example.com/brochure.jpg',
+                priority: 2
+              }
+            ]
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              batchId: 'product_launch_2025',
+              totalMessages: 3,
+              queuedMessages: 3,
+              failedMessages: 0,
+              estimatedCompletionTime: '2025-08-21T14:57:15.720Z'
+            }
+          }
+        }
+      },
+      {
+        title: 'Marketing Campaign with Mixed Media',
+        description: 'Send a marketing campaign with text-only and media messages',
+        request: {
+          method: 'POST',
+          url: `${API_BASE_URL}/messages/bulk`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here',
+            'Content-Type': 'application/json'
+          },
+          body: {
+            deviceName: '2_bizflashindevice202508210325_1755746719393',
+            batchId: 'mixed_media_campaign',
+            delay: 2500,
+            messages: [
+              {
+                to: '+919960589622',
+                message: 'Flash Sale Alert! 50% off on all products today only!',
+                priority: 3
+              },
+              {
+                to: '+918983063144',
+                message: 'Exclusive offer for you! See details in the attached flyer.',
+                attachmentUrl: 'https://example.com/exclusive-offer.jpg',
+                priority: 2
+              },
+              {
+                to: '+917890123456',
+                message: 'Your personalized discount code: SAVE20. Terms apply.',
+                attachmentUrl: 'https://example.com/terms-conditions.pdf',
+                priority: 1
+              }
+            ]
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              batchId: 'mixed_media_campaign',
+              totalMessages: 3,
+              queuedMessages: 3,
+              failedMessages: 0,
+              withAttachments: 2,
+              withoutAttachments: 1,
+              estimatedCompletionTime: '2025-08-21T14:57:12.500Z'
             }
           }
         }
