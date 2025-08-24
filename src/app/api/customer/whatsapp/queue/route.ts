@@ -6,33 +6,15 @@ import { whatsappServerManager } from '@/lib/whatsapp-servers'
 // Database connection
 const pool = new Pool(getDatabaseConfig())
 
-// In-memory storage for demonstration (in production, use a database)
-let messageQueue: QueueMessage[] = []
+// Queue settings
 let queueSettings: QueueSettings = {
   enabled: true,
-  interval: 10,
-  batchSize: 1,
+  interval: 3,
+  batchSize: 5,
   maxRetries: 3,
   retryDelay: 30
 }
 let processingInterval: NodeJS.Timeout | null = null
-
-interface QueueMessage {
-  id: string
-  to: string
-  message: string
-  messageType: string
-  attachmentUrl?: string
-  deviceId: string
-  deviceName: string
-  status: 'pending' | 'processing' | 'sent' | 'failed' | 'paused'
-  priority: number
-  scheduledAt?: string
-  createdAt: string
-  attempts: number
-  lastError?: string
-  metadata?: any
-}
 
 interface QueueSettings {
   enabled: boolean
@@ -52,25 +34,60 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ settings: queueSettings })
     }
 
+    // Fetch messages from database
+    const dbMessages = await pool.query(`
+      SELECT 
+        mq.id,
+        mq."toNumber" as to,
+        mq.message,
+        mq.status,
+        mq.priority,
+        mq.scheduled as "scheduledAt",
+        mq."createdAt",
+        mq.attempts,
+        mq."lastError",
+        mq.metadata,
+        wi.name as "deviceName"
+      FROM message_queue mq
+      LEFT JOIN whatsapp_instances wi ON mq."instanceId" = wi.id
+      WHERE mq.status IN ('PENDING', 'PROCESSING', 'SENT', 'FAILED')
+      ORDER BY mq.priority DESC, mq."createdAt" ASC
+      LIMIT 100
+    `)
+
+    // Convert database records to QueueMessage format
+    const allMessages = dbMessages.rows.map(row => ({
+      id: row.id,
+      to: row.to,
+      message: row.message,
+      messageType: row.metadata?.messageType || 'text',
+      attachmentUrl: row.metadata?.attachmentUrl || row.metadata?.mediaUrl,
+      deviceId: row.metadata?.deviceName || '',
+      deviceName: row.deviceName || row.metadata?.deviceName || 'Unknown Device',
+      status: row.status.toLowerCase() as 'pending' | 'processing' | 'sent' | 'failed',
+      priority: row.priority || 0,
+      scheduledAt: row.scheduledAt,
+      createdAt: row.createdAt,
+      attempts: row.attempts || 0,
+      lastError: row.lastError,
+      metadata: row.metadata
+    }))
+
     // Calculate stats
     const stats = {
-      totalMessages: messageQueue.length,
-      pendingMessages: messageQueue.filter(m => m.status === 'pending').length,
-      processingMessages: messageQueue.filter(m => m.status === 'processing').length,
-      sentMessages: messageQueue.filter(m => m.status === 'sent').length,
-      failedMessages: messageQueue.filter(m => m.status === 'failed').length,
-      messagesPerMinute: queueSettings.enabled ? Math.round(60 / queueSettings.interval) : 0,
-      estimatedTimeRemaining: calculateETA()
+      totalMessages: allMessages.length,
+      pendingMessages: allMessages.filter(m => m.status === 'pending').length,
+      processingMessages: allMessages.filter(m => m.status === 'processing').length,
+      sentMessages: allMessages.filter(m => m.status === 'sent').length,
+      failedMessages: allMessages.filter(m => m.status === 'failed').length,
+      messagesPerMinute: queueSettings.enabled ? Math.round(60 / queueSettings.interval * queueSettings.batchSize) : 0,
+      estimatedTimeRemaining: queueSettings.enabled && allMessages.filter(m => m.status === 'pending').length > 0
+        ? Math.ceil(allMessages.filter(m => m.status === 'pending').length / queueSettings.batchSize * queueSettings.interval / 60) + ' minutes'
+        : '0 minutes'
     }
 
     return NextResponse.json({
-      messages: messageQueue.sort((a, b) => {
-        // Sort by priority (higher first), then by creation time
-        if (a.priority !== b.priority) {
-          return b.priority - a.priority
-        }
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      }),
+      messages: allMessages,
       stats,
       settings: queueSettings
     })
@@ -83,135 +100,70 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Add message to queue or update settings
+// POST - Handle queue operations
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { action } = body
 
-    if (action === 'updateSettings') {
-      const { settings } = body
-      queueSettings = { ...queueSettings, ...settings }
-      
-      // Start or stop processing based on enabled status
-      if (queueSettings.enabled && !processingInterval) {
-        startQueueProcessor()
-      } else if (!queueSettings.enabled && processingInterval) {
-        stopQueueProcessor()
-      }
-      
-      return NextResponse.json({ 
-        message: 'Settings updated successfully',
-        settings: queueSettings 
-      })
+    // If no action is provided, treat as addMessage (bulk functionality)
+    if (!action && body.toNumber && body.message) {
+      return handleAddMessage(body)
     }
 
-    // Add message to queue
-    const {
-      to,
-      toNumber, 
-      message,
-      messageType = 'text',
-      attachmentUrl,
-      deviceId,
-      instanceId,
-      deviceName,
-      instanceName,
-      priority = 0,
-      scheduledAt,
-      metadata
-    } = body
-
-    // Map field names for compatibility
-    const recipient = to || toNumber
-    const device = deviceId || instanceId
-    const deviceDisplayName = deviceName || instanceName
-
-    if (!recipient || !message || !device) {
-      return NextResponse.json(
-        { error: 'Missing required fields: to/toNumber, message, deviceId/instanceId' },
-        { status: 400 }
-      )
+    switch (action) {
+      case 'updateSettings':
+        return handleUpdateSettings(body.settings)
+      case 'pause':
+        return handlePauseQueue()
+      case 'resume':
+        return handleResumeQueue()
+      case 'clear':
+        return handleClearQueue()
+      case 'retry':
+        return handleRetryMessage(body.messageId)
+      case 'addMessage':
+        return handleAddMessage(body)
+      default:
+        return NextResponse.json(
+          { error: 'Invalid action' },
+          { status: 400 }
+        )
     }
-
-    const queueMessage: QueueMessage = {
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      to: recipient,
-      message,
-      messageType,
-      attachmentUrl,
-      deviceId: device,
-      deviceName: deviceDisplayName || 'Unknown Device',
-      status: scheduledAt && new Date(scheduledAt) > new Date() ? 'paused' : 'pending',
-      priority,
-      scheduledAt,
-      createdAt: new Date().toISOString(),
-      attempts: 0,
-      metadata
-    }
-
-    messageQueue.push(queueMessage)
-
-    // Start processing if enabled and not already running
-    if (queueSettings.enabled && !processingInterval) {
-      startQueueProcessor()
-    }
-
-    return NextResponse.json({
-      message: 'Message added to queue successfully',
-      data: queueMessage
-    }, { status: 201 })
   } catch (error) {
-    console.error('Error adding to queue:', error)
+    console.error('Error processing queue action:', error)
     return NextResponse.json(
-      { error: 'Failed to add message to queue' },
+      { error: 'Failed to process queue action' },
       { status: 500 }
     )
   }
 }
 
-// PUT - Update message status or retry failed messages
+// PUT - Handle retry and update operations
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { messageId, action, status } = body
+    const { action, messageId } = body
 
-    const messageIndex = messageQueue.findIndex(m => m.id === messageId)
-    if (messageIndex === -1) {
-      return NextResponse.json(
-        { error: 'Message not found' },
-        { status: 404 }
-      )
+    switch (action) {
+      case 'retry':
+        return handleRetryMessage(messageId)
+      default:
+        return NextResponse.json(
+          { error: 'Invalid action' },
+          { status: 400 }
+        )
     }
-
-    if (action === 'retry') {
-      messageQueue[messageIndex] = {
-        ...messageQueue[messageIndex],
-        status: 'pending',
-        attempts: 0,
-        lastError: undefined
-      }
-    } else if (status) {
-      messageQueue[messageIndex] = {
-        ...messageQueue[messageIndex],
-        status
-      }
-    }
-
-    return NextResponse.json({
-      message: 'Message updated successfully',
-      data: messageQueue[messageIndex]
-    })
   } catch (error) {
-    console.error('Error updating message:', error)
+    console.error('Error processing PUT request:', error)
     return NextResponse.json(
-      { error: 'Failed to update message' },
+      { error: 'Failed to process request' },
       { status: 500 }
     )
   }
 }
 
-// DELETE - Remove message from queue or clear all
+// DELETE - Remove specific message from queue
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -219,7 +171,8 @@ export async function DELETE(request: NextRequest) {
     const action = searchParams.get('action')
 
     if (action === 'clear') {
-      messageQueue = []
+      // Clear all failed messages
+      await pool.query(`DELETE FROM message_queue WHERE status = 'FAILED'`)
       return NextResponse.json({ message: 'Queue cleared successfully' })
     }
 
@@ -230,21 +183,164 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    const initialLength = messageQueue.length
-    messageQueue = messageQueue.filter(m => m.id !== messageId)
+    // Delete from database
+    const dbResult = await pool.query(`DELETE FROM message_queue WHERE id = $1`, [messageId])
 
-    if (messageQueue.length === initialLength) {
-      return NextResponse.json(
-        { error: 'Message not found' },
-        { status: 404 }
-      )
+    if (dbResult.rowCount && dbResult.rowCount > 0) {
+      return NextResponse.json({ message: 'Message deleted successfully' })
     }
 
-    return NextResponse.json({ message: 'Message deleted successfully' })
+    return NextResponse.json(
+      { error: 'Message not found' },
+      { status: 404 }
+    )
   } catch (error) {
     console.error('Error deleting message:', error)
     return NextResponse.json(
       { error: 'Failed to delete message' },
+      { status: 500 }
+    )
+  }
+}
+
+// Handler functions
+async function handleUpdateSettings(newSettings: Partial<QueueSettings>) {
+  Object.assign(queueSettings, newSettings)
+  
+  if (queueSettings.enabled) {
+    startQueueProcessor()
+  } else {
+    stopQueueProcessor()
+  }
+
+  return NextResponse.json({
+    message: 'Settings updated successfully',
+    settings: queueSettings
+  })
+}
+
+async function handlePauseQueue() {
+  queueSettings.enabled = false
+  stopQueueProcessor()
+  return NextResponse.json({ message: 'Queue paused' })
+}
+
+async function handleResumeQueue() {
+  queueSettings.enabled = true
+  startQueueProcessor()
+  return NextResponse.json({ message: 'Queue resumed' })
+}
+
+async function handleClearQueue() {
+  await pool.query(`DELETE FROM message_queue WHERE status IN ('FAILED', 'SENT')`)
+  return NextResponse.json({ message: 'Queue cleared successfully' })
+}
+
+async function handleRetryMessage(messageId: string) {
+  if (!messageId) {
+    return NextResponse.json(
+      { error: 'Message ID is required' },
+      { status: 400 }
+    )
+  }
+
+  await pool.query(`
+    UPDATE message_queue 
+    SET status = 'PENDING', attempts = 0, "lastError" = NULL
+    WHERE id = $1
+  `, [messageId])
+
+  return NextResponse.json({ message: 'Message queued for retry' })
+}
+
+async function handleAddMessage(data: any) {
+  try {
+    const { 
+      toNumber, 
+      message, 
+      messageType = 'text',
+      attachmentUrl,
+      priority = 0,
+      instanceId,
+      instanceName,
+      scheduledAt,
+      metadata = {}
+    } = data
+
+    if (!toNumber || !message || !instanceId) {
+      return NextResponse.json(
+        { error: 'Missing required fields: toNumber, message, instanceId' },
+        { status: 400 }
+      )
+    }
+
+    // Look up the actual database instanceId by name
+    const instanceResult = await pool.query(`
+      SELECT id FROM whatsapp_instances 
+      WHERE name = $1 
+      LIMIT 1
+    `, [instanceId])
+
+    if (instanceResult.rows.length === 0) {
+      console.log(`WhatsApp instance not found: ${instanceId}`)
+      console.log(`Available instances:`, await pool.query(`SELECT name FROM whatsapp_instances LIMIT 5`))
+      return NextResponse.json(
+        { error: 'WhatsApp instance not found' },
+        { status: 404 }
+      )
+    }
+
+    const dbInstanceId = instanceResult.rows[0].id
+
+    // Generate unique message ID
+    const messageId = `${Date.now()}_${Math.random().toString(36).substring(2)}`
+    
+    // Insert message into database queue
+    const result = await pool.query(`
+      INSERT INTO message_queue (
+        id, "toNumber", message, status, priority, scheduled, "instanceId", 
+        "createdAt", "updatedAt", attempts, metadata
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, $8)
+      RETURNING *
+    `, [
+      messageId,
+      toNumber,
+      message,
+      'PENDING',
+      priority,
+      scheduledAt ? new Date(scheduledAt) : null,
+      dbInstanceId,
+      JSON.stringify({
+        ...metadata,
+        messageType,
+        attachmentUrl,
+        instanceName: instanceId,
+        via: 'bulk_ui'
+      })
+    ])
+
+    const insertedMessage = result.rows[0]
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        messageId,
+        queueId: messageId,
+        to: toNumber,
+        message,
+        status: 'QUEUED',
+        priority,
+        scheduledAt,
+        createdAt: insertedMessage.createdAt
+      },
+      message: 'Message added to queue successfully'
+    })
+
+  } catch (error) {
+    console.error('Error adding message to queue:', error)
+    return NextResponse.json(
+      { error: 'Failed to add message to queue' },
       { status: 500 }
     )
   }
@@ -271,22 +367,29 @@ function stopQueueProcessor() {
 
 async function processQueue() {
   try {
-    // Get pending messages, prioritized
-    const pendingMessages = messageQueue
-      .filter(m => {
-        if (m.status !== 'pending') return false
-        if (m.scheduledAt && new Date(m.scheduledAt) > new Date()) return false
-        return true
-      })
-      .sort((a, b) => b.priority - a.priority)
-      .slice(0, queueSettings.batchSize)
+    // Get pending messages from database, prioritized
+    const result = await pool.query(`
+      SELECT 
+        mq.*,
+        wi.name as device_name,
+        wi."userId" as user_id,
+        wi."serverId" as server_id
+      FROM message_queue mq
+      JOIN whatsapp_instances wi ON mq."instanceId" = wi.id
+      WHERE mq.status = 'PENDING'
+        AND (mq.scheduled IS NULL OR mq.scheduled <= CURRENT_TIMESTAMP)
+        AND mq.attempts < $1
+      ORDER BY mq.priority DESC, mq."createdAt" ASC
+      LIMIT $2
+    `, [queueSettings.maxRetries, queueSettings.batchSize])
 
-    if (pendingMessages.length === 0) return
+    if (result.rows.length === 0) return
 
-    console.log(`Processing ${pendingMessages.length} messages from queue`)
+    console.log(`Processing ${result.rows.length} messages from database queue`)
 
-    for (const message of pendingMessages) {
-      await processMessage(message)
+    // Process each database message
+    for (const dbMessage of result.rows) {
+      await processDbMessage(dbMessage)
     }
   } catch (error) {
     console.error('Error processing queue:', error)
@@ -356,246 +459,202 @@ async function checkCustomerSubscription(deviceName: string): Promise<boolean> {
   }
 }
 
-async function processMessage(message: QueueMessage) {
+async function processDbMessage(dbMessage: any) {
   try {
-    // Update status to processing
-    const messageIndex = messageQueue.findIndex(m => m.id === message.id)
-    if (messageIndex !== -1) {
-      messageQueue[messageIndex].status = 'processing'
-      messageQueue[messageIndex].attempts++
-    }
+    // Update status to PROCESSING
+    await pool.query(`
+      UPDATE message_queue 
+      SET status = 'PROCESSING', 
+          attempts = attempts + 1,
+          "updatedAt" = CURRENT_TIMESTAMP
+      WHERE id = $1
+    `, [dbMessage.id])
 
     // Check customer subscription before sending
-    const hasValidSubscription = await checkCustomerSubscription(message.deviceName)
+    const hasValidSubscription = await checkCustomerSubscription(dbMessage.device_name)
     
     if (!hasValidSubscription) {
       // Mark as failed due to invalid subscription
-      if (messageIndex !== -1) {
-        messageQueue[messageIndex].status = 'failed'
-        messageQueue[messageIndex].lastError = 'Invalid or expired subscription'
-      }
-      console.log(`Message ${message.id} failed: Invalid or expired subscription`)
+      await pool.query(`
+        UPDATE message_queue 
+        SET status = 'FAILED',
+            "lastError" = 'Invalid or expired subscription',
+            "updatedAt" = CURRENT_TIMESTAMP
+        WHERE id = $1
+      `, [dbMessage.id])
+      console.log(`Message ${dbMessage.id} failed: Invalid or expired subscription`)
       return
     }
 
-    // Send the message if subscription is valid
-    const success = await sendWhatsAppMessage(message)
-
-    if (success) {
-      // Mark as sent
-      if (messageIndex !== -1) {
-        messageQueue[messageIndex].status = 'sent'
-      }
+    // Build message object exactly like the working UI
+    let messageObject: any = { text: dbMessage.message }
+    
+    // Handle attachments if present
+    if (dbMessage.metadata?.attachmentUrl || dbMessage.metadata?.mediaUrl) {
+      const attachmentUrl = dbMessage.metadata.attachmentUrl || dbMessage.metadata.mediaUrl
       
-      // Log successful send to database
-      await logSentMessage(message)
+      // Determine attachment type from URL or metadata
+      const messageType = dbMessage.metadata?.messageType || 'image'
       
-      console.log(`Message ${message.id} sent successfully to ${message.to}`)
-    } else {
-      // Mark as failed and schedule retry if under max attempts
-      if (messageIndex !== -1) {
-        if (message.attempts < queueSettings.maxRetries) {
-          messageQueue[messageIndex].status = 'pending'
-          messageQueue[messageIndex].lastError = 'Failed to send message'
-          // Schedule retry after delay
-          setTimeout(() => {
-            const msg = messageQueue.find(m => m.id === message.id)
-            if (msg && msg.status === 'pending') {
-              msg.status = 'pending' // Reset for retry
+      switch (messageType) {
+        case 'image':
+          messageObject = {
+            image: {
+              url: attachmentUrl,
+              caption: dbMessage.message || undefined
             }
-          }, queueSettings.retryDelay * 1000)
-        } else {
-          messageQueue[messageIndex].status = 'failed'
-          messageQueue[messageIndex].lastError = 'Max retry attempts exceeded'
-        }
+          }
+          break
+        case 'document':
+          messageObject = {
+            document: {
+              url: attachmentUrl,
+              filename: dbMessage.metadata?.filename || 'document',
+              caption: dbMessage.message || undefined
+            }
+          }
+          break
+        case 'video':
+          messageObject = {
+            video: {
+              url: attachmentUrl,
+              caption: dbMessage.message || undefined
+            }
+          }
+          break
+        case 'audio':
+          messageObject = {
+            audio: { url: attachmentUrl }
+          }
+          break
+        default:
+          messageObject = { text: dbMessage.message }
       }
-      console.log(`Message ${message.id} failed to send`)
-    }
-  } catch (error) {
-    console.error(`Error processing message ${message.id}:`, error)
-    const messageIndex = messageQueue.findIndex(m => m.id === message.id)
-    if (messageIndex !== -1) {
-      messageQueue[messageIndex].status = 'failed'
-      messageQueue[messageIndex].lastError = error instanceof Error ? error.message : 'Unknown error'
-    }
-  }
-}
-
-async function sendWhatsAppMessage(message: QueueMessage): Promise<boolean> {
-  try {
-    // Build message object based on type
-    let messageObject: any = {}
-
-    switch (message.messageType) {
-      case 'text':
-        messageObject = { text: message.message }
-        break
-      case 'image':
-        messageObject = {
-          image: {
-            url: message.attachmentUrl,
-            caption: message.message || undefined
-          }
-        }
-        break
-      case 'document':
-        messageObject = {
-          document: {
-            url: message.attachmentUrl,
-            filename: message.metadata?.filename || 'document',
-            caption: message.message || undefined
-          }
-        }
-        break
-      case 'video':
-        messageObject = {
-          video: {
-            url: message.attachmentUrl,
-            caption: message.message || undefined
-          }
-        }
-        break
-      case 'audio':
-        messageObject = {
-          audio: { url: message.attachmentUrl }
-        }
-        break
-      case 'location':
-        messageObject = {
-          location: {
-            latitude: message.metadata?.lat || 0,
-            longitude: message.metadata?.lon || 0,
-            name: message.metadata?.name,
-            address: message.metadata?.address
-          }
-        }
-        break
-      default:
-        messageObject = { text: message.message }
     }
 
-    // Format phone number
-    let formattedRecipient = message.to.trim()
-    if (!message.to.includes('@')) {
-      let cleanNumber = message.to.replace(/\D/g, '')
+    // Format phone number exactly like the working UI
+    let formattedTo = dbMessage.toNumber
+    
+    if (!formattedTo.includes('@')) {
+      // Clean the number
+      let cleanNumber = formattedTo.replace(/\D/g, '')
+      
+      // Remove + if present
+      if (formattedTo.startsWith('+')) {
+        cleanNumber = formattedTo.substring(1).replace(/\D/g, '')
+      }
+      
+      // Handle Indian numbers (add country code if missing)
       if (cleanNumber.length === 10 && cleanNumber.match(/^[6-9]/)) {
         cleanNumber = '91' + cleanNumber
       }
-      formattedRecipient = `${cleanNumber}@s.whatsapp.net`
+      
+      // Format as WhatsApp JID
+      formattedTo = `${cleanNumber}@s.whatsapp.net`
     }
 
-    // Get optimal server for message sending
-    const optimalServer = await whatsappServerManager.getOptimalServer()
-    if (!optimalServer) {
-      throw new Error('No active WhatsApp servers available')
-    }
+    // Get server URL
+    const serverUrl = dbMessage.server_id 
+      ? await getServerUrlFromServerId(dbMessage.server_id)
+      : process.env.WHATSAPP_SERVER_URL || 'http://127.0.0.1:3110'
 
-    // Send via WhatsApp API
-    const response = await fetch(`${optimalServer.url}/api/accounts/${message.deviceName}/send-message`, {
+    // Send via WhatsApp API using same format as working UI
+    const response = await fetch(`${serverUrl}/api/accounts/${dbMessage.device_name}/send-message`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        to: formattedRecipient,
+        to: formattedTo,
         message: messageObject
       })
     })
 
     const result = await response.json()
     
-    if (result.success && result.data?.messageId) {
-      // Update message metadata with WhatsApp messageId for status tracking
-      const messageIndex = messageQueue.findIndex(m => m.id === message.id)
-      if (messageIndex !== -1) {
-        messageQueue[messageIndex].metadata = {
-          ...messageQueue[messageIndex].metadata,
-          whatsappMessageId: result.data.messageId
-        }
-      }
+    if (result.success) {
+      // Mark as SENT
+      await pool.query(`
+        UPDATE message_queue 
+        SET status = 'SENT',
+            "processedAt" = CURRENT_TIMESTAMP,
+            "updatedAt" = CURRENT_TIMESTAMP
+        WHERE id = $1
+      `, [dbMessage.id])
+      
+      // Log successful send to sent_messages table
+      await logSentMessageFromDb(dbMessage)
+      
+      console.log(`✅ Message ${dbMessage.id} sent successfully to ${dbMessage.toNumber}`)
+    } else {
+      // Mark as failed with error
+      await pool.query(`
+        UPDATE message_queue 
+        SET status = 'FAILED',
+            "lastError" = $2,
+            "updatedAt" = CURRENT_TIMESTAMP
+        WHERE id = $1
+      `, [dbMessage.id, result.error || 'Unknown error'])
+      
+      console.log(`❌ Message ${dbMessage.id} failed: ${result.error}`)
     }
-    
-    return result.success === true
+
   } catch (error) {
-    console.error('Error sending WhatsApp message:', error)
-    return false
+    console.error(`Error processing message ${dbMessage.id}:`, error)
+    
+    // Mark as failed with error
+    await pool.query(`
+      UPDATE message_queue 
+      SET status = 'FAILED',
+          "lastError" = $2,
+          "updatedAt" = CURRENT_TIMESTAMP
+      WHERE id = $1
+    `, [dbMessage.id, error instanceof Error ? error.message : 'Unknown error'])
   }
 }
 
-async function logSentMessage(message: QueueMessage): Promise<void> {
+async function getServerUrlFromServerId(serverId: string): Promise<string> {
   try {
-    // Get customer ID from the WhatsApp instance
-    const instanceResult = await pool.query(`
-      SELECT "userId" FROM whatsapp_instances 
-      WHERE name = $1
-    `, [message.deviceName])
+    const servers = await whatsappServerManager.getAllServers()
+    const server = servers.find(s => s.id === serverId)
+    return server?.url || process.env.WHATSAPP_SERVER_URL || 'http://127.0.0.1:3110'
+  } catch (error) {
+    console.error('Error getting server URL:', error)
+    return process.env.WHATSAPP_SERVER_URL || 'http://127.0.0.1:3110'
+  }
+}
 
-    if (instanceResult.rows.length === 0) {
-      console.error(`No instance found for device: ${message.deviceName}`)
-      return
-    }
-
-    const userId = instanceResult.rows[0].userId
-
-    // Extract recipient name from metadata if available
-    const recipientName = message.metadata?.recipientName || null
-
-    // Create a unique ID for the sent message
-    const sentMessageId = `sent_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-
-    // Insert sent message record with WhatsApp messageId for status tracking
-    const metadata = {
-      ...message.metadata,
-      messageId: message.metadata?.whatsappMessageId || null
-    }
-    
+async function logSentMessageFromDb(dbMessage: any) {
+  try {
+    const messageId = Date.now().toString()
     await pool.query(`
       INSERT INTO sent_messages (
-        id, "userId", "recipientNumber", "recipientName", message, "messageType",
-        "deviceName", status, "sentAt", "queueMessageId", "attachmentUrl", metadata,
-        "createdAt", "updatedAt"
-      ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW()
+        id, "userId", "deviceName", "recipientNumber", message, status, "sentAt", 
+        "updatedAt", metadata
       )
+      VALUES ($1, $2::text, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7)
     `, [
-      sentMessageId,
-      userId,
-      message.to,
-      recipientName,
-      message.message,
-      message.messageType,
-      message.deviceName,
-      'sent', // Initial status
-      new Date().toISOString(),
-      message.id,
-      message.attachmentUrl || null,
-      JSON.stringify(metadata)
+      messageId,
+      dbMessage.user_id,
+      dbMessage.device_name,
+      dbMessage.toNumber,
+      dbMessage.message,
+      'sent',
+      JSON.stringify({ 
+        queueId: dbMessage.id,
+        serverId: dbMessage.server_id,
+        via: 'queue_processor'
+      })
     ])
-
-    console.log(`✅ Logged sent message ${sentMessageId} for user ${userId}`)
+    console.log(`✅ Logged sent message for user ${dbMessage.user_id}`)
   } catch (error) {
-    console.error('Error logging sent message:', error)
-    // Don't throw error to avoid breaking the queue processing
+    console.warn('Failed to log sent message:', error)
   }
 }
 
-function calculateETA(): string {
-  const pendingCount = messageQueue.filter(m => m.status === 'pending').length
-  if (pendingCount === 0 || !queueSettings.enabled) return '0 minutes'
-  
-  const totalSeconds = pendingCount * queueSettings.interval
-  const minutes = Math.round(totalSeconds / 60)
-  
-  if (minutes < 1) return 'Less than 1 minute'
-  if (minutes === 1) return '1 minute'
-  if (minutes < 60) return `${minutes} minutes`
-  
-  const hours = Math.floor(minutes / 60)
-  const remainingMinutes = minutes % 60
-  
-  if (hours === 1 && remainingMinutes === 0) return '1 hour'
-  if (hours === 1) return `1 hour ${remainingMinutes} minutes`
-  if (remainingMinutes === 0) return `${hours} hours`
-  
-  return `${hours} hours ${remainingMinutes} minutes`
+// Auto-start queue processor on server startup
+if (queueSettings.enabled) {
+  setTimeout(() => {
+    startQueueProcessor()
+  }, 2000) // Small delay to ensure server is ready
 }

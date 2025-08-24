@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import CompanyLayoutWrapper from "@/components/layout/CompanyLayoutWrapper";
 import "./globals.css";
 
+
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",

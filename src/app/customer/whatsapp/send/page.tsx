@@ -216,8 +216,8 @@ export default function SendMessagePage() {
         messageType,
         attachmentUrl: messageType !== 'text' ? (imageUrl || documentUrl || videoUrl || audioUrl) : undefined,
         priority,
-        instanceId: selectedDevice,
-        instanceName: device.accountId,
+        instanceId: device.accountName,
+        instanceName: device.accountName,
         scheduledAt: scheduledDateTime || undefined,
         metadata: {
           messageType,
