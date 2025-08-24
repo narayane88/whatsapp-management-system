@@ -81,6 +81,11 @@ async function authenticateApiKey(request: NextRequest) {
  *               mediaUrl:
  *                 type: string
  *                 description: Optional media file URL
+ *               messageType:
+ *                 type: string
+ *                 description: Type of message when mediaUrl is provided (auto-detected if not specified)
+ *                 enum: [text, image, video, audio, document]
+ *                 example: image
  *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
@@ -163,7 +168,7 @@ export async function POST(request: NextRequest) {
       body = await request.json()
     }
     
-    const { to, message, deviceName, instanceId, priority = 0, scheduledAt, mediaUrl } = body
+    const { to, message, deviceName, instanceId, priority = 0, scheduledAt, mediaUrl, messageType } = body
     
     // Use deviceName if provided, fallback to instanceId for backwards compatibility
     const actualInstanceId = deviceName || instanceId
@@ -221,14 +226,35 @@ export async function POST(request: NextRequest) {
     const subscription = packageResult.rows[0]
     const remainingMessages = subscription.messageLimit - subscription.messagesUsed
     
-    if (remainingMessages < 1) {
+    // Calculate credits needed (1 for text, 2 for attachments)
+    const creditsNeeded = mediaUrl ? 2 : 1
+    
+    if (remainingMessages < creditsNeeded) {
       return NextResponse.json({
         success: false,
-        error: 'Insufficient message credits',
+        error: `Insufficient message credits. Need ${creditsNeeded} credits but only ${remainingMessages} available.`,
         available: remainingMessages,
         used: subscription.messagesUsed,
-        limit: subscription.messageLimit
+        limit: subscription.messageLimit,
+        creditsNeeded: creditsNeeded
       }, { status: 403 })
+    }
+
+    // Auto-detect message type from mediaUrl if not provided
+    let finalMessageType = messageType || 'text'
+    if (mediaUrl && !messageType) {
+      const url = mediaUrl.toLowerCase()
+      if (url.includes('.jpg') || url.includes('.jpeg') || url.includes('.png') || url.includes('.gif') || url.includes('.webp')) {
+        finalMessageType = 'image'
+      } else if (url.includes('.mp4') || url.includes('.avi') || url.includes('.mov') || url.includes('.webm')) {
+        finalMessageType = 'video'
+      } else if (url.includes('.mp3') || url.includes('.wav') || url.includes('.ogg') || url.includes('.m4a')) {
+        finalMessageType = 'audio'
+      } else if (url.includes('.pdf') || url.includes('.doc') || url.includes('.docx') || url.includes('.txt') || url.includes('.xlsx')) {
+        finalMessageType = 'document'
+      } else {
+        finalMessageType = 'document' // Default for unknown file types
+      }
     }
 
     // Add message to queue instead of sending directly
@@ -253,7 +279,9 @@ export async function POST(request: NextRequest) {
         apiKeyId: apiKeyData.id,
         via: 'single_api',
         messageId: messageId,
-        mediaUrl: mediaUrl || null
+        mediaUrl: mediaUrl || null,
+        attachmentUrl: mediaUrl || null,
+        messageType: finalMessageType
       })
     ])
 
@@ -262,10 +290,10 @@ export async function POST(request: NextRequest) {
     // Update subscription message count
     await pool.query(`
       UPDATE customer_packages 
-      SET "messagesUsed" = "messagesUsed" + 1,
+      SET "messagesUsed" = "messagesUsed" + $2,
           "updatedAt" = CURRENT_TIMESTAMP
       WHERE id = $1
-    `, [subscription.id])
+    `, [subscription.id, creditsNeeded])
 
     // Get queue position
     const queuePositionResult = await pool.query(`
@@ -312,7 +340,7 @@ export async function POST(request: NextRequest) {
         priority: priority || 0,
         scheduledAt: scheduledTime.toISOString(),
         estimatedDelivery: estimatedDelivery.toISOString(),
-        remainingCredits: remainingMessages - 1
+        remainingCredits: remainingMessages - creditsNeeded
       },
       message: 'Message queued successfully'
     })

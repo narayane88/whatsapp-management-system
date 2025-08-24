@@ -14,7 +14,14 @@ let queueSettings: QueueSettings = {
   maxRetries: 3,
   retryDelay: 30
 }
-let processingInterval: NodeJS.Timeout | null = null
+
+// Use global to prevent multiple processors in dev mode
+declare global {
+  var __queueProcessor: NodeJS.Timeout | null | undefined
+}
+
+let processingInterval: NodeJS.Timeout | null = globalThis.__queueProcessor || null
+let isProcessing = false // Add processing lock
 
 interface QueueSettings {
   enabled: boolean
@@ -282,8 +289,6 @@ async function handleAddMessage(data: any) {
     `, [instanceId])
 
     if (instanceResult.rows.length === 0) {
-      console.log(`WhatsApp instance not found: ${instanceId}`)
-      console.log(`Available instances:`, await pool.query(`SELECT name FROM whatsapp_instances LIMIT 5`))
       return NextResponse.json(
         { error: 'WhatsApp instance not found' },
         { status: 404 }
@@ -348,13 +353,19 @@ async function handleAddMessage(data: any) {
 
 // Queue processor functions
 function startQueueProcessor() {
-  if (processingInterval) return
+  if (processingInterval || globalThis.__queueProcessor) {
+    console.log('Queue processor already running, skipping start')
+    return
+  }
 
   console.log('Starting queue processor with interval:', queueSettings.interval + 's')
   
   processingInterval = setInterval(async () => {
     await processQueue()
   }, queueSettings.interval * 1000)
+  
+  // Store in global to prevent duplicates in dev mode
+  globalThis.__queueProcessor = processingInterval
 }
 
 function stopQueueProcessor() {
@@ -363,9 +374,21 @@ function stopQueueProcessor() {
     processingInterval = null
     console.log('Queue processor stopped')
   }
+  
+  if (globalThis.__queueProcessor) {
+    clearInterval(globalThis.__queueProcessor)
+    globalThis.__queueProcessor = null
+    console.log('Global queue processor stopped')
+  }
 }
 
 async function processQueue() {
+  if (isProcessing) {
+    console.log('Queue processing already in progress, skipping')
+    return
+  }
+  
+  isProcessing = true
   try {
     // Get pending messages from database, prioritized
     const result = await pool.query(`
@@ -393,10 +416,12 @@ async function processQueue() {
     }
   } catch (error) {
     console.error('Error processing queue:', error)
+  } finally {
+    isProcessing = false
   }
 }
 
-async function checkCustomerSubscription(deviceName: string): Promise<boolean> {
+async function checkCustomerSubscription(deviceName: string, creditsNeeded: number = 1): Promise<boolean> {
   try {
     // Get customer ID from WhatsApp instance
     const instanceResult = await pool.query(`
@@ -436,21 +461,28 @@ async function checkCustomerSubscription(deviceName: string): Promise<boolean> {
 
     const subscription = subscriptionResult.rows[0]
     
-    // Check message limit
-    if (subscription.messageLimit && subscription.messagesUsed >= subscription.messageLimit) {
-      console.log(`Message limit exceeded for user: ${userId} (${subscription.messagesUsed}/${subscription.messageLimit})`)
+    // If creditsNeeded is 0, just check subscription validity (credits already deducted elsewhere)
+    if (creditsNeeded === 0) {
+      console.log(`Subscription valid for user: ${userId} (credits already deducted by API)`)
+      return true
+    }
+
+    // Check if user has enough credits
+    const remainingCredits = subscription.messageLimit - subscription.messagesUsed
+    if (subscription.messageLimit && remainingCredits < creditsNeeded) {
+      console.log(`Insufficient credits for user: ${userId} (needs ${creditsNeeded}, has ${remainingCredits})`)
       return false
     }
 
     // Update message usage count
     await pool.query(`
       UPDATE customer_packages 
-      SET "messagesUsed" = "messagesUsed" + 1,
+      SET "messagesUsed" = "messagesUsed" + $2,
           "updatedAt" = CURRENT_TIMESTAMP
       WHERE id = $1
-    `, [subscription.id])
+    `, [subscription.id, creditsNeeded])
 
-    console.log(`Subscription valid for user: ${userId}, messages used: ${subscription.messagesUsed + 1}`)
+    console.log(`Subscription valid for user: ${userId}, credits deducted: ${creditsNeeded}, new usage: ${subscription.messagesUsed + creditsNeeded}`)
     return true
 
   } catch (error) {
@@ -470,8 +502,12 @@ async function processDbMessage(dbMessage: any) {
       WHERE id = $1
     `, [dbMessage.id])
 
+    // Check if credits were already deducted (API v1 messages have via: 'single_api')
+    const creditsAlreadyDeducted = dbMessage.metadata?.via === 'single_api'
+    const creditsNeeded = creditsAlreadyDeducted ? 0 : 1
+    
     // Check customer subscription before sending
-    const hasValidSubscription = await checkCustomerSubscription(dbMessage.device_name)
+    const hasValidSubscription = await checkCustomerSubscription(dbMessage.device_name, creditsNeeded)
     
     if (!hasValidSubscription) {
       // Mark as failed due to invalid subscription
@@ -489,9 +525,9 @@ async function processDbMessage(dbMessage: any) {
     // Build message object exactly like the working UI
     let messageObject: any = { text: dbMessage.message }
     
-    // Handle attachments if present
-    if (dbMessage.metadata?.attachmentUrl || dbMessage.metadata?.mediaUrl) {
-      const attachmentUrl = dbMessage.metadata.attachmentUrl || dbMessage.metadata.mediaUrl
+    // Handle attachments if present (check for imageUrl from UI and attachmentUrl/mediaUrl from API)
+    if (dbMessage.metadata?.attachmentUrl || dbMessage.metadata?.mediaUrl || dbMessage.metadata?.imageUrl) {
+      const attachmentUrl = dbMessage.metadata.attachmentUrl || dbMessage.metadata.mediaUrl || dbMessage.metadata.imageUrl
       
       // Determine attachment type from URL or metadata
       const messageType = dbMessage.metadata?.messageType || 'image'
@@ -500,9 +536,9 @@ async function processDbMessage(dbMessage: any) {
         case 'image':
           messageObject = {
             image: {
-              url: attachmentUrl,
-              caption: dbMessage.message || undefined
-            }
+              url: attachmentUrl
+            },
+            caption: dbMessage.metadata?.imageCaption || dbMessage.message || undefined
           }
           break
         case 'document':
@@ -559,6 +595,12 @@ async function processDbMessage(dbMessage: any) {
       : process.env.WHATSAPP_SERVER_URL || 'http://127.0.0.1:3110'
 
     // Send via WhatsApp API using same format as working UI
+    console.log(`📤 Sending to WhatsApp API:`, {
+      to: formattedTo,
+      message: messageObject,
+      url: `${serverUrl}/api/accounts/${dbMessage.device_name}/send-message`
+    })
+    
     const response = await fetch(`${serverUrl}/api/accounts/${dbMessage.device_name}/send-message`, {
       method: 'POST',
       headers: {
@@ -626,7 +668,7 @@ async function getServerUrlFromServerId(serverId: string): Promise<string> {
 
 async function logSentMessageFromDb(dbMessage: any) {
   try {
-    const messageId = Date.now().toString()
+    const messageId = `${Date.now()}_${Math.random().toString(36).substring(2)}_${dbMessage.id}`
     await pool.query(`
       INSERT INTO sent_messages (
         id, "userId", "deviceName", "recipientNumber", message, status, "sentAt", 
@@ -652,9 +694,13 @@ async function logSentMessageFromDb(dbMessage: any) {
   }
 }
 
-// Auto-start queue processor on server startup
+// Auto-start queue processor on server startup (only if enabled)
 if (queueSettings.enabled) {
+  // Use a longer delay and check if already running
   setTimeout(() => {
-    startQueueProcessor()
-  }, 2000) // Small delay to ensure server is ready
+    if (!processingInterval) {
+      console.log('Auto-starting queue processor on server startup')
+      startQueueProcessor()
+    }
+  }, 5000) // Longer delay to prevent race conditions
 }
