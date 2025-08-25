@@ -909,47 +909,72 @@ const apiEndpoints: ApiEndpoint[] = [
     method: 'GET',
     path: '/devices',
     title: 'Get WhatsApp Devices',
-    description: 'Retrieve your WhatsApp devices with connection status, message counts, and server information',
+    description: 'Retrieve your WhatsApp devices with real-time connection status from WhatsApp servers, message counts, and server information. Status is automatically synchronized with the database.',
     category: 'Devices',
     icon: <IconDevices size={20} />,
-    tags: ['devices', 'whatsapp', 'instances', 'status'],
+    tags: ['devices', 'whatsapp', 'instances', 'status', 'realtime'],
     authentication: true,
     parameters: [
-      { name: 'format', type: 'string', required: false, description: 'Response format', enum: ['table', 'json'], example: 'table' },
-      { name: 'status', type: 'string', required: false, description: 'Filter by device status', enum: ['CONNECTED', 'CONNECTING', 'DISCONNECTED', 'AUTHENTICATING', 'ERROR'] }
+      { name: 'format', type: 'string', required: false, description: 'Response format - table format includes status display with emojis', enum: ['table', 'json'], example: 'table' },
+      { name: 'status', type: 'string', required: false, description: 'Filter by real-time device status', enum: ['CONNECTED', 'CONNECTING', 'DISCONNECTED', 'AUTHENTICATING', 'ERROR'] }
     ],
     responses: [
       {
         status: 200,
-        description: 'Devices retrieved successfully',
+        description: 'Devices retrieved successfully with real-time status',
         schema: { type: 'object' },
         example: {
           success: true,
           data: {
             devices: [
               {
-                deviceName: '2_bizflashindevice202508210325_1755746719393',
+                deviceName: '5_bizflashindevice202508230721_1755933681864',
                 phoneNumber: '+919960589622',
                 status: '🟢 Connected',
-                messages: 25,
-                lastActivity: '2025-08-21T15:30:00.000Z',
-                serverName: 'Wa-Server-1'
+                messages: 53,
+                lastActivity: '2025-08-25T12:19:21.094Z',
+                serverName: 'WA-Server-01',
+                actions: ['view', 'edit', 'delete', 'relink'],
+                metadata: {
+                  id: 'ddef4be8-47ae-4a92-af7d-8dbcc95ab76a',
+                  serverId: 'd72aec27-9b79-4ef8-abc5-82fcdecb8ec2',
+                  rawStatus: 'CONNECTED',
+                  createdAt: '2025-08-23T07:21:22.095Z'
+                }
+              },
+              {
+                deviceName: '3_support_device_202508251202_1756123456789',
+                phoneNumber: 'Not connected',
+                status: '🔵 Scan QR Code',
+                messages: 0,
+                lastActivity: 'Never',
+                serverName: 'WA-Server-02',
+                actions: ['view', 'edit', 'delete', 'generate-qr'],
+                metadata: {
+                  id: 'auth-device-123-456-789',
+                  serverId: 'server-abc-def-456',
+                  rawStatus: 'AUTHENTICATING',
+                  createdAt: '2025-08-25T12:00:00.000Z'
+                }
               }
             ],
             summary: {
-              total: 1,
+              total: 2,
               connected: 1,
-              pending: 0,
-              totalMessages: 25
-            }
-          }
+              pending: 1,
+              disconnected: 0,
+              totalMessages: 53
+            },
+            format: 'table'
+          },
+          message: 'Retrieved 2 devices in table format'
         }
       }
     ],
     examples: [
       {
         title: 'Get All Devices (Table Format)',
-        description: 'Retrieve devices in table format for UI display',
+        description: 'Retrieve devices with real-time status in table format for UI display',
         request: {
           method: 'GET',
           url: `${API_BASE_URL}/devices?format=table`,
@@ -964,29 +989,52 @@ const apiEndpoints: ApiEndpoint[] = [
             data: {
               devices: [
                 {
-                  deviceName: '2_bizflashindevice202508210325_1755746719393',
+                  deviceName: '5_bizflashindevice202508230721_1755933681864',
                   phoneNumber: '+919960589622',
                   status: '🟢 Connected',
-                  messages: 25,
-                  lastActivity: '2025-08-21T15:30:00.000Z',
-                  serverName: 'Wa-Server-1',
-                  actions: ['view', 'edit', 'delete', 'relink']
+                  messages: 53,
+                  lastActivity: '8/25/2025, 5:49:21 PM',
+                  serverName: 'WA-Server-01',
+                  actions: ['view', 'edit', 'delete', 'relink'],
+                  metadata: {
+                    id: 'ddef4be8-47ae-4a92-af7d-8dbcc95ab76a',
+                    serverId: 'd72aec27-9b79-4ef8-abc5-82fcdecb8ec2',
+                    rawStatus: 'CONNECTED',
+                    createdAt: '2025-08-23T07:21:22.095Z'
+                  }
+                },
+                {
+                  deviceName: '3_support_device_202508251202_1756123456789',
+                  phoneNumber: 'Not connected',
+                  status: '🔵 Scan QR Code',
+                  messages: 0,
+                  lastActivity: 'Never',
+                  serverName: 'WA-Server-02',
+                  actions: ['view', 'edit', 'delete', 'generate-qr'],
+                  metadata: {
+                    id: 'auth-device-123-456-789',
+                    serverId: 'server-abc-def-456',
+                    rawStatus: 'AUTHENTICATING',
+                    createdAt: '2025-08-25T12:00:00.000Z'
+                  }
                 }
               ],
               summary: {
-                total: 1,
+                total: 2,
                 connected: 1,
-                pending: 0,
-                totalMessages: 25
+                pending: 1,
+                disconnected: 0,
+                totalMessages: 53
               },
               format: 'table'
-            }
+            },
+            message: 'Retrieved 2 devices in table format'
           }
         }
       },
       {
         title: 'Get Connected Devices (JSON)',
-        description: 'Filter devices by connection status in JSON format',
+        description: 'Filter devices by real-time connection status in JSON format',
         request: {
           method: 'GET',
           url: `${API_BASE_URL}/devices?status=CONNECTED&format=json`,
@@ -1001,29 +1049,108 @@ const apiEndpoints: ApiEndpoint[] = [
             data: {
               devices: [
                 {
-                  id: '2_bizflashindevice202508210325_1755746719393',
-                  name: 'bizflashindevice202508210325',
+                  id: 'ddef4be8-47ae-4a92-af7d-8dbcc95ab76a',
+                  name: '5_bizflashindevice202508230721_1755933681864',
                   phoneNumber: '+919960589622',
                   status: 'CONNECTED',
-                  lastActivity: '2025-08-21T15:30:00.000Z',
-                  messageCount: 25,
-                  serverId: 'wa-server-1',
-                  serverName: 'Wa-Server-1',
-                  createdAt: '2025-08-21T14:30:00.000Z'
+                  lastActivity: '2025-08-25T12:19:21.094Z',
+                  messageCount: 53,
+                  serverId: 'd72aec27-9b79-4ef8-abc5-82fcdecb8ec2',
+                  serverName: 'WA-Server-01',
+                  serverUrl: 'http://127.0.0.1:3110',
+                  createdAt: '2025-08-23T07:21:22.095Z'
                 }
               ],
               format: 'json'
-            }
+            },
+            message: 'Retrieved 1 devices'
+          }
+        }
+      },
+      {
+        title: 'Get Devices by Status (All Statuses)',
+        description: 'Example showing different device statuses with real-time updates',
+        request: {
+          method: 'GET',
+          url: `${API_BASE_URL}/devices?format=table`,
+          headers: {
+            'Authorization': 'Bearer sk_live_your_api_key_here'
+          }
+        },
+        response: {
+          status: 200,
+          body: {
+            success: true,
+            data: {
+              devices: [
+                {
+                  deviceName: '5_bizflashindevice202508230721_1755933681864',
+                  phoneNumber: '+919960589622',
+                  status: '🟢 Connected',
+                  messages: 53,
+                  lastActivity: '8/25/2025, 5:49:21 PM',
+                  serverName: 'WA-Server-01',
+                  actions: ['view', 'edit', 'delete', 'relink']
+                },
+                {
+                  deviceName: '6_customer_device_connecting_1756123789012',
+                  phoneNumber: 'Not connected',
+                  status: '🟡 Connecting',
+                  messages: 0,
+                  lastActivity: '8/25/2025, 6:00:15 PM',
+                  serverName: 'WA-Server-02',
+                  actions: ['view', 'edit', 'delete', 'generate-qr']
+                },
+                {
+                  deviceName: '7_support_device_auth_1756123890123',
+                  phoneNumber: 'Not connected',
+                  status: '🔵 Scan QR Code',
+                  messages: 0,
+                  lastActivity: 'Never',
+                  serverName: 'WA-Server-01',
+                  actions: ['view', 'edit', 'delete', 'generate-qr']
+                },
+                {
+                  deviceName: '8_old_device_disconnected_1756120000000',
+                  phoneNumber: '+918983063144',
+                  status: '⚫ Disconnected',
+                  messages: 15,
+                  lastActivity: '8/24/2025, 2:30:45 PM',
+                  serverName: 'WA-Server-03',
+                  actions: ['view', 'edit', 'delete', 'reconnect']
+                },
+                {
+                  deviceName: '9_error_device_failed_1756119000000',
+                  phoneNumber: 'Not connected',
+                  status: '🔴 Error',
+                  messages: 0,
+                  lastActivity: '8/24/2025, 1:15:30 PM',
+                  serverName: 'WA-Server-02',
+                  actions: ['view', 'edit', 'delete', 'reconnect']
+                }
+              ],
+              summary: {
+                total: 5,
+                connected: 1,
+                pending: 2,
+                disconnected: 2,
+                totalMessages: 68
+              },
+              format: 'table'
+            },
+            message: 'Retrieved 5 devices in table format'
           }
         }
       }
     ],
     useCases: [
-      'Device monitoring and management',
-      'Connection status tracking',
-      'Performance analytics',
-      'Troubleshooting connectivity',
-      'Resource allocation'
+      'Real-time device monitoring and management',
+      'Live connection status tracking and alerts',
+      'Performance analytics with current status',
+      'Troubleshooting connectivity issues',
+      'Resource allocation based on device availability',
+      'Automated health checks and status reporting',
+      'Integration with monitoring dashboards'
     ]
   },
 

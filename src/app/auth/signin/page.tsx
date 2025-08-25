@@ -95,12 +95,34 @@ export default function SignInPage() {
       })
 
       if (result?.ok) {
+        let redirectPath = '/admin' // Default for admin users
+        let welcomeMessage = 'Welcome to WhatsApp Admin!'
+        
+        try {
+          // Get user session to determine role-based redirect
+          const response = await fetch('/api/auth/session')
+          if (response.ok) {
+            const sessionData = await response.json()
+            const userRole = sessionData?.user?.role?.toUpperCase()
+            
+            // Role-based redirect logic
+            if (userRole === 'CUSTOMER') {
+              redirectPath = '/customer'
+              welcomeMessage = 'Welcome to your WhatsApp Customer Portal!'
+            }
+          }
+        } catch (error) {
+          console.warn('Could not fetch session for redirect, using default:', error)
+          // Fall back to default redirect path
+        }
+        
         notifications.show({
           title: 'Sign in successful',
-          message: 'Welcome to WhatsApp Admin!',
+          message: welcomeMessage,
           color: 'green'
         })
-        router.push('/admin')
+        
+        router.push(redirectPath)
       } else {
         notifications.show({
           title: 'Sign in failed',

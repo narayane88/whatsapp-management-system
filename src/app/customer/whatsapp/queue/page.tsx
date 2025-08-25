@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import {
   Container,
   Card,
@@ -43,6 +43,7 @@ import {
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import CustomerHeader from '@/components/customer/CustomerHeader'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface QueueMessage {
   id: string
@@ -82,6 +83,7 @@ export default function MessageQueuePage() {
   const [messages, setMessages] = useState<QueueMessage[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
   const [settings, setSettings] = useState<QueueSettings>({
     enabled: false,
     interval: 10,
@@ -105,19 +107,65 @@ export default function MessageQueuePage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
+  // Real-time queue update handler
+  const handleQueueUpdate = useCallback((data: any) => {
+    // Handle full messages array update
+    if (data.messages) {
+      const sortedMessages = data.messages.sort((a: QueueMessage, b: QueueMessage) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      })
+      setMessages(sortedMessages)
+    }
+    
+    // Handle individual message updates
+    if (data.messageUpdate) {
+      const { id, ...updates } = data.messageUpdate
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => 
+          msg.id === id ? { ...msg, ...updates } : msg
+        ).sort((a: QueueMessage, b: QueueMessage) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        })
+      })
+    }
+    
+    if (data.stats) {
+      setStats(data.stats)
+    }
+    
+    if (data.settings) {
+      setSettings(data.settings)
+      setIsProcessing(data.settings.enabled)
+    }
+  }, [])
+
+  // Handle message sent events to update queue status
+  const handleMessageSent = useCallback((data: any) => {
+    if (data.messageId) {
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => 
+          msg.id === data.messageId ? { ...msg, status: 'sent' as const } : msg
+        )
+      })
+    }
+  }, [])
+
+  // Initialize real-time connection with both queue and message-sent handlers
+  const { isConnected, hasError } = useWhatsAppRealTime({
+    onQueueUpdate: handleQueueUpdate,
+    onMessageSent: handleMessageSent,
+    enableNotifications: true,
+    autoReconnect: true
+  })
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
+
   useEffect(() => {
     fetchQueueData()
     fetchSettings()
-    
-    // Auto-refresh every 5 seconds when processing
-    const interval = setInterval(() => {
-      if (isProcessing) {
-        fetchQueueData()
-      }
-    }, 5000)
-    
-    return () => clearInterval(interval)
-  }, [isProcessing])
+  }, [])
 
   const fetchQueueData = async (showLoading = true) => {
     try {
@@ -128,35 +176,21 @@ export default function MessageQueuePage() {
       const result = await response.json()
 
       if (response.ok) {
-        // Sort messages by createdAt (latest first)
-        const sortedMessages = (result.messages || []).sort((a: QueueMessage, b: QueueMessage) => {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        })
-        setMessages(sortedMessages)
-        setStats(result.stats || {
-          totalMessages: 0,
-          pendingMessages: 0,
-          processingMessages: 0,
-          sentMessages: 0,
-          failedMessages: 0,
-          messagesPerMinute: 0,
-          estimatedTimeRemaining: '0 minutes'
-        })
-        if (result.settings) {
-          setSettings(result.settings)
-          setIsProcessing(result.settings.enabled)
-        }
+        // Handle initial data load
+        handleQueueUpdate(result)
       } else {
         throw new Error(result.error || 'Failed to fetch queue data')
       }
       
     } catch (error) {
       console.error('Error fetching queue data:', error)
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to fetch queue data',
-        color: 'red'
-      })
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to fetch queue data',
+          color: 'red'
+        })
+      }
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -201,7 +235,7 @@ export default function MessageQueuePage() {
         })
         
         setSettingsModalOpen(false)
-        fetchQueueData(false)
+        // Real-time updates will handle the refresh automatically
       } else {
         throw new Error(result.error || 'Failed to save settings')
       }
@@ -235,7 +269,7 @@ export default function MessageQueuePage() {
             message: 'All messages removed from queue',
             color: 'green'
           })
-          fetchQueueData(false)
+          // Real-time updates will handle the refresh automatically
         } else {
           throw new Error(result.error || 'Failed to clear queue')
         }
@@ -264,7 +298,7 @@ export default function MessageQueuePage() {
           message: 'Message removed from queue',
           color: 'green'
         })
-        fetchQueueData(false)
+        // Real-time updates will handle the refresh automatically
       } else {
         throw new Error(result.error || 'Failed to delete message')
       }
@@ -296,7 +330,7 @@ export default function MessageQueuePage() {
           message: 'Message added back to queue for retry',
           color: 'green'
         })
-        fetchQueueData(false)
+        // Real-time updates will handle the refresh automatically
       } else {
         throw new Error(result.error || 'Failed to retry message')
       }
@@ -357,7 +391,12 @@ export default function MessageQueuePage() {
       <CustomerHeader 
         title="Message Queue"
         subtitle="Manage and monitor automated message sending with configurable intervals"
-        badge={{ label: isProcessing ? 'Processing' : 'Paused', color: isProcessing ? 'green' : 'orange' }}
+        badge={{ 
+          label: realTimeConnected ? 
+            (isProcessing ? 'Live • Processing' : 'Live • Paused') : 
+            (isProcessing ? 'Processing' : 'Paused'), 
+          color: realTimeConnected ? 'green' : (isProcessing ? 'orange' : 'gray') 
+        }}
       />
       
       <Container size="xl" py="md">
@@ -365,7 +404,19 @@ export default function MessageQueuePage() {
           {/* Queue Controls */}
           <Card withBorder padding="lg">
             <Group justify="space-between" mb="md">
-              <Title order={3}>Queue Control</Title>
+              <Group gap="sm">
+                <Title order={3}>Queue Control</Title>
+                {realTimeConnected && (
+                  <Badge size="sm" color="green" variant="dot">
+                    Live Updates
+                  </Badge>
+                )}
+                {hasError && (
+                  <Badge size="sm" color="red" variant="dot">
+                    Connection Error
+                  </Badge>
+                )}
+              </Group>
               <Group gap="sm">
                 <Button
                   variant="light"

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Container,
   Card,
@@ -37,6 +37,7 @@ import {
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import CustomerHeader from '@/components/customer/CustomerHeader'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface ConnectedDevice {
   id: string
@@ -51,6 +52,7 @@ export default function SendMessagePage() {
   const [devices, setDevices] = useState<ConnectedDevice[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedDevice, setSelectedDevice] = useState('')
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
   const [recipientNumber, setRecipientNumber] = useState('')
   const [messageType, setMessageType] = useState('text')
   const [messageSending, setMessageSending] = useState(false)
@@ -79,6 +81,42 @@ export default function SendMessagePage() {
   const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null)
   const [subscriptionChecking, setSubscriptionChecking] = useState(false)
 
+  // Real-time device status updates
+  const handleDeviceStatusUpdate = useCallback((data: any) => {
+    if (data.devices) {
+      const connectedDevices = data.devices.filter((device: any) => device.status === 'CONNECTED')
+      setDevices(connectedDevices)
+      
+      // Auto-select first device if none selected
+      if (connectedDevices.length > 0 && !selectedDevice) {
+        setSelectedDevice(connectedDevices[0].id)
+      }
+    }
+  }, [selectedDevice])
+
+  // Real-time message sent handler  
+  const handleMessageSent = useCallback((data: any) => {
+    if (data.message) {
+      notifications.show({
+        title: '✅ Message Delivered',
+        message: `Message sent to ${data.message.to}`,
+        color: 'green'
+      })
+    }
+  }, [])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppRealTime({
+    onDeviceStatus: handleDeviceStatusUpdate,
+    onMessageSent: handleMessageSent,
+    enableNotifications: false, // We handle notifications manually
+    autoReconnect: true
+  })
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
+
   useEffect(() => {
     fetchConnectedDevices()
     checkSubscriptionStatus()
@@ -90,22 +128,18 @@ export default function SendMessagePage() {
       const response = await fetch('/api/customer/host/connections')
       if (response.ok) {
         const allDevices = await response.json()
-        // Filter only connected devices
-        const connectedDevices = allDevices.filter((device: any) => device.status === 'CONNECTED')
-        setDevices(connectedDevices)
-        
-        // Auto-select first connected device if available
-        if (connectedDevices.length > 0 && !selectedDevice) {
-          setSelectedDevice(connectedDevices[0].id)
-        }
+        // Process through real-time handler for consistency
+        handleDeviceStatusUpdate({ devices: allDevices })
       }
     } catch (error) {
       console.error('Error fetching devices:', error)
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to fetch connected devices',
-        color: 'red'
-      })
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to fetch connected devices',
+          color: 'red'
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -602,7 +636,10 @@ export default function SendMessagePage() {
       <CustomerHeader 
         title="Send Messages"
         subtitle="Send WhatsApp messages, images, documents, and more from your connected devices"
-        badge={{ label: 'Message Center', color: 'green' }}
+        badge={{ 
+          label: realTimeConnected ? 'Live • Message Center' : 'Message Center', 
+          color: realTimeConnected ? 'green' : 'blue' 
+        }}
       />
       
       <Container size="xl" py="md">
@@ -671,17 +708,31 @@ export default function SendMessagePage() {
                 <IconBrandWhatsapp size={24} color="#25D366" />
                 <div>
                   <Text size="lg" fw={600}>Connected Devices</Text>
-                  <Text size="sm" c="dimmed">Select a device to send messages from</Text>
+                  <Text size="sm" c="dimmed">
+                    Select a device to send messages from
+                    {realTimeConnected && (
+                      <Text component="span" size="xs" c="green" ml="xs">
+                        • Live updates active
+                      </Text>
+                    )}
+                  </Text>
                 </div>
               </Group>
-              <Button
-                variant="light"
-                onClick={fetchConnectedDevices}
-                leftSection={<IconDeviceMobile size="1rem" />}
-                size="sm"
-              >
-                Refresh Devices
-              </Button>
+              <Group gap="sm">
+                {realTimeConnected && (
+                  <Badge size="sm" color="green" variant="dot">
+                    Live Updates
+                  </Badge>
+                )}
+                <Button
+                  variant="light"
+                  onClick={fetchConnectedDevices}
+                  leftSection={<IconDeviceMobile size="1rem" />}
+                  size="sm"
+                >
+                  Refresh Devices
+                </Button>
+              </Group>
             </Group>
             
             {devices.length > 0 ? (

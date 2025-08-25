@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Container,
   Card,
@@ -49,6 +49,7 @@ import {
 import { notifications } from '@mantine/notifications'
 import { useDisclosure } from '@mantine/hooks'
 import CustomerHeader from '@/components/customer/CustomerHeader'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface ConnectedDevice {
   id: string
@@ -71,6 +72,7 @@ export default function BulkMessagePage() {
   const [devices, setDevices] = useState<ConnectedDevice[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedDevice, setSelectedDevice] = useState('')
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
   const [messageType, setMessageType] = useState('text')
   const [messageSending, setMessageSending] = useState(false)
   
@@ -113,6 +115,47 @@ export default function BulkMessagePage() {
   // Modal states
   const [previewOpened, { open: openPreview, close: closePreview }] = useDisclosure(false)
 
+  // Real-time device status updates
+  const handleDeviceStatusUpdate = useCallback((data: any) => {
+    if (data.devices) {
+      const connectedDevices = data.devices.filter((device: any) => device.status === 'CONNECTED')
+      setDevices(connectedDevices)
+      
+      // Auto-select first device if none selected
+      if (connectedDevices.length > 0 && !selectedDevice) {
+        setSelectedDevice(connectedDevices[0].id)
+      }
+    }
+  }, [selectedDevice])
+
+  // Real-time queue updates
+  const handleQueueUpdate = useCallback((data: any) => {
+    if (data.messages) {
+      // Update recipient statuses based on queue messages
+      setRecipients(prev => prev.map(recipient => {
+        const queueMessage = data.messages.find((msg: any) => 
+          msg.to === recipient.phoneNumber && msg.status === 'sent'
+        )
+        if (queueMessage) {
+          return { ...recipient, status: 'sent' as const }
+        }
+        return recipient
+      }))
+    }
+  }, [])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppRealTime({
+    onDeviceStatus: handleDeviceStatusUpdate,
+    onQueueUpdate: handleQueueUpdate,
+    enableNotifications: false,
+    autoReconnect: true
+  })
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
+
   useEffect(() => {
     fetchConnectedDevices()
     checkSubscriptionStatus()
@@ -124,22 +167,18 @@ export default function BulkMessagePage() {
       const response = await fetch('/api/customer/host/connections')
       if (response.ok) {
         const allDevices = await response.json()
-        // Filter only connected devices
-        const connectedDevices = allDevices.filter((device: ConnectedDevice) => device.status === 'CONNECTED')
-        setDevices(connectedDevices)
-        
-        // Auto-select first connected device if available
-        if (connectedDevices.length > 0 && !selectedDevice) {
-          setSelectedDevice(connectedDevices[0].id)
-        }
+        // Process through real-time handler for consistency
+        handleDeviceStatusUpdate({ devices: allDevices })
       }
     } catch (error) {
       console.error('Error fetching devices:', error)
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to fetch connected devices',
-        color: 'red'
-      })
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to fetch connected devices',
+          color: 'red'
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -529,7 +568,10 @@ export default function BulkMessagePage() {
       <CustomerHeader 
         title="Bulk Messages"
         subtitle="Send WhatsApp messages to multiple recipients efficiently"
-        badge={{ label: 'Bulk Messaging', color: 'blue' }}
+        badge={{ 
+          label: realTimeConnected ? 'Live • Bulk Messaging' : 'Bulk Messaging', 
+          color: realTimeConnected ? 'green' : 'blue' 
+        }}
       />
       
       <Container size="xl" py="md">
@@ -577,7 +619,14 @@ export default function BulkMessagePage() {
                 {/* Recipients Management */}
                 <Card withBorder padding="lg">
                   <Group justify="space-between" mb="md">
-                    <Title order={4}>📱 Recipients ({recipients.length})</Title>
+                    <Group gap="sm">
+                      <Title order={4}>📱 Recipients ({recipients.length})</Title>
+                      {realTimeConnected && (
+                        <Badge size="sm" color="green" variant="dot">
+                          Live Updates
+                        </Badge>
+                      )}
+                    </Group>
                     <Group gap="sm">
                       <Button
                         variant="light"

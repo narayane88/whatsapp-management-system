@@ -5,6 +5,8 @@ import { getImpersonationContext, hasCustomerAccess } from '@/lib/impersonation'
 import { Pool } from 'pg'
 import { getDatabaseConfig } from '@/lib/db-config'
 import { whatsappServerManager } from '@/lib/whatsapp-servers'
+import { WhatsAppEventStreamer } from '../../whatsapp/events/route'
+import { generateDeviceWebhookPayload, logWebhookConfig } from '@/lib/webhook-config'
 
 const pool = new Pool(getDatabaseConfig())
 
@@ -170,21 +172,39 @@ export async function GET(request: NextRequest) {
               realTimeStatus = 'DISCONNECTED'
             }
             
-            // Update phone number and user info
-            if (serverAccount.phoneNumber || serverAccount.deviceInfo?.phoneNumber) {
-              // Update database with phone number if we have it
-              try {
-                await pool.query(`
-                  UPDATE whatsapp_instances 
-                  SET "phoneNumber" = $1, "updatedAt" = CURRENT_TIMESTAMP
-                  WHERE id = $2
-                `, [
-                  serverAccount.phoneNumber || serverAccount.deviceInfo?.phoneNumber,
-                  instance.id
-                ])
-              } catch (updateError) {
-                console.warn('Failed to update phone number in database:', updateError.message)
+            // Update database with real-time status and phone number
+            try {
+              const updates = []
+              const values = []
+              let paramIndex = 1
+
+              // Always update status to keep database in sync
+              updates.push(`status = $${paramIndex++}`)
+              values.push(realTimeStatus)
+
+              // Always update lastSeenAt if we have it
+              if (lastActivity) {
+                updates.push(`"lastSeenAt" = $${paramIndex++}`)
+                values.push(new Date(lastActivity))
               }
+
+              // Update phone number if available
+              if (serverAccount.phoneNumber || serverAccount.deviceInfo?.phoneNumber) {
+                updates.push(`"phoneNumber" = $${paramIndex++}`)
+                values.push(serverAccount.phoneNumber || serverAccount.deviceInfo?.phoneNumber)
+              }
+
+              // Always update timestamp
+              updates.push(`"updatedAt" = CURRENT_TIMESTAMP`)
+              values.push(instance.id)
+
+              await pool.query(`
+                UPDATE whatsapp_instances 
+                SET ${updates.join(', ')}
+                WHERE id = $${paramIndex}
+              `, values)
+            } catch (updateError) {
+              console.warn('Failed to update device status in database:', updateError.message)
             }
             
             lastActivity = serverAccount.lastSeen || instance.lastSeenAt
@@ -194,7 +214,7 @@ export async function GET(request: NextRequest) {
           }
         }
       } catch (fetchError) {
-        console.warn(`Failed to get real-time status for ${serverAccountId}:`, fetchError.message)
+        console.warn(`Failed to get real-time status for ${instance.name}:`, fetchError.message)
         // Keep database status as fallback
       }
 
@@ -226,6 +246,13 @@ export async function GET(request: NextRequest) {
         updatedAt: instance.updatedAt
       })
     }
+
+    // Broadcast device status updates to real-time clients
+    const streamer = WhatsAppEventStreamer.getInstance()
+    streamer.sendDeviceStatus({
+      devices: connections,
+      userId: userId
+    })
 
     return NextResponse.json(connections)
 
@@ -341,6 +368,13 @@ export async function POST(request: NextRequest) {
     try {
       console.log(`Creating WhatsApp connection for account: ${accountId} on server: ${selectedServer.name}`)
       
+      // Log webhook configuration for debugging
+      logWebhookConfig()
+      
+      // Generate webhook payload with device configuration
+      const webhookPayload = generateDeviceWebhookPayload(accountId)
+      console.log('📡 Webhook payload:', JSON.stringify(webhookPayload, null, 2))
+      
       const connectController = new AbortController()
       const connectTimeoutId = setTimeout(() => connectController.abort(), 10000)
       
@@ -351,10 +385,7 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ 
-          id: accountId
-          // Note: WhatsApp server doesn't accept 'name' field
-        }),
+        body: JSON.stringify(webhookPayload),
         signal: connectController.signal
       })
         
@@ -455,6 +486,19 @@ export async function POST(request: NextRequest) {
       serverId,
       hasQR: !!qrCode,
       serverConnected: !!whatsappServerResult
+    })
+
+    // Broadcast device creation to real-time clients
+    const streamer = WhatsAppEventStreamer.getInstance()
+    streamer.sendDeviceStatus({
+      deviceUpdate: {
+        deviceId: response.id,
+        status: response.status,
+        accountName: response.accountName,
+        phoneNumber: response.phoneNumber,
+        action: 'created'
+      },
+      userId: userId
     })
 
     return NextResponse.json(response, { status: 201 })

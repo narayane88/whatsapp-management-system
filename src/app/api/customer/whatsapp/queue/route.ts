@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Pool } from 'pg'
 import { getDatabaseConfig } from '@/lib/db-config'
 import { whatsappServerManager } from '@/lib/whatsapp-servers'
+import { WhatsAppEventStreamer } from '../events/route'
 
 // Database connection
 const pool = new Pool(getDatabaseConfig())
@@ -92,6 +93,14 @@ export async function GET(request: NextRequest) {
         ? Math.ceil(allMessages.filter(m => m.status === 'pending').length / queueSettings.batchSize * queueSettings.interval / 60) + ' minutes'
         : '0 minutes'
     }
+
+    // Send real-time update to all connected clients
+    const streamer = WhatsAppEventStreamer.getInstance()
+    streamer.sendQueueUpdate({
+      messages: allMessages,
+      stats,
+      settings: queueSettings
+    })
 
     return NextResponse.json({
       messages: allMessages,
@@ -219,6 +228,12 @@ async function handleUpdateSettings(newSettings: Partial<QueueSettings>) {
   } else {
     stopQueueProcessor()
   }
+
+  // Broadcast settings update to all connected clients
+  const streamer = WhatsAppEventStreamer.getInstance()
+  streamer.sendQueueUpdate({
+    settings: queueSettings
+  })
 
   return NextResponse.json({
     message: 'Settings updated successfully',
@@ -414,6 +429,18 @@ async function processQueue() {
     for (const dbMessage of result.rows) {
       await processDbMessage(dbMessage)
     }
+    
+    // After processing, send updated queue state to all clients
+    if (result.rows.length > 0) {
+      const streamer = WhatsAppEventStreamer.getInstance()
+      // Trigger a fresh queue update by calling GET endpoint logic
+      try {
+        const updatedStats = await getUpdatedQueueStats()
+        streamer.sendQueueUpdate(updatedStats)
+      } catch (error) {
+        console.error('Error broadcasting queue update:', error)
+      }
+    }
   } catch (error) {
     console.error('Error processing queue:', error)
   } finally {
@@ -525,8 +552,65 @@ async function processDbMessage(dbMessage: any) {
     // Build message object exactly like the working UI
     let messageObject: any = { text: dbMessage.message }
     
+    // Parse API v1 message format if message is a JSON object
+    if (dbMessage.message && typeof dbMessage.message === 'string' && dbMessage.message.startsWith('{')) {
+      try {
+        const parsedMessage = JSON.parse(dbMessage.message)
+        
+        // Handle different message types from API v1 format
+        if (parsedMessage.text) {
+          messageObject = { text: parsedMessage.text }
+        } else if (parsedMessage.image) {
+          messageObject = {
+            image: {
+              url: parsedMessage.image.url,
+              caption: parsedMessage.image.caption || undefined
+            }
+          }
+        } else if (parsedMessage.video) {
+          messageObject = {
+            video: {
+              url: parsedMessage.video.url,
+              caption: parsedMessage.video.caption || undefined
+            }
+          }
+        } else if (parsedMessage.audio) {
+          messageObject = {
+            audio: {
+              url: parsedMessage.audio.url
+            }
+          }
+        } else if (parsedMessage.document) {
+          messageObject = {
+            document: {
+              url: parsedMessage.document.url,
+              filename: parsedMessage.document.filename || 'document',
+              caption: parsedMessage.document.caption || undefined
+            }
+          }
+        } else if (parsedMessage.location) {
+          messageObject = {
+            location: {
+              latitude: parsedMessage.location.latitude,
+              longitude: parsedMessage.location.longitude,
+              name: parsedMessage.location.name || undefined,
+              address: parsedMessage.location.address || undefined
+            }
+          }
+        }
+        
+        console.log('📝 Parsed API v1 message format:', {
+          original: dbMessage.message,
+          parsed: messageObject
+        })
+        
+      } catch (parseError) {
+        console.log('⚠️ Failed to parse message JSON, treating as text:', parseError)
+        messageObject = { text: dbMessage.message }
+      }
+    }
     // Handle attachments if present (check for imageUrl from UI and attachmentUrl/mediaUrl from API)
-    if (dbMessage.metadata?.attachmentUrl || dbMessage.metadata?.mediaUrl || dbMessage.metadata?.imageUrl) {
+    else if (dbMessage.metadata?.attachmentUrl || dbMessage.metadata?.mediaUrl || dbMessage.metadata?.imageUrl) {
       const attachmentUrl = dbMessage.metadata.attachmentUrl || dbMessage.metadata.mediaUrl || dbMessage.metadata.imageUrl
       
       // Determine attachment type from URL or metadata
@@ -536,9 +620,9 @@ async function processDbMessage(dbMessage: any) {
         case 'image':
           messageObject = {
             image: {
-              url: attachmentUrl
-            },
-            caption: dbMessage.metadata?.imageCaption || dbMessage.message || undefined
+              url: attachmentUrl,
+              caption: dbMessage.metadata?.imageCaption || dbMessage.message || undefined
+            }
           }
           break
         case 'document':
@@ -565,6 +649,36 @@ async function processDbMessage(dbMessage: any) {
           break
         default:
           messageObject = { text: dbMessage.message }
+      }
+    }
+
+    // Handle location messages (detect location format from text message)
+    if (!dbMessage.metadata?.attachmentUrl && 
+        !dbMessage.metadata?.mediaUrl && 
+        !dbMessage.metadata?.imageUrl &&
+        dbMessage.message && 
+        typeof dbMessage.message === 'string' &&
+        dbMessage.message.match(/^\[Location:\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)\]/)) {
+      
+      // Extract location data from text format: [Location: lat, lng] - optional description
+      const locationMatch = dbMessage.message.match(/^\[Location:\s*(-?\d+\.?\d*),\s*(-?\d+\.?\d*)\]\s*(?:-\s*(.+))?/)
+      
+      if (locationMatch) {
+        const [, latitude, longitude, description] = locationMatch
+        
+        messageObject = {
+          location: {
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            name: description || undefined,
+            address: description || undefined
+          }
+        }
+        
+        console.log('📍 Converted location message:', {
+          original: dbMessage.message,
+          parsed: messageObject
+        })
       }
     }
 
@@ -628,6 +742,16 @@ async function processDbMessage(dbMessage: any) {
       await logSentMessageFromDb(dbMessage)
       
       console.log(`✅ Message ${dbMessage.id} sent successfully to ${dbMessage.toNumber}`)
+      
+      // Broadcast message sent event to all connected clients
+      const streamer = WhatsAppEventStreamer.getInstance()
+      streamer.sendMessageSent({
+        messageId: dbMessage.id,
+        to: dbMessage.toNumber,
+        deviceName: dbMessage.device_name,
+        status: 'sent',
+        sentAt: new Date().toISOString()
+      })
     } else {
       // Mark as failed with error
       await pool.query(`
@@ -639,6 +763,17 @@ async function processDbMessage(dbMessage: any) {
       `, [dbMessage.id, result.error || 'Unknown error'])
       
       console.log(`❌ Message ${dbMessage.id} failed: ${result.error}`)
+      
+      // Broadcast message failure to all connected clients
+      const streamer = WhatsAppEventStreamer.getInstance()
+      streamer.sendQueueUpdate({
+        messageUpdate: {
+          id: dbMessage.id,
+          status: 'failed',
+          lastError: result.error || 'Unknown error',
+          updatedAt: new Date().toISOString()
+        }
+      })
     }
 
   } catch (error) {
@@ -689,8 +824,79 @@ async function logSentMessageFromDb(dbMessage: any) {
       })
     ])
     console.log(`✅ Logged sent message for user ${dbMessage.user_id}`)
+    
+    // Broadcast stats update for sent messages page
+    const streamer = WhatsAppEventStreamer.getInstance()
+    streamer.sendStatsUpdate({
+      newSentMessage: {
+        id: messageId,
+        recipientNumber: dbMessage.toNumber,
+        message: dbMessage.message,
+        deviceName: dbMessage.device_name,
+        status: 'sent',
+        sentAt: new Date().toISOString()
+      }
+    })
   } catch (error) {
     console.warn('Failed to log sent message:', error)
+  }
+}
+
+// Helper function to get updated queue stats
+async function getUpdatedQueueStats() {
+  const dbMessages = await pool.query(`
+    SELECT 
+      mq.id,
+      mq."toNumber" as to,
+      mq.message,
+      mq.status,
+      mq.priority,
+      mq.scheduled as "scheduledAt",
+      mq."createdAt",
+      mq.attempts,
+      mq."lastError",
+      mq.metadata,
+      wi.name as "deviceName"
+    FROM message_queue mq
+    LEFT JOIN whatsapp_instances wi ON mq."instanceId" = wi.id
+    WHERE mq.status IN ('PENDING', 'PROCESSING', 'SENT', 'FAILED')
+    ORDER BY mq."createdAt" DESC
+    LIMIT 500
+  `)
+
+  const allMessages = dbMessages.rows.map(row => ({
+    id: row.id,
+    to: row.to,
+    message: row.message,
+    messageType: row.metadata?.messageType || 'text',
+    attachmentUrl: row.metadata?.attachmentUrl || row.metadata?.mediaUrl,
+    deviceId: row.metadata?.deviceName || '',
+    deviceName: row.deviceName || row.metadata?.deviceName || 'Unknown Device',
+    status: row.status.toLowerCase() as 'pending' | 'processing' | 'sent' | 'failed',
+    priority: row.priority || 0,
+    scheduledAt: row.scheduledAt,
+    createdAt: row.createdAt,
+    attempts: row.attempts || 0,
+    lastError: row.lastError,
+    metadata: row.metadata
+  }))
+
+  const stats = {
+    totalMessages: allMessages.length,
+    pendingMessages: allMessages.filter(m => m.status === 'pending').length,
+    processingMessages: allMessages.filter(m => m.status === 'processing').length,
+    sentMessages: allMessages.filter(m => m.status === 'sent').length,
+    failedMessages: allMessages.filter(m => m.status === 'failed').length,
+    messagesPerMinute: queueSettings.enabled ? Math.round(60 / queueSettings.interval * queueSettings.batchSize) : 0,
+    estimatedTimeRemaining: queueSettings.enabled && allMessages.filter(m => m.status === 'pending').length > 0
+      ? Math.ceil(allMessages.filter(m => m.status === 'pending').length / queueSettings.batchSize * queueSettings.interval / 60) + ' minutes'
+      : '0 minutes'
+  }
+
+  return {
+    messages: allMessages,
+    stats,
+    settings: queueSettings
   }
 }
 

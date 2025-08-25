@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { 
   Card, 
   Text, 
@@ -38,6 +38,7 @@ import {
 import WhatsAppLoader from '@/components/ui/WhatsAppLoader'
 import { WhatsAppSectionLoader } from '@/components/ui/WhatsAppPageLoader'
 import { useImpersonation } from '@/contexts/ImpersonationContext'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface WhatsAppDevice {
   id: string
@@ -75,6 +76,7 @@ export default function SimpleDeviceManager() {
   const [devices, setDevices] = useState<WhatsAppDevice[]>([])
   const [loading, setLoading] = useState(true)
   const [connecting, setConnecting] = useState(false)
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
   
   // Helper function to build URLs with impersonation parameters
   const buildApiUrl = (path: string) => {
@@ -90,8 +92,7 @@ export default function SimpleDeviceManager() {
   const [currentQrCode, setCurrentQrCode] = useState<string>('')
   const [currentDevice, setCurrentDevice] = useState<string>('')
   const [editData, setEditData] = useState<EditDeviceData>({ id: '', accountName: '', phoneNumber: '' })
-  const [autoRefresh, setAutoRefresh] = useState<NodeJS.Timeout | null>(null)
-  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true)
+  // Removed auto-refresh polling - now using real-time updates
   const [servers, setServers] = useState<Server[]>([])
   const [selectedServerId, setSelectedServerId] = useState<string>('')
   const [deviceName, setDeviceName] = useState<string>('')
@@ -112,6 +113,66 @@ export default function SimpleDeviceManager() {
     const timestamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '')
     return `bizflash.in-device-${timestamp}`
   }
+
+  // Real-time device status update handler
+  const handleDeviceStatusUpdate = useCallback((data: any) => {
+    if (data.devices) {
+      // Full device list update
+      const devicesWithServerNames = data.devices.map(device => {
+        if (device.serverId && (!device.serverName || device.serverName === 'Unknown Server')) {
+          const server = servers.find(s => s.id === device.serverId)
+          if (server) {
+            device.serverName = server.name
+          }
+        }
+        
+        // If device is now connected, clear its cleanup timer and show notification
+        if (device.status === 'CONNECTED' && pendingDevices.has(device.id)) {
+          cleanupQrTimeout(device.id)
+          setPendingDevices(prev => {
+            const newSet = new Set(prev)
+            newSet.delete(device.id)
+            return newSet
+          })
+          
+          // Defer notification to avoid context issues
+          setTimeout(() => {
+            try {
+              notifications.show({
+                title: '✅ Device Connected',
+                message: `Device "${device.accountName}" is now connected to WhatsApp`,
+                color: 'green'
+              })
+            } catch (error) {
+              console.error('Failed to show device connected notification:', error)
+            }
+          }, 0)
+        }
+        
+        return device
+      })
+      setDevices(devicesWithServerNames)
+    } else if (data.deviceUpdate) {
+      // Single device update
+      const { deviceId, status, phoneNumber, lastActivity } = data.deviceUpdate
+      setDevices(prev => prev.map(device => 
+        device.id === deviceId 
+          ? { ...device, status, phoneNumber, lastActivity }
+          : device
+      ))
+    }
+  }, [servers, pendingDevices])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppRealTime({
+    onDeviceStatus: handleDeviceStatusUpdate,
+    enableNotifications: true,
+    autoReconnect: true
+  })
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
 
   // Cleanup function for QR timeouts and pending devices
   const cleanupQrTimeout = (deviceId: string) => {
@@ -197,37 +258,20 @@ export default function SimpleDeviceManager() {
       await fetchServers()
       await fetchDevices()
       
-      // Show notification that auto-refresh is enabled
-      notifications.show({
-        title: '🔄 Auto-refresh enabled',
-        message: 'Device status updates automatically every 15 seconds',
-        color: 'blue',
-        autoClose: 4000
-      })
+      // Show notification that real-time updates are enabled
+      if (isConnected) {
+        notifications.show({
+          title: '📡 Real-time Updates Active',
+          message: 'Device status updates instantly via live connection',
+          color: 'green',
+          autoClose: 4000
+        })
+      }
     }
     initializeData()
   }, [isImpersonating, impersonationData])
 
-  // Auto-refresh control
-  useEffect(() => {
-    if (autoRefreshEnabled) {
-      const interval = setInterval(() => {
-        fetchDevices()
-      }, 15000) // 15 seconds for better performance
-      setAutoRefresh(interval)
-    } else {
-      if (autoRefresh) {
-        clearInterval(autoRefresh)
-        setAutoRefresh(null)
-      }
-    }
-    
-    return () => {
-      if (autoRefresh) {
-        clearInterval(autoRefresh)
-      }
-    }
-  }, [autoRefreshEnabled])
+  // Real-time updates replace auto-refresh polling
 
   // Refresh devices when servers list changes to ensure proper server name mapping
   useEffect(() => {
@@ -253,11 +297,6 @@ export default function SimpleDeviceManager() {
   // Cleanup all timers on component unmount
   useEffect(() => {
     return () => {
-      // Clear auto-refresh
-      if (autoRefresh) {
-        clearInterval(autoRefresh)
-      }
-      
       // Clear QR countdown
       if (countdownInterval) {
         clearInterval(countdownInterval)
@@ -276,42 +315,18 @@ export default function SimpleDeviceManager() {
       if (response.ok) {
         const data = await response.json()
         
-        // Ensure server names are populated for devices that might not have them
-        const devicesWithServerNames = data.map(device => {
-          if (device.serverId && (!device.serverName || device.serverName === 'Unknown Server')) {
-            const server = servers.find(s => s.id === device.serverId)
-            if (server) {
-              device.serverName = server.name
-            }
-          }
-          
-          // If device is now connected, clear its cleanup timer
-          if (device.status === 'CONNECTED' && pendingDevices.has(device.id)) {
-            cleanupQrTimeout(device.id)
-            setPendingDevices(prev => {
-              const newSet = new Set(prev)
-              newSet.delete(device.id)
-              return newSet
-            })
-            
-            try {
-              notifications.show({
-                title: '✅ Device Connected',
-                message: `Device "${device.accountName}" is now connected to WhatsApp`,
-                color: 'green'
-              })
-            } catch (error) {
-              console.error('Failed to show device connected notification:', error)
-            }
-          }
-          
-          return device
-        })
-        
-        setDevices(devicesWithServerNames)
+        // Process devices through real-time handler for consistency
+        handleDeviceStatusUpdate({ devices: data })
       }
     } catch (error: any) {
       console.error('Error fetching devices:', error)
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Connection Error',
+          message: 'Failed to fetch device status',
+          color: 'red'
+        })
+      }
     } finally {
       if (loading) setLoading(false)
     }
@@ -476,15 +491,18 @@ export default function SimpleDeviceManager() {
                 clearInterval(interval)
                 setCountdownInterval(null)
                 closeQrModal()
-                try {
-                  notifications.show({
-                    title: '⏰ QR Code Expired',
-                    message: 'QR code has expired after 20 seconds. Generate a new one if needed.',
-                    color: 'orange'
-                  })
-                } catch (error) {
-                  console.error('Failed to show QR expiry notification:', error)
-                }
+                // Defer notification to next tick to avoid context issues
+                setTimeout(() => {
+                  try {
+                    notifications.show({
+                      title: '⏰ QR Code Expired',
+                      message: 'QR code has expired after 20 seconds. Generate a new one if needed.',
+                      color: 'orange'
+                    })
+                  } catch (error) {
+                    console.error('Failed to show QR expiry notification:', error)
+                  }
+                }, 0)
                 return 0
               }
               return prev - 1
@@ -655,25 +673,25 @@ export default function SimpleDeviceManager() {
               <Text size="lg" fw={600}>WhatsApp Devices</Text>
               <Text size="sm" c="dimmed">
                 Manage your connected WhatsApp devices
-                {autoRefreshEnabled && (
-                  <Text component="span" size="xs" c="blue" ml="xs">
-                    • Auto-refreshing every 15s
+                {realTimeConnected && (
+                  <Text component="span" size="xs" c="green" ml="xs">
+                    • Live updates active
                   </Text>
                 )}
               </Text>
             </div>
           </Group>
           <Group gap="sm">
-            <Button
-              variant={autoRefreshEnabled ? 'filled' : 'light'}
-              color={autoRefreshEnabled ? 'green' : 'blue'}
-              leftSection={<IconRefresh size="1rem" />}
-              onClick={() => setAutoRefreshEnabled(!autoRefreshEnabled)}
-              size="sm"
-              title={autoRefreshEnabled ? 'Disable auto-refresh (15s)' : 'Enable auto-refresh (15s)'}
-            >
-              {autoRefreshEnabled ? '🔄 Auto ON' : 'Auto OFF'}
-            </Button>
+            {realTimeConnected && (
+              <Badge size="lg" color="green" variant="dot">
+                📡 Live Updates
+              </Badge>
+            )}
+            {!realTimeConnected && (
+              <Badge size="lg" color="orange" variant="dot">
+                📡 Connecting...
+              </Badge>
+            )}
             <Button
               variant="light"
               leftSection={<IconRefresh size="1rem" />}

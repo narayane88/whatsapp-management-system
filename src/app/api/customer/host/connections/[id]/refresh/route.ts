@@ -5,6 +5,7 @@ import { getImpersonationContext, hasCustomerAccess } from '@/lib/impersonation'
 import { Pool } from 'pg'
 import { getDatabaseConfig } from '@/lib/db-config'
 import { whatsappServerManager } from '@/lib/whatsapp-servers'
+import { generateDeviceWebhookPayload } from '@/lib/webhook-config'
 
 const pool = new Pool(getDatabaseConfig())
 
@@ -131,13 +132,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
           const reconnectController = new AbortController()
           const reconnectTimeoutId = setTimeout(() => reconnectController.abort(), 10000)
           
+          // Generate webhook payload with device configuration
+          const webhookPayload = generateDeviceWebhookPayload(accountId)
+          
           const reconnectResponse = await fetch(`${targetServer.url}/api/accounts/connect`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ 
-              id: accountId,
+              ...webhookPayload,
               reconnect: true
             }),
             signal: reconnectController.signal

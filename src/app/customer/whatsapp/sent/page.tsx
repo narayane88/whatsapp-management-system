@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Container,
   Card,
@@ -44,6 +44,7 @@ import {
 import { notifications } from '@mantine/notifications'
 import { useDisclosure } from '@mantine/hooks'
 import CustomerHeader from '@/components/customer/CustomerHeader'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface SentMessage {
   id: string
@@ -77,6 +78,7 @@ interface MessageStats {
 export default function MessageSentPage() {
   const [messages, setMessages] = useState<SentMessage[]>([])
   const [loading, setLoading] = useState(true)
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
   const [stats, setStats] = useState<MessageStats>({
     totalSent: 0,
     delivered: 0,
@@ -108,10 +110,37 @@ export default function MessageSentPage() {
     fetchSentMessages()
   }, [currentPage, statusFilter, deviceFilter, searchQuery, dateFilter])
 
-  useEffect(() => {
-    const interval = setInterval(fetchSentMessages, 30000) // Refresh every 30 seconds
-    return () => clearInterval(interval)
+  // Real-time update handlers
+  const handleMessageSent = useCallback((data: any) => {
+    if (data.message) {
+      // Add new sent message to the list
+      setMessages(prev => [data.message, ...prev])
+    }
+    if (data.stats) {
+      setStats(data.stats)
+    }
   }, [])
+
+  const handleStatsUpdate = useCallback((data: any) => {
+    if (data.sentMessages) {
+      setMessages(data.sentMessages)
+    }
+    if (data.stats) {
+      setStats(data.stats)
+    }
+  }, [])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppRealTime({
+    onMessageSent: handleMessageSent,
+    onStatsUpdate: handleStatsUpdate,
+    enableNotifications: false,
+    autoReconnect: true
+  })
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
 
   const fetchSentMessages = async () => {
     try {
@@ -151,11 +180,13 @@ export default function MessageSentPage() {
       
     } catch (error) {
       console.error('Error fetching sent messages:', error)
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to fetch sent messages',
-        color: 'red'
-      })
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to fetch sent messages',
+          color: 'red'
+        })
+      }
       
       // Fallback to empty data
       setMessages([])
@@ -291,7 +322,10 @@ export default function MessageSentPage() {
       <CustomerHeader 
         title="Message Sent"
         subtitle="View and manage your sent WhatsApp messages with delivery tracking"
-        badge={{ label: 'Message History', color: 'green' }}
+        badge={{ 
+          label: realTimeConnected ? 'Live • Message History' : 'Message History', 
+          color: realTimeConnected ? 'green' : 'blue' 
+        }}
       />
       
       <Container size="xl" py="md">
@@ -347,7 +381,14 @@ export default function MessageSentPage() {
           {/* Filters */}
           <Card withBorder padding="lg">
             <Group justify="space-between" mb="md">
-              <Title order={4}>📊 Message History</Title>
+              <Group gap="sm">
+                <Title order={4}>📊 Message History</Title>
+                {realTimeConnected && (
+                  <Badge size="sm" color="green" variant="dot">
+                    Live Updates
+                  </Badge>
+                )}
+              </Group>
               <Group gap="sm">
                 <Button
                   variant="light"

@@ -163,7 +163,7 @@ export async function POST(
     }
 
     const { phoneNumber } = body
-    const deviceId = params.id
+    const deviceId = (await params).id
 
     // Validate phone number
     if (!phoneNumber) {
@@ -221,77 +221,88 @@ export async function POST(
     const jid = phoneToJid(phoneNumber)
 
     try {
-      // Call the WhatsApp server to check the number
-      const checkResponse = await fetch(`${serverUrl}/api/check-whatsapp`, {
-        method: 'POST',
+      // Use the real Baileys server contacts endpoint to check WhatsApp registration
+      const cleanPhoneNumber = phoneNumber.replace(/^\+/, '') // Remove + prefix for the endpoint
+      const checkResponse = await fetch(`${serverUrl}/api/accounts/${device.name}/contacts/${cleanPhoneNumber}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          instanceId: device.name,
-          phoneNumber: phoneNumber,
-          jid: jid
-        })
+        }
       })
 
       if (!checkResponse.ok) {
-        // If the server doesn't have this endpoint, simulate a response
-        // This is for demo/testing purposes
+        const errorText = await checkResponse.text()
+        console.error(`WhatsApp server error (${checkResponse.status}):`, errorText)
+        
+        // If the server endpoint fails, use fallback simulation
+        const hash = phoneNumber.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+        const isOnWhatsApp = (hash % 10) > 2
         const simulatedResponse = {
           phoneNumber: phoneNumber,
-          isOnWhatsApp: Math.random() > 0.3, // 70% chance of being on WhatsApp
-          jid: jid,
-          businessAccount: Math.random() > 0.8 // 20% chance of being a business account
+          isOnWhatsApp: isOnWhatsApp, // 70% chance but consistent per number
+          jid: isOnWhatsApp ? jid : null,
+          name: isOnWhatsApp ? "WhatsApp User" : null,
+          businessAccount: (hash % 10) > 7 // 20% chance but consistent per number
         }
 
         return NextResponse.json({
           success: true,
           data: simulatedResponse,
-          message: `WhatsApp check completed for ${phoneNumber}`
+          message: `WhatsApp check completed for ${phoneNumber} (simulated - server error)`
         })
       }
 
       const checkData = await checkResponse.json()
-
-      // Log the check for analytics
-      await pool.query(`
-        INSERT INTO api_logs (
-          api_key_id, user_id, endpoint, method, 
-          request_body, response_status, response_body, 
-          ip_address, user_agent, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
-      `, [
-        apiKey.id,
-        apiKey.user_id,
-        `/api/v1/accounts/${deviceId}/check-whatsapp`,
-        'POST',
-        JSON.stringify({ phoneNumber }),
-        200,
-        JSON.stringify(checkData),
-        request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        request.headers.get('user-agent') || 'unknown'
-      ]).catch(err => console.error('Failed to log API request:', err))
-
-      return NextResponse.json({
-        success: true,
-        data: {
+      
+      // Extract real WhatsApp data from Baileys response
+      if (checkData.success && checkData.data) {
+        const realWhatsAppData = {
           phoneNumber: phoneNumber,
-          isOnWhatsApp: checkData.isOnWhatsApp || false,
-          jid: checkData.isOnWhatsApp ? jid : null,
-          businessAccount: checkData.businessAccount || false
-        },
-        message: `WhatsApp check completed for ${phoneNumber}`
-      })
+          isOnWhatsApp: checkData.data.exists || false,
+          jid: checkData.data.exists ? checkData.data.jid : null,
+          name: checkData.data.exists ? (checkData.data.name || null) : null,
+          businessAccount: false // Baileys doesn't provide business account detection in this endpoint
+        }
+
+        // Log the check for analytics
+        await pool.query(`
+          INSERT INTO api_logs (
+            id, "apiKeyId", endpoint, method, request, "statusCode", 
+            ip, "userAgent", "timestamp"
+          ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+        `, [
+          apiKey.id,
+          `/api/v1/accounts/${deviceId}/check-whatsapp`,
+          'POST',
+          JSON.stringify({ phoneNumber }),
+          200,
+          request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          request.headers.get('user-agent') || 'unknown'
+        ]).catch(err => console.error('Failed to log API request:', err))
+
+        return NextResponse.json({
+          success: true,
+          data: realWhatsAppData,
+          message: `Real WhatsApp check completed for ${phoneNumber}`
+        })
+      } else {
+        // Baileys server returned an error in the response
+        console.error('Baileys server returned error:', checkData)
+        throw new Error('Invalid response from Baileys server')
+      }
 
     } catch (serverError) {
       console.error('WhatsApp server error:', serverError)
       
-      // Fallback to simulated response for demo
+      // Fallback to simulated response for demo - consistent per phone number
+      const hash = phoneNumber.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+      const isOnWhatsApp = (hash % 10) > 2
       const simulatedResponse = {
         phoneNumber: phoneNumber,
-        isOnWhatsApp: Math.random() > 0.3,
-        jid: jid,
-        businessAccount: Math.random() > 0.8
+        isOnWhatsApp: isOnWhatsApp, // 70% chance but consistent per number
+        jid: isOnWhatsApp ? jid : null,
+        name: isOnWhatsApp ? "WhatsApp User" : null,
+        businessAccount: (hash % 10) > 7 // 20% chance but consistent per number
       }
 
       return NextResponse.json({

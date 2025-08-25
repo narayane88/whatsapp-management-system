@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { 
   Grid, 
   Card, 
@@ -24,6 +24,7 @@ import {
   IconInfoCircle
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
+import { useWhatsAppStatsRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface WhatsAppInstance {
   id: string
@@ -48,6 +49,19 @@ interface WhatsAppStats {
 export default function WhatsAppOverview() {
   const [stats, setStats] = useState<WhatsAppStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [realTimeConnected, setRealTimeConnected] = useState(false)
+
+  // Real-time stats update handler
+  const handleStatsUpdate = useCallback((data: any) => {
+    setStats(data)
+  }, [])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppStatsRealTime(handleStatsUpdate)
+
+  useEffect(() => {
+    setRealTimeConnected(isConnected)
+  }, [isConnected])
 
   useEffect(() => {
     fetchWhatsAppStats()
@@ -59,10 +73,10 @@ export default function WhatsAppOverview() {
       const response = await fetch('/api/customer/whatsapp/stats')
       if (response.ok) {
         const data = await response.json()
-        setStats(data)
+        handleStatsUpdate(data)
       } else {
         // Mock data for now
-        setStats({
+        const mockData = {
           instances: [
             {
               id: '1',
@@ -88,15 +102,18 @@ export default function WhatsAppOverview() {
           complaints: 2,
           scheduledMessages: 8,
           groups: 5
-        })
+        }
+        handleStatsUpdate(mockData)
       }
     } catch (error) {
       console.error('WhatsApp stats error:', error)
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to load WhatsApp data',
-        color: 'red',
-      })
+      if (!realTimeConnected) {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to load WhatsApp data',
+          color: 'red',
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -172,7 +189,14 @@ export default function WhatsAppOverview() {
       {/* WhatsApp Instances */}
       <Card withBorder padding="lg">
         <Group justify="space-between" mb="md">
-          <Text size="lg" fw={600}>WhatsApp Instances</Text>
+          <Group gap="sm">
+            <Text size="lg" fw={600}>WhatsApp Instances</Text>
+            {realTimeConnected && (
+              <Badge size="sm" color="green" variant="dot">
+                Live
+              </Badge>
+            )}
+          </Group>
           <Button 
             leftSection={<IconBrandWhatsapp size="1rem" />}
             component="a"

@@ -77,6 +77,22 @@ export function useCompanyProfile() {
   const fetchProfile = async () => {
     try {
       setLoading(true)
+      
+      // First check if user has permission to access company profile
+      const sessionResponse = await fetch('/api/auth/session')
+      if (sessionResponse.ok) {
+        const sessionData = await sessionResponse.json()
+        const userRole = sessionData?.user?.role?.toUpperCase()
+        
+        // Only try to fetch company profile for admin users
+        if (userRole === 'CUSTOMER') {
+          // Customers should use default profile without API call
+          setProfile(defaultProfile)
+          setLoading(false)
+          return
+        }
+      }
+      
       const response = await fetch('/api/company/profile')
       
       if (response.ok) {
@@ -94,16 +110,13 @@ export function useCompanyProfile() {
           })
         } else {
           // Use default profile if API fails
-
           setProfile(defaultProfile)
         }
       } else {
         // Use default profile if not authenticated or other errors
-
         setProfile(defaultProfile)
       }
     } catch (error) {
-
       setProfile(defaultProfile)
       setError(null) // Don't show error, just use defaults
     } finally {
