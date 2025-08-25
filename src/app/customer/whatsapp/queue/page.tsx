@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   Container,
   Card,
@@ -18,7 +18,9 @@ import {
   Textarea,
   Switch,
   NumberInput,
-  Select
+  Select,
+  Pagination,
+  Center
 } from '@mantine/core'
 import {
   IconRefresh,
@@ -100,6 +102,8 @@ export default function MessageQueuePage() {
   const [viewModalOpen, setViewModalOpen] = useState(false)
   const [selectedMessage, setSelectedMessage] = useState<QueueMessage | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   useEffect(() => {
     fetchQueueData()
@@ -124,7 +128,11 @@ export default function MessageQueuePage() {
       const result = await response.json()
 
       if (response.ok) {
-        setMessages(result.messages || [])
+        // Sort messages by createdAt (latest first)
+        const sortedMessages = (result.messages || []).sort((a: QueueMessage, b: QueueMessage) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        })
+        setMessages(sortedMessages)
         setStats(result.stats || {
           totalMessages: 0,
           pendingMessages: 0,
@@ -324,6 +332,22 @@ export default function MessageQueuePage() {
     }
   }
 
+  // Paginated messages
+  const paginatedMessages = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return messages.slice(startIndex, endIndex)
+  }, [messages, currentPage, itemsPerPage])
+
+  const totalPages = Math.ceil(messages.length / itemsPerPage)
+
+  // Reset to first page when messages change
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1)
+    }
+  }, [messages.length, totalPages, currentPage])
+
   if (loading) {
     return <LoadingOverlay visible />
   }
@@ -446,113 +470,133 @@ export default function MessageQueuePage() {
           <Card withBorder padding="lg">
             <Group justify="space-between" mb="md">
               <Title order={4}>Queue Messages ({messages.length})</Title>
+              {messages.length > itemsPerPage && (
+                <Text size="sm" c="dimmed">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, messages.length)} of {messages.length}
+                </Text>
+              )}
             </Group>
 
             {messages.length > 0 ? (
-              <Table striped highlightOnHover>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>To</Table.Th>
-                    <Table.Th>Content</Table.Th>
-                    <Table.Th>Device</Table.Th>
-                    <Table.Th>Status</Table.Th>
-                    <Table.Th>Priority</Table.Th>
-                    <Table.Th>Created</Table.Th>
-                    <Table.Th>Actions</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {messages.map((message) => (
-                    <Table.Tr key={message.id}>
-                      <Table.Td>
-                        <Group gap="xs">
-                          {getMessageTypeIcon(message.messageType)}
-                          <Text size="sm">{message.messageType}</Text>
-                        </Group>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm">{message.to}</Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm" lineClamp={2} style={{ maxWidth: 200 }}>
-                          {message.message}
-                        </Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm">{message.deviceName}</Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Group gap="xs">
-                          <Badge color={getStatusColor(message.status)} size="sm">
-                            {message.status}
+              <>
+                <Table striped highlightOnHover>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Type</Table.Th>
+                      <Table.Th>To</Table.Th>
+                      <Table.Th>Content</Table.Th>
+                      <Table.Th>Device</Table.Th>
+                      <Table.Th>Status</Table.Th>
+                      <Table.Th>Priority</Table.Th>
+                      <Table.Th>Created</Table.Th>
+                      <Table.Th>Actions</Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {paginatedMessages.map((message) => (
+                      <Table.Tr key={message.id}>
+                        <Table.Td>
+                          <Group gap="xs">
+                            {getMessageTypeIcon(message.messageType)}
+                            <Text size="sm">{message.messageType}</Text>
+                          </Group>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm">{message.to}</Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm" lineClamp={2} style={{ maxWidth: 200 }}>
+                            {message.message}
+                          </Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm">{message.deviceName}</Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Group gap="xs">
+                            <Badge color={getStatusColor(message.status)} size="sm">
+                              {message.status}
+                            </Badge>
+                            {message.lastError && (
+                              <ActionIcon
+                                size="sm"
+                                variant="subtle"
+                                color="red"
+                                onClick={() => {
+                                  notifications.show({
+                                    title: 'Error Details',
+                                    message: message.lastError,
+                                    color: 'red'
+                                  })
+                                }}
+                              >
+                                <IconAlertCircle size={14} />
+                              </ActionIcon>
+                            )}
+                          </Group>
+                        </Table.Td>
+                        <Table.Td>
+                          <Badge color={message.priority > 0 ? 'orange' : 'blue'} size="sm">
+                            {message.priority > 0 ? 'High' : 'Normal'}
                           </Badge>
-                          {message.lastError && (
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size="sm">
+                            {new Date(message.createdAt).toLocaleString()}
+                          </Text>
+                        </Table.Td>
+                        <Table.Td>
+                          <Group gap="xs">
+                            <ActionIcon
+                              size="sm"
+                              variant="subtle"
+                              onClick={() => {
+                                setSelectedMessage(message)
+                                setViewModalOpen(true)
+                              }}
+                            >
+                              <IconEye size={14} />
+                            </ActionIcon>
+                            
+                            {message.status === 'failed' && (
+                              <ActionIcon
+                                size="sm"
+                                variant="subtle"
+                                color="green"
+                                onClick={() => retryMessage(message.id)}
+                              >
+                                <IconRefresh size={14} />
+                              </ActionIcon>
+                            )}
+                            
                             <ActionIcon
                               size="sm"
                               variant="subtle"
                               color="red"
-                              onClick={() => {
-                                notifications.show({
-                                  title: 'Error Details',
-                                  message: message.lastError,
-                                  color: 'red'
-                                })
-                              }}
+                              onClick={() => deleteMessage(message.id)}
                             >
-                              <IconAlertCircle size={14} />
+                              <IconTrash size={14} />
                             </ActionIcon>
-                          )}
-                        </Group>
-                      </Table.Td>
-                      <Table.Td>
-                        <Badge color={message.priority > 0 ? 'orange' : 'blue'} size="sm">
-                          {message.priority > 0 ? 'High' : 'Normal'}
-                        </Badge>
-                      </Table.Td>
-                      <Table.Td>
-                        <Text size="sm">
-                          {new Date(message.createdAt).toLocaleString()}
-                        </Text>
-                      </Table.Td>
-                      <Table.Td>
-                        <Group gap="xs">
-                          <ActionIcon
-                            size="sm"
-                            variant="subtle"
-                            onClick={() => {
-                              setSelectedMessage(message)
-                              setViewModalOpen(true)
-                            }}
-                          >
-                            <IconEye size={14} />
-                          </ActionIcon>
-                          
-                          {message.status === 'failed' && (
-                            <ActionIcon
-                              size="sm"
-                              variant="subtle"
-                              color="green"
-                              onClick={() => retryMessage(message.id)}
-                            >
-                              <IconRefresh size={14} />
-                            </ActionIcon>
-                          )}
-                          
-                          <ActionIcon
-                            size="sm"
-                            variant="subtle"
-                            color="red"
-                            onClick={() => deleteMessage(message.id)}
-                          >
-                            <IconTrash size={14} />
-                          </ActionIcon>
-                        </Group>
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
+                          </Group>
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+                
+                {/* Pagination */}
+                {messages.length > itemsPerPage && (
+                  <Center mt="xl">
+                    <Pagination
+                      value={currentPage}
+                      onChange={setCurrentPage}
+                      total={totalPages}
+                      siblings={1}
+                      boundaries={1}
+                    />
+                  </Center>
+                )}
+              </>
             ) : (
               <Alert icon={<IconMessage size="1rem" />} color="blue">
                 <Text size="sm" fw={500}>No messages in queue</Text>

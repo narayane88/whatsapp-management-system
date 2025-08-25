@@ -58,8 +58,8 @@ export async function GET(request: NextRequest) {
       FROM message_queue mq
       LEFT JOIN whatsapp_instances wi ON mq."instanceId" = wi.id
       WHERE mq.status IN ('PENDING', 'PROCESSING', 'SENT', 'FAILED')
-      ORDER BY mq.priority DESC, mq."createdAt" ASC
-      LIMIT 100
+      ORDER BY mq."createdAt" DESC
+      LIMIT 500
     `)
 
     // Convert database records to QueueMessage format
