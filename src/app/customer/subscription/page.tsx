@@ -403,13 +403,13 @@ function PackageCard({ pkg, currentSubscription, onSubscribe }: {
             color={colors.badgeColor}
             style={{ backgroundColor: colors.primary }}
             onClick={() => onSubscribe(pkg)}
-            disabled={hasActiveSubscription}
+            disabled={false}
             leftSection={isCurrentPlan ? <IconCrown size={18} /> : <IconPackage size={18} />}
           >
             {isCurrentPlan 
-              ? 'Current Plan' 
+              ? 'Renew Plan' 
               : hasActiveSubscription 
-                ? 'Already Subscribed'
+                ? 'Upgrade/Change Plan'
                 : 'Subscribe Now'}
           </Button>
         </Group>

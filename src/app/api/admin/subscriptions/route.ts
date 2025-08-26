@@ -239,7 +239,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { userId, packageId, duration, startDate, paymentMethod } = body
+    const { userId, packageId, duration, startDate, paymentMethod, startType = 'now' } = body
     
     // Get logged-in user details with role and access level
     const loggedInUserResult = await pool.query(`
@@ -358,12 +358,37 @@ export async function POST(request: NextRequest) {
 
     const pkg = packageDetails.rows[0]
     const subscriptionId = `cs${Date.now()}${Math.random().toString(36).substring(2, 9)}`
-    const start = startDate ? new Date(startDate) : new Date()
+    let start = startDate ? new Date(startDate) : new Date()
     const durationInDays = duration || pkg.duration
-    const end = new Date(start.getTime() + (durationInDays * 24 * 60 * 60 * 1000))
+    let end = new Date(start.getTime() + (durationInDays * 24 * 60 * 60 * 1000))
+    let scheduledStartDate = null
+    let subscriptionStatus = 'ACTIVE'
+    let previousSubscriptionId = null
     
+    // Handle scheduled subscriptions for admin pre-expiry purchases
+    if (startType === 'after_expiry') {
+      // Check if target user has an active subscription
+      const activeSubscriptionResult = await pool.query(`
+        SELECT id, "endDate" FROM customer_packages 
+        WHERE "userId" = $1 AND "isActive" = true AND status = 'ACTIVE' 
+        ORDER BY "endDate" DESC LIMIT 1
+      `, [userId])
+      
+      if (activeSubscriptionResult.rows.length > 0) {
+        const currentSubscription = activeSubscriptionResult.rows[0]
+        previousSubscriptionId = currentSubscription.id
+        scheduledStartDate = new Date(currentSubscription.endDate)
+        start = scheduledStartDate
+        end = new Date(start.getTime() + (durationInDays * 24 * 60 * 60 * 1000))
+        subscriptionStatus = 'SCHEDULED'
+        console.log(`📅 Admin creating scheduled subscription for user ${userId} starting ${scheduledStartDate.toISOString()}`)
+      } else {
+        console.log(`⚠️ Admin requested scheduled start but no active subscription found for user ${userId}, creating immediate subscription`)
+      }
+    }
+
     // Handle credit-based payments for level 3 & 4 users
-    let isActiveStatus = false // Default PENDING status
+    let isActiveStatus = subscriptionStatus === 'ACTIVE' // Only active if immediate start
     let transactionStatus = 'PENDING'
     
     if (paymentMethod === 'CREDIT') {
@@ -474,11 +499,20 @@ export async function POST(request: NextRequest) {
       console.log(`🪙 BizCoins payment processed: ${loggedInUser.name} (ID: ${loggedInUser.id}) paid ${packagePrice} BizCoins for ${endUser.name}'s subscription. Remaining balance: ${currentBizCoins - packagePrice}`)
     }
     
-    // Create subscription using raw SQL
+    // Create subscription using raw SQL with scheduled subscription support
     await pool.query(`
-      INSERT INTO customer_packages (id, "userId", "packageId", "createdBy", "paymentMethod", "startDate", "endDate", "isActive", "messagesUsed", "createdAt", "updatedAt")
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0, NOW(), NOW())
-    `, [subscriptionId, userId, packageId, createdBy || null, paymentMethod || 'CASH', start, end, isActiveStatus])
+      INSERT INTO customer_packages (
+        id, "userId", "packageId", "createdBy", "paymentMethod", 
+        "startDate", "endDate", "isActive", "messagesUsed", 
+        "scheduledStartDate", "purchaseType", "previousSubscriptionId", status,
+        "createdAt", "updatedAt"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 0, $9, $10, $11, $12, NOW(), NOW())
+    `, [
+      subscriptionId, userId, packageId, createdBy || null, paymentMethod || 'CASH', 
+      start, end, isActiveStatus,
+      scheduledStartDate, startType === 'after_expiry' ? 'SCHEDULED' : 'IMMEDIATE', 
+      previousSubscriptionId, subscriptionStatus
+    ])
 
     // Auto-create corresponding transaction (skip for credit and BizCoins payments as they're processed immediately)
     if (paymentMethod !== 'CREDIT' && paymentMethod !== 'BIZPOINTS') {
@@ -502,11 +536,12 @@ export async function POST(request: NextRequest) {
       ])
     }
     
-    // Fetch the created subscription with details
+    // Fetch the created subscription with details including scheduled fields
     const subscription = await pool.query(`
       SELECT 
         cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
         cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
+        cp."scheduledStartDate", cp."purchaseType", cp."previousSubscriptionId", cp.status,
         cp."createdAt", cp."updatedAt",
         u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
         c.name as creator_name, c.email as creator_email,
@@ -530,6 +565,10 @@ export async function POST(request: NextRequest) {
         endDate: subscription.rows[0].endDate,
         isActive: subscription.rows[0].isActive,
         messagesUsed: subscription.rows[0].messagesUsed,
+        scheduledStartDate: subscription.rows[0].scheduledStartDate,
+        purchaseType: subscription.rows[0].purchaseType,
+        previousSubscriptionId: subscription.rows[0].previousSubscriptionId,
+        status: subscription.rows[0].status,
         createdAt: subscription.rows[0].createdAt,
         updatedAt: subscription.rows[0].updatedAt,
         user: {

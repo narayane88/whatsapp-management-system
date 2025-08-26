@@ -127,8 +127,10 @@ export default function SubscriptionsPage() {
     packageId: '',
     duration: 0,
     startDate: new Date(),
-    paymentMethod: 'RAZORPAY'
+    paymentMethod: 'RAZORPAY',
+    startType: 'now' as 'now' | 'after_expiry'
   })
+  const [userActiveSubscription, setUserActiveSubscription] = useState<any>(null)
 
   // Payment iframe state
   const [paymentIframeOpened, setPaymentIframeOpened] = useState(false)
@@ -267,6 +269,22 @@ export default function SubscriptionsPage() {
     } catch (error) {
       console.error('Failed to fetch user credit info:', error)
       setUserCreditInfo(null)
+    }
+  }
+
+  const fetchUserActiveSubscription = async (userId: string) => {
+    try {
+      const response = await fetch(`/api/admin/subscriptions?userId=${userId}&status=ACTIVE&limit=1`)
+      if (response.ok) {
+        const data = await response.json()
+        const activeSubscription = data.subscriptions.find((s: any) => s.status === 'ACTIVE')
+        setUserActiveSubscription(activeSubscription || null)
+      } else {
+        setUserActiveSubscription(null)
+      }
+    } catch (error) {
+      console.error('Error fetching user active subscription:', error)
+      setUserActiveSubscription(null)
     }
   }
 
@@ -457,8 +475,10 @@ export default function SubscriptionsPage() {
           packageId: '',
           duration: 0,
           startDate: new Date(),
-          paymentMethod: 'RAZORPAY'
+          paymentMethod: 'RAZORPAY',
+          startType: 'now'
         })
+        setUserActiveSubscription(null)
         fetchSubscriptions() // Refresh the list
       } else {
         setNotification({ message: data.error || 'Failed to create subscription', type: 'error' })
@@ -484,8 +504,10 @@ export default function SubscriptionsPage() {
       packageId: '',
       duration: 0,
       startDate: new Date(),
-      paymentMethod: 'RAZORPAY'
+      paymentMethod: 'RAZORPAY',
+      startType: 'now'
     })
+    setUserActiveSubscription(null)
     fetchSubscriptions() // Refresh the list
   }
 
@@ -1254,6 +1276,7 @@ export default function SubscriptionsPage() {
                 setAddSubscriptionData(prev => ({ ...prev, userId: value || '' }))
                 if (value) {
                   fetchUserCreditInfo(value)
+                  fetchUserActiveSubscription(value)
                   // No need to fetch BizCoins info per user since it's for logged-in user
                 }
               }}
@@ -1610,6 +1633,29 @@ export default function SubscriptionsPage() {
               data={getAvailablePaymentMethods()}
             />
 
+            {/* Start Type Selection for Pre-Expiry Subscriptions */}
+            <Select
+              label="Subscription Start Type"
+              placeholder="When should the subscription start?"
+              required
+              value={addSubscriptionData.startType}
+              onChange={(value) => {
+                const newStartType = (value as 'now' | 'after_expiry') || 'now'
+                setAddSubscriptionData(prev => ({ 
+                  ...prev, 
+                  startType: newStartType,
+                  startDate: newStartType === 'now' 
+                    ? new Date() 
+                    : (userActiveSubscription ? new Date(userActiveSubscription.endDate) : new Date())
+                }))
+              }}
+              data={[
+                { value: 'now', label: 'Start Immediately (Cancel current subscription if exists)' },
+                { value: 'after_expiry', label: 'Start After Current Plan Expires (Schedule for later)' }
+              ]}
+              description="Choose whether to start the subscription immediately or schedule it for when the current plan expires"
+            />
+
             {/* Payment Method Restriction Notice for Level 3+ */}
             {currentUserLevel !== null && currentUserLevel >= 3 && (
               <Alert color="blue" variant="light">
@@ -1660,7 +1706,13 @@ export default function SubscriptionsPage() {
                 onChange={(value) => setAddSubscriptionData(prev => ({ ...prev, startDate: value || new Date() }))}
                 readOnly
                 disabled
-                description="Start date is automatically set to today"
+                description={
+                  addSubscriptionData.startType === 'now' 
+                    ? 'Start date is automatically set to today (immediate start)'
+                    : userActiveSubscription
+                      ? `Start date is automatically set to current plan expiry (${new Date(userActiveSubscription.endDate).toLocaleDateString()})`
+                      : 'No active subscription found - will start immediately'
+                }
               />
             </Group>
 
