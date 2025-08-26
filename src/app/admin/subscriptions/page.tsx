@@ -57,7 +57,10 @@ interface Subscription {
   messagesUsed: number;
   createdAt: string;
   updatedAt: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'EXPIRED' | 'PENDING';
+  status: 'ACTIVE' | 'INACTIVE' | 'EXPIRED' | 'PENDING' | 'SCHEDULED' | 'CANCELLED';
+  scheduledStartDate?: string;
+  purchaseType?: string;
+  previousSubscriptionId?: string;
   user: {
     name: string;
     email: string;
@@ -147,6 +150,7 @@ export default function SubscriptionsPage() {
   const [addLoading, setAddLoading] = useState(false)
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null)
   const [currentUserLevel, setCurrentUserLevel] = useState<number | null>(null)
+  const [activatingScheduled, setActivatingScheduled] = useState(false)
 
   // View/Edit/Delete Modal states
   const [viewModalOpened, setViewModalOpened] = useState(false)
@@ -334,6 +338,8 @@ export default function SubscriptionsPage() {
       case 'PENDING': return 'yellow'
       case 'INACTIVE': return 'gray'
       case 'EXPIRED': return 'red'
+      case 'SCHEDULED': return 'orange'
+      case 'CANCELLED': return 'pink'
       default: return 'gray'
     }
   }
@@ -348,6 +354,7 @@ export default function SubscriptionsPage() {
   const totalSubscriptions = pagination.total
   const activeSubscriptions = subscriptions.filter(s => s.status === 'ACTIVE').length
   const expiredSubscriptions = subscriptions.filter(s => s.status === 'EXPIRED').length
+  const scheduledSubscriptions = subscriptions.filter(s => s.status === 'SCHEDULED').length
   const totalRevenue = subscriptions
     .filter(s => s.status === 'ACTIVE')
     .reduce((sum, s) => sum + s.package.price, 0)
@@ -585,6 +592,67 @@ export default function SubscriptionsPage() {
     }
   }
 
+  const handleActivateScheduled = async () => {
+    try {
+      setActivatingScheduled(true)
+      
+      const response = await fetch('/api/admin/subscriptions/scheduled', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'activate_all'
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setNotification({ 
+          message: data.message || `Successfully activated ${data.results?.activated || 0} scheduled subscriptions`, 
+          type: 'success' 
+        })
+        fetchSubscriptions() // Refresh the list
+      } else {
+        const data = await response.json()
+        setNotification({ message: data.error || 'Failed to activate scheduled subscriptions', type: 'error' })
+      }
+    } catch (error) {
+      setNotification({ message: 'Network error occurred', type: 'error' })
+    } finally {
+      setActivatingScheduled(false)
+    }
+  }
+
+  const handleCancelScheduled = async (subscriptionId: string, userId: string) => {
+    try {
+      const response = await fetch('/api/admin/subscriptions/scheduled', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'cancel',
+          subscriptionId,
+          userId
+        })
+      })
+
+      if (response.ok) {
+        setNotification({ 
+          message: 'Scheduled subscription cancelled successfully', 
+          type: 'success' 
+        })
+        fetchSubscriptions() // Refresh the list
+      } else {
+        const data = await response.json()
+        setNotification({ message: data.error || 'Failed to cancel scheduled subscription', type: 'error' })
+      }
+    } catch (error) {
+      setNotification({ message: 'Network error occurred', type: 'error' })
+    }
+  }
+
   const getDaysRemaining = (endDate: string) => {
     const end = new Date(endDate)
     const now = new Date()
@@ -695,12 +763,12 @@ export default function SubscriptionsPage() {
                 description: 'Monthly recurring revenue'
               },
               {
-                label: 'Expired Plans',
-                value: expiredSubscriptions,
+                label: 'Scheduled Plans',
+                value: scheduledSubscriptions,
                 icon: FiClock,
-                color: 'red',
-                progress: totalSubscriptions > 0 ? (expiredSubscriptions / totalSubscriptions) * 100 : 0,
-                description: 'Subscription renewals needed'
+                color: 'orange',
+                progress: totalSubscriptions > 0 ? (scheduledSubscriptions / totalSubscriptions) * 100 : 0,
+                description: 'Plans scheduled to activate'
               }
             ].map((stat, index) => (
               <Card 
@@ -861,6 +929,14 @@ export default function SubscriptionsPage() {
                 >
                   Export Excel
                 </Button>
+                <Button
+                  color="orange"
+                  onClick={handleActivateScheduled}
+                  leftSection={<FiClock size={10} />}
+                  loading={activatingScheduled}
+                >
+                  Activate Scheduled
+                </Button>
               </Group>
             </Group>
             
@@ -874,7 +950,9 @@ export default function SubscriptionsPage() {
                   { value: 'active', label: 'Active' },
                   { value: 'pending', label: 'Pending' },
                   { value: 'inactive', label: 'Inactive' },
-                  { value: 'expired', label: 'Expired' }
+                  { value: 'expired', label: 'Expired' },
+                  { value: 'scheduled', label: 'Scheduled' },
+                  { value: 'cancelled', label: 'Cancelled' }
                 ]}
                 style={{ maxWidth: '200px' }}
               />
@@ -1015,9 +1093,16 @@ export default function SubscriptionsPage() {
                         </Stack>
                       </Table.Td>
                       <Table.Td>
-                        <Badge color={getStatusColor(subscription.status)} variant="light" size="xs">
-                          {subscription.status}
-                        </Badge>
+                        <Stack gap="xs">
+                          <Badge color={getStatusColor(subscription.status)} variant="light" size="xs">
+                            {subscription.status}
+                          </Badge>
+                          {subscription.status === 'SCHEDULED' && subscription.scheduledStartDate && (
+                            <Text size="xs" c="orange.6">
+                              Starts: {new Date(subscription.scheduledStartDate).toLocaleDateString()}
+                            </Text>
+                          )}
+                        </Stack>
                       </Table.Td>
                       <Table.Td>
                         <Group gap="xs">
@@ -1131,6 +1216,17 @@ export default function SubscriptionsPage() {
                           >
                             <FiTrash2 size={10} />
                           </ActionIcon>
+                          {subscription.status === 'SCHEDULED' && (
+                            <ActionIcon
+                              size="xs"
+                              variant="subtle"
+                              color="pink"
+                              aria-label="Cancel scheduled subscription"
+                              onClick={() => handleCancelScheduled(subscription.id, subscription.userId)}
+                            >
+                              <FiAlertCircle size={10} />
+                            </ActionIcon>
+                          )}
                         </Group>
                       </Table.Td>
                     </Table.Tr>

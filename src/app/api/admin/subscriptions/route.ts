@@ -73,17 +73,20 @@ export async function GET(request: NextRequest) {
         cp.id, cp."userId", cp."packageId", cp."createdBy", cp."paymentMethod",
         cp."startDate", cp."endDate", cp."isActive", cp."messagesUsed", 
         cp."createdAt", cp."updatedAt",
+        cp."scheduledStartDate", cp."purchaseType", cp."previousSubscriptionId", cp.status as subscription_status,
         u.name as user_name, u.email as user_email, u.mobile as user_mobile, u.dealer_code as user_dealer_code,
         c.name as creator_name, c.email as creator_email,
         p.name as package_name, p.description as package_description, 
         p.price as package_price, p.duration as package_duration,
         p."messageLimit" as package_message_limit, p."instanceLimit" as package_instance_limit,
         CASE 
+          WHEN cp.status = 'SCHEDULED' THEN 'SCHEDULED'
+          WHEN cp.status = 'CANCELLED' THEN 'CANCELLED'
           WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
           WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
           WHEN cp."isActive" = false AND cp."endDate" > NOW() THEN 'PENDING'
           ELSE 'INACTIVE'
-        END as status
+        END as computed_status
       FROM customer_packages cp
       LEFT JOIN users u ON cp."userId" = CAST(u.id AS TEXT)
       LEFT JOIN users c ON cp."createdBy" = c.id
@@ -164,7 +167,10 @@ export async function GET(request: NextRequest) {
       messagesUsed: sub.messagesUsed,
       createdAt: sub.createdAt,
       updatedAt: sub.updatedAt,
-      status: sub.status,
+      status: sub.computed_status || sub.subscription_status || 'INACTIVE',
+      scheduledStartDate: sub.scheduledStartDate,
+      purchaseType: sub.purchaseType,
+      previousSubscriptionId: sub.previousSubscriptionId,
       user: {
         name: sub.user_name || 'Unknown User',
         email: sub.user_email || 'unknown@example.com',
