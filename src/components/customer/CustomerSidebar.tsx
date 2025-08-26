@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Stack, NavLink } from '@mantine/core'
+import { Stack, NavLink, Tooltip, ActionIcon } from '@mantine/core'
 import { usePathname, useRouter } from 'next/navigation'
 import { 
   IconUser, 
@@ -22,7 +22,11 @@ import {
   IconCrown
 } from '@tabler/icons-react'
 
-export default function CustomerSidebar() {
+interface CustomerSidebarProps {
+  collapsed?: boolean
+}
+
+export default function CustomerSidebar({ collapsed = false }: CustomerSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -126,9 +130,34 @@ export default function CustomerSidebar() {
     },
   ]
 
-  const renderNavItems = (items: typeof navigationItems) => {
+  const renderNavItems = (items: typeof navigationItems, isChild = false) => {
     return items.map((item, index) => {
       const isActive = item.href ? pathname === item.href : false
+      
+      if (collapsed && !isChild) {
+        // Show only icon in collapsed mode for top-level items
+        return (
+          <Tooltip
+            key={item.href || `menu-${index}`}
+            label={item.label}
+            position="right"
+            offset={10}
+          >
+            <ActionIcon
+              variant={isActive ? "filled" : "subtle"}
+              size="lg"
+              onClick={() => {
+                if (item.href) {
+                  router.push(item.href)
+                }
+              }}
+              style={{ width: '100%', height: 40 }}
+            >
+              <item.icon size="1.2rem" />
+            </ActionIcon>
+          </Tooltip>
+        )
+      }
       
       return (
         <NavLink
@@ -145,7 +174,7 @@ export default function CustomerSidebar() {
           }}
           childrenOffset={28}
         >
-          {item.children && renderNavItems(item.children)}
+          {item.children && !collapsed && renderNavItems(item.children, true)}
         </NavLink>
       )
     })

@@ -109,8 +109,19 @@ export const useDashboardData = (): UseDashboardDataReturn => {
         } else if (response.status === 403) {
           throw new Error('Insufficient permissions to view dashboard')
         } else {
-          const errorData = await response.json().catch(() => ({}))
-          throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
+          let errorMessage = `HTTP error! status: ${response.status}`
+          try {
+            const errorData = await response.json()
+            if (errorData && typeof errorData.error === 'string') {
+              errorMessage = errorData.error
+            } else if (errorData && typeof errorData.message === 'string') {
+              errorMessage = errorData.message
+            }
+          } catch (parseError) {
+            // If JSON parsing fails, use the default error message
+            console.warn('Failed to parse error response as JSON:', parseError)
+          }
+          throw new Error(errorMessage)
         }
       }
 
