@@ -152,7 +152,6 @@ export default function SubscriptionsPage() {
   const [addLoading, setAddLoading] = useState(false)
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null)
   const [currentUserLevel, setCurrentUserLevel] = useState<number | null>(null)
-  const [activatingScheduled, setActivatingScheduled] = useState(false)
 
   // View/Edit/Delete Modal states
   const [viewModalOpened, setViewModalOpened] = useState(false)
@@ -614,37 +613,6 @@ export default function SubscriptionsPage() {
     }
   }
 
-  const handleActivateScheduled = async () => {
-    try {
-      setActivatingScheduled(true)
-      
-      const response = await fetch('/api/admin/subscriptions/scheduled', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'activate_all'
-        })
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setNotification({ 
-          message: data.message || `Successfully activated ${data.results?.activated || 0} scheduled subscriptions`, 
-          type: 'success' 
-        })
-        fetchSubscriptions() // Refresh the list
-      } else {
-        const data = await response.json()
-        setNotification({ message: data.error || 'Failed to activate scheduled subscriptions', type: 'error' })
-      }
-    } catch (error) {
-      setNotification({ message: 'Network error occurred', type: 'error' })
-    } finally {
-      setActivatingScheduled(false)
-    }
-  }
 
   const handleCancelScheduled = async (subscriptionId: string, userId: string) => {
     try {
@@ -951,14 +919,15 @@ export default function SubscriptionsPage() {
                 >
                   Export Excel
                 </Button>
-                <Button
-                  color="orange"
-                  onClick={handleActivateScheduled}
-                  leftSection={<FiClock size={10} />}
-                  loading={activatingScheduled}
-                >
-                  Activate Scheduled
-                </Button>
+                <Alert color="green" variant="light" style={{ padding: '8px 12px', margin: 0 }}>
+                  <Group gap="xs" justify="center">
+                    <FiClock size={14} />
+                    <Text size="xs" fw={500}>Auto-Activation Enabled</Text>
+                  </Group>
+                  <Text size="xs" c="dimmed" mt={2}>
+                    Scheduled subscriptions activate automatically
+                  </Text>
+                </Alert>
               </Group>
             </Group>
             
