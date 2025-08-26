@@ -20,7 +20,8 @@ import {
   Tooltip,
   Box,
   Paper,
-  Loader
+  Loader,
+  Radio
 } from '@mantine/core'
 import {
   IconPackage,
@@ -91,14 +92,35 @@ interface CurrentSubscription {
   devicesUsed: number
   instanceLimit: number
   paymentMethod: string
+  scheduledStartDate?: string
+  purchaseType: string
+  previousSubscriptionId?: string
+  subscriptionStatus: string
   status: string
   price: number
   daysRemaining: number
 }
 
+interface ScheduledSubscription {
+  id: string
+  packageId: string
+  packageName: string
+  scheduledStartDate: string
+  startDate: string
+  endDate: string
+  purchaseType: string
+  previousSubscriptionId?: string
+  status: string
+  price: number
+  messageLimit: number
+  instanceLimit: number
+  createdAt: string
+}
+
 interface SubscriptionData {
   packages: Package[]
   currentSubscription: CurrentSubscription | null
+  scheduledSubscriptions: ScheduledSubscription[]
   subscriptionHistory: any[]
 }
 
@@ -405,6 +427,7 @@ export default function SubscriptionPage() {
   const [loading, setLoading] = useState(true)
   const [purchasing, setPurchasing] = useState(false)
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
+  const [startType, setStartType] = useState<'now' | 'after_expiry'>('after_expiry')
   const [confirmOpened, { open: openConfirm, close: closeConfirm }] = useDisclosure(false)
   const [paymentModalOpened, { open: openPaymentModal, close: closePaymentModal }] = useDisclosure(false)
   const [paymentIframeOpened, { open: openPaymentIframe, close: closePaymentIframe }] = useDisclosure(false)
@@ -449,21 +472,16 @@ export default function SubscriptionPage() {
   }
 
   const handleSubscribe = (pkg: Package) => {
-    if (data?.currentSubscription?.status === 'ACTIVE') {
-      showSubscriptionNotification(
-        'You already have an active subscription. Please wait for it to expire.',
-        'warning'
-      )
-      notifications.show({
-        title: 'Active Subscription',
-        message: 'You already have an active subscription. Please wait for it to expire.',
-        color: 'orange'
-      })
-      return
-    }
-    
     setSelectedPackage(pkg)
-    openPaymentMethodModal()
+    
+    // If user has an active subscription, reset to default option and open confirm modal
+    if (data?.currentSubscription?.status === 'ACTIVE') {
+      setStartType('after_expiry')
+      openConfirm()
+    } else {
+      // No active subscription, go directly to payment method selection
+      openPaymentMethodModal()
+    }
   }
 
   const handlePaymentMethodSelect = (method: 'modal' | 'iframe') => {
@@ -515,7 +533,8 @@ export default function SubscriptionPage() {
         credentials: 'include',
         body: JSON.stringify({
           packageId: selectedPackage.id,
-          paymentMethod: 'razorpay'
+          paymentMethod: 'razorpay',
+          startType: startType
         })
       })
 
@@ -527,8 +546,8 @@ export default function SubscriptionPage() {
       const result = await response.json()
 
       notifications.show({
-        title: '🎉 Subscription Activated!',
-        message: `Your ${selectedPackage.name} subscription is now active!`,
+        title: startType === 'now' ? '🎉 Subscription Activated!' : '📅 Subscription Scheduled!',
+        message: result.message || `Your ${selectedPackage.name} subscription has been processed successfully!`,
         color: 'green'
       })
 
@@ -789,6 +808,79 @@ export default function SubscriptionPage() {
             </Alert>
           )}
 
+          {/* Scheduled Subscriptions */}
+          {data.scheduledSubscriptions && data.scheduledSubscriptions.length > 0 && (
+            <Stack gap="lg" mt="xl">
+              <Title order={3} c="blue">📅 Scheduled Subscriptions</Title>
+              
+              <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+                {data.scheduledSubscriptions.map((scheduled) => (
+                  <Card key={scheduled.id} withBorder padding="lg" style={{ backgroundColor: '#fff9e6' }}>
+                    <Stack gap="md">
+                      <Group justify="space-between">
+                        <Text fw={600} size="lg">{scheduled.packageName}</Text>
+                        <Badge color="orange" size="sm">SCHEDULED</Badge>
+                      </Group>
+                      
+                      <Stack gap="xs">
+                        <Group justify="space-between">
+                          <Text size="sm" c="dimmed">Start Date</Text>
+                          <Text size="sm" fw={600}>
+                            {new Date(scheduled.scheduledStartDate).toLocaleDateString()}
+                          </Text>
+                        </Group>
+                        <Group justify="space-between">
+                          <Text size="sm" c="dimmed">Duration</Text>
+                          <Text size="sm" fw={600}>{Math.floor((new Date(scheduled.endDate).getTime() - new Date(scheduled.startDate).getTime()) / (1000 * 60 * 60 * 24))} days</Text>
+                        </Group>
+                        <Group justify="space-between">
+                          <Text size="sm" c="dimmed">Price</Text>
+                          <Text size="sm" fw={600}>₹{scheduled.price.toLocaleString()}</Text>
+                        </Group>
+                      </Stack>
+                      
+                      <Button
+                        variant="outline"
+                        size="xs"
+                        color="red"
+                        onClick={async () => {
+                          try {
+                            const response = await fetch('/api/customer/subscription/scheduled', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              credentials: 'include',
+                              body: JSON.stringify({
+                                action: 'cancel',
+                                subscriptionId: scheduled.id
+                              })
+                            })
+                            
+                            if (response.ok) {
+                              await fetchSubscriptionData()
+                              notifications.show({
+                                title: 'Subscription Cancelled',
+                                message: 'Your scheduled subscription has been cancelled.',
+                                color: 'green'
+                              })
+                            }
+                          } catch (error) {
+                            notifications.show({
+                              title: 'Error',
+                              message: 'Failed to cancel scheduled subscription.',
+                              color: 'red'
+                            })
+                          }
+                        }}
+                      >
+                        Cancel Scheduled Purchase
+                      </Button>
+                    </Stack>
+                  </Card>
+                ))}
+              </SimpleGrid>
+            </Stack>
+          )}
+
           {/* Info */}
           <Alert icon={<IconInfoCircle size="1rem" />} color="blue">
             <Text size="sm">
@@ -803,11 +895,58 @@ export default function SubscriptionPage() {
       <Modal
         opened={confirmOpened}
         onClose={closeConfirm}
-        title="Confirm Subscription"
-        size="md"
+        title="Purchase Confirmation"
+        size="lg"
       >
         {selectedPackage && (
-          <Stack gap="md">
+          <Stack gap="lg">
+            {/* Current Subscription Alert */}
+            {data?.currentSubscription && (
+              <Alert color="blue" icon={<IconInfoCircle size="1rem" />}>
+                <Text size="sm">
+                  <strong>You have an active subscription:</strong> {data.currentSubscription.packageName} 
+                  (expires {new Date(data.currentSubscription.endDate).toLocaleDateString()})
+                </Text>
+              </Alert>
+            )}
+
+            {/* Start Type Selection - Only show if user has active subscription */}
+            {data?.currentSubscription && (
+              <Card withBorder padding="md" style={{ backgroundColor: '#fff9e6', borderColor: '#ffd43b' }}>
+                <Text fw={600} mb="md" size="sm">When would you like to start your new subscription?</Text>
+                <Radio.Group
+                  value={startType}
+                  onChange={(value: string) => setStartType(value as 'now' | 'after_expiry')}
+                >
+                  <Stack gap="sm">
+                    <Radio
+                      value="now"
+                      label={
+                        <div>
+                          <Text size="sm" fw={500}>Start Immediately</Text>
+                          <Text size="xs" c="dimmed">
+                            Your current subscription will be cancelled and the new plan will start right away.
+                          </Text>
+                        </div>
+                      }
+                    />
+                    <Radio
+                      value="after_expiry"
+                      label={
+                        <div>
+                          <Text size="sm" fw={500}>Start After Current Plan Expires</Text>
+                          <Text size="xs" c="dimmed">
+                            Your new subscription will automatically start when your current plan expires on{' '}
+                            {new Date(data.currentSubscription.endDate).toLocaleDateString()}.
+                          </Text>
+                        </div>
+                      }
+                    />
+                  </Stack>
+                </Radio.Group>
+              </Card>
+            )}
+
             <Card withBorder padding="md" style={{ backgroundColor: '#f8f9fa' }}>
               <Group justify="space-between" mb="md">
                 <div>
@@ -846,8 +985,16 @@ export default function SubscriptionPage() {
             </Card>
 
             <Text size="sm" c="dimmed">
-              Your subscription will be activated immediately and will expire after {selectedPackage.duration} days.
-              You can upgrade or downgrade anytime.
+              {data?.currentSubscription ? (
+                startType === 'now' ? (
+                  `Your new subscription will start immediately, cancelling your current plan. It will be active for ${selectedPackage.duration} days.`
+                ) : (
+                  `Your new subscription will start automatically on ${new Date(data.currentSubscription.endDate).toLocaleDateString()} and be active for ${selectedPackage.duration} days.`
+                )
+              ) : (
+                `Your subscription will be activated immediately and will expire after ${selectedPackage.duration} days.`
+              )}
+              {' '}You can upgrade or downgrade anytime.
             </Text>
 
             <Group justify="flex-end">
@@ -855,11 +1002,18 @@ export default function SubscriptionPage() {
                 Cancel
               </Button>
               <Button
-                onClick={purchasePackage}
+                onClick={() => {
+                  closeConfirm()
+                  openPaymentMethodModal()
+                }}
                 loading={purchasing}
                 leftSection={<IconPackage size="1rem" />}
               >
-                Subscribe Now
+                {data?.currentSubscription ? (
+                  startType === 'now' ? 'Start Now' : 'Schedule Purchase'
+                ) : 'Continue'} - ₹{selectedPackage.offerEnabled && selectedPackage.offerPrice 
+                  ? selectedPackage.offerPrice 
+                  : selectedPackage.price}
               </Button>
             </Group>
           </Stack>
