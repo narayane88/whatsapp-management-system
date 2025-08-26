@@ -61,6 +61,36 @@ interface DashboardPermissions {
   accessType: string
 }
 
+interface ChartData {
+  revenueChart: Array<{
+    name: string
+    revenue: number
+    users: number
+  }>
+  serverPerformanceChart: Array<{
+    time: string
+    cpu: number
+    memory: number
+    network: number
+  }>
+  transactionStatusChart: Array<{
+    name: string
+    value: number
+    color: string
+  }>
+}
+
+interface AdminPagesData {
+  users: { total: number; active: number; new: number }
+  customers: { total: number; active: number; revenue: number }
+  transactions: { total: number; success: number; pending: number }
+  packages: { active: number; subscribers: number; revenue: number }
+  servers: { total: number; online: number; load: number }
+  vouchers: { active: number; redeemed: number; value: number }
+  subscriptions: { active: number; expired: number; revenue: number }
+  settings: { configs: number; active: number; alerts: number }
+}
+
 interface DashboardData {
   stats: DashboardStats[]
   recentTransactions: RecentTransaction[]
@@ -68,6 +98,8 @@ interface DashboardData {
   recentActivities: RecentActivity[]
   systemMetrics: SystemMetrics
   permissions: DashboardPermissions
+  chartData: ChartData
+  adminPagesData: AdminPagesData
 }
 
 interface UseDashboardDataReturn {

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   Container,
   SimpleGrid,
@@ -45,7 +46,17 @@ import {
   IconBell,
   IconCalendar,
   IconDatabase,
-  IconWorld
+  IconWorld,
+  IconPackage,
+  IconCreditCard,
+  IconShield,
+  IconTicket,
+  IconFileText,
+  IconCloud,
+  IconGift,
+  IconChartPie,
+  IconChartLine,
+  IconChartArea
 } from '@tabler/icons-react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import PagePermissionGuard from '@/components/auth/PagePermissionGuard'
@@ -66,6 +77,23 @@ import {
 } from '@/components/ui/responsive-layout'
 import { useState, useEffect } from 'react'
 import { useDashboardData } from '@/hooks/useDashboardData'
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts'
 
 export default function AdminDashboard() {
   const { profile } = useCompanyProfile()
@@ -105,6 +133,141 @@ export default function AdminDashboard() {
       </PagePermissionGuard>
     )
   }
+
+  // Use real chart data from API or fallback to placeholder
+  const revenueChartData = dashboardData?.chartData?.revenueChart?.length > 0 
+    ? dashboardData.chartData.revenueChart 
+    : [
+        { name: 'Jan', revenue: 4000, users: 240 },
+        { name: 'Feb', revenue: 3000, users: 139 },
+        { name: 'Mar', revenue: 2000, users: 980 },
+        { name: 'Apr', revenue: 2780, users: 390 },
+        { name: 'May', revenue: 1890, users: 480 },
+        { name: 'Jun', revenue: 2390, users: 380 },
+        { name: 'Jul', revenue: 3490, users: 430 },
+      ]
+
+  const serverPerformanceData = dashboardData?.chartData?.serverPerformanceChart?.length > 0 
+    ? dashboardData.chartData.serverPerformanceChart 
+    : [
+        { time: '00:00', cpu: 45, memory: 67, network: 23 },
+        { time: '04:00', cpu: 52, memory: 71, network: 34 },
+        { time: '08:00', cpu: 67, memory: 85, network: 56 },
+        { time: '12:00', cpu: 78, memory: 82, network: 67 },
+        { time: '16:00', cpu: 65, memory: 76, network: 45 },
+        { time: '20:00', cpu: 58, memory: 69, network: 38 },
+      ]
+
+  const transactionStatusData = dashboardData?.chartData?.transactionStatusChart?.length > 0 
+    ? dashboardData.chartData.transactionStatusChart 
+    : [
+        { name: 'Completed', value: 847, color: '#22c55e' },
+        { name: 'Pending', value: 124, color: '#f59e0b' },
+        { name: 'Failed', value: 67, color: '#ef4444' },
+        { name: 'Refunded', value: 23, color: '#8b5cf6' },
+      ]
+
+  // Use real data for admin pages summary from API
+  const adminPagesData = dashboardData?.adminPagesData
+  
+  const adminPagesSummary = [
+    {
+      title: 'Users Management',
+      icon: IconUsers,
+      color: 'blue',
+      stats: { 
+        total: adminPagesData?.users.total?.toLocaleString() || '0', 
+        active: adminPagesData?.users.active?.toLocaleString() || '0', 
+        new: adminPagesData?.users.new?.toLocaleString() || '0' 
+      },
+      link: '/admin/users',
+      description: 'Manage user accounts and permissions'
+    },
+    {
+      title: 'Customers',
+      icon: IconUsers,
+      color: 'green',
+      stats: { 
+        total: adminPagesData?.customers.total?.toLocaleString() || '0', 
+        active: adminPagesData?.customers.active?.toLocaleString() || '0', 
+        revenue: `₹${adminPagesData?.customers.revenue?.toLocaleString() || '0'}` 
+      },
+      link: '/admin/customers',
+      description: 'Customer management and analytics'
+    },
+    {
+      title: 'Transactions',
+      icon: IconCreditCard,
+      color: 'orange',
+      stats: { 
+        total: adminPagesData?.transactions.total?.toLocaleString() || '0', 
+        success: adminPagesData?.transactions.success?.toLocaleString() || '0', 
+        pending: adminPagesData?.transactions.pending?.toLocaleString() || '0' 
+      },
+      link: '/admin/transactions',
+      description: 'Transaction monitoring and management'
+    },
+    {
+      title: 'Packages',
+      icon: IconPackage,
+      color: 'violet',
+      stats: { 
+        active: adminPagesData?.packages.active?.toLocaleString() || '0', 
+        subscribers: adminPagesData?.packages.subscribers?.toLocaleString() || '0', 
+        revenue: `₹${adminPagesData?.packages.revenue?.toLocaleString() || '0'}` 
+      },
+      link: '/admin/packages',
+      description: 'Service packages and subscriptions'
+    },
+    {
+      title: 'WhatsApp Servers',
+      icon: IconServer,
+      color: 'teal',
+      stats: { 
+        total: adminPagesData?.servers.total?.toString() || '0', 
+        online: adminPagesData?.servers.online?.toString() || '0', 
+        load: `${adminPagesData?.servers.load || 0}%` 
+      },
+      link: '/admin/servers',
+      description: 'Server infrastructure management'
+    },
+    {
+      title: 'Vouchers',
+      icon: IconTicket,
+      color: 'pink',
+      stats: { 
+        active: adminPagesData?.vouchers.active?.toLocaleString() || '0', 
+        redeemed: adminPagesData?.vouchers.redeemed?.toLocaleString() || '0', 
+        value: `₹${adminPagesData?.vouchers.value?.toLocaleString() || '0'}` 
+      },
+      link: '/admin/vouchers',
+      description: 'Voucher and promotion management'
+    },
+    {
+      title: 'Subscriptions',
+      icon: IconCalendar,
+      color: 'indigo',
+      stats: { 
+        active: adminPagesData?.subscriptions.active?.toLocaleString() || '0', 
+        expired: adminPagesData?.subscriptions.expired?.toLocaleString() || '0', 
+        revenue: `₹${adminPagesData?.subscriptions.revenue?.toLocaleString() || '0'}` 
+      },
+      link: '/admin/subscriptions',
+      description: 'Subscription lifecycle management'
+    },
+    {
+      title: 'System Settings',
+      icon: IconSettings,
+      color: 'gray',
+      stats: { 
+        configs: adminPagesData?.settings.configs?.toString() || '0', 
+        active: adminPagesData?.settings.active?.toString() || '0', 
+        alerts: adminPagesData?.settings.alerts?.toString() || '0' 
+      },
+      link: '/admin/settings',
+      description: 'System configuration and settings'
+    }
+  ]
 
   // Use real data if available, fallback to placeholder data
   const stats = dashboardData?.stats || [
@@ -209,7 +372,7 @@ export default function AdminDashboard() {
     },
   ]
 
-  const serverStatus = dashboardData?.serverStatus || [
+  const serverStatusList = dashboardData?.serverStatus || [
     { 
       name: 'WA-Server-01', 
       status: 'Online', 
@@ -522,11 +685,11 @@ export default function AdminDashboard() {
                     height: 'auto',
                     minHeight: '140px'
                   }}
-                  onMouseEnter={(e: any) => {
+                  onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                     e.currentTarget.style.transform = 'translateY(-2px)'
                     e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.1)'
                   }}
-                  onMouseLeave={(e: any) => {
+                  onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                     e.currentTarget.style.transform = 'translateY(0)'
                     e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.05)'
                   }}
@@ -698,7 +861,7 @@ export default function AdminDashboard() {
                 </Box>
 
                 <Stack gap="md">
-                  {serverStatus.map((server, index) => (
+                  {serverStatusList.map((server, index) => (
                     <ModernCard key={index} withBorder>
                       <Group justify="space-between" align="flex-start" mb="md">
                         <Group gap="xs">
@@ -882,6 +1045,247 @@ export default function AdminDashboard() {
             )}
           </ResponsiveTwoColumn>
 
+          {/* Interactive Charts Section */}
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+            {/* Revenue & User Growth Chart */}
+            <ModernCard>
+              <Group gap="sm" mb="lg">
+                <ThemeIcon size="sm" variant="light" color="blue">
+                  <IconChartLine size={18} />
+                </ThemeIcon>
+                <Box>
+                  <Text fw={600} size="sm">Revenue & User Growth</Text>
+                  <Text size="xs" c="dimmed">Monthly trends and analytics</Text>
+                </Box>
+              </Group>
+              <Box style={{ height: 300 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={revenueChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                    <XAxis 
+                      dataKey="name" 
+                      fontSize={12}
+                      stroke="#6b7280"
+                    />
+                    <YAxis fontSize={12} stroke="#6b7280" />
+                    <RechartsTooltip 
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <Legend />
+                    <Area 
+                      type="monotone" 
+                      dataKey="revenue" 
+                      stroke="#3b82f6" 
+                      fill="#3b82f6"
+                      fillOpacity={0.1}
+                      name="Revenue (₹)"
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="users" 
+                      stroke="#10b981" 
+                      fill="#10b981"
+                      fillOpacity={0.1}
+                      name="New Users"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </Box>
+            </ModernCard>
+
+            {/* Server Performance Chart */}
+            <ModernCard>
+              <Group gap="sm" mb="lg">
+                <ThemeIcon size="sm" variant="light" color="green">
+                  <IconChartArea size={18} />
+                </ThemeIcon>
+                <Box>
+                  <Text fw={600} size="sm">Server Performance</Text>
+                  <Text size="xs" c="dimmed">Real-time system metrics</Text>
+                </Box>
+              </Group>
+              <Box style={{ height: 300 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={serverPerformanceData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                    <XAxis 
+                      dataKey="time" 
+                      fontSize={12}
+                      stroke="#6b7280"
+                    />
+                    <YAxis fontSize={12} stroke="#6b7280" />
+                    <RechartsTooltip 
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="cpu" 
+                      stroke="#3b82f6" 
+                      strokeWidth={2}
+                      name="CPU (%)"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="memory" 
+                      stroke="#f59e0b" 
+                      strokeWidth={2}
+                      name="Memory (%)"
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="network" 
+                      stroke="#8b5cf6" 
+                      strokeWidth={2}
+                      name="Network I/O (%)"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Box>
+            </ModernCard>
+
+            {/* Transaction Status Distribution */}
+            <ModernCard>
+              <Group gap="sm" mb="lg">
+                <ThemeIcon size="sm" variant="light" color="violet">
+                  <IconChartPie size={18} />
+                </ThemeIcon>
+                <Box>
+                  <Text fw={600} size="sm">Transaction Distribution</Text>
+                  <Text size="xs" c="dimmed">Real-time status breakdown from database (Last 90 days)</Text>
+                </Box>
+              </Group>
+              <Box style={{ height: 300 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={transactionStatusData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {transactionStatusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <RechartsTooltip 
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </Box>
+              
+              {/* Transaction Analytics Summary */}
+              <Stack gap="xs" mt="md">
+                <Group justify="space-between">
+                  <Text size="xs" fw={500}>Total Transactions</Text>
+                  <Text size="xs" fw={600}>
+                    {transactionStatusData.reduce((sum, item) => sum + item.value, 0).toLocaleString()}
+                  </Text>
+                </Group>
+                <Group justify="space-between">
+                  <Text size="xs" fw={500}>Success Rate</Text>
+                  <Text size="xs" fw={600} c="green">
+                    {Math.round((transactionStatusData.find(item => item.name === 'Completed')?.value || 0) / 
+                      Math.max(transactionStatusData.reduce((sum, item) => sum + item.value, 0), 1) * 100)}%
+                  </Text>
+                </Group>
+                <Group justify="space-between">
+                  <Text size="xs" fw={500}>Pending Processing</Text>
+                  <Text size="xs" fw={600} c="orange">
+                    {transactionStatusData.find(item => item.name === 'Pending')?.value.toLocaleString() || '0'}
+                  </Text>
+                </Group>
+              </Stack>
+            </ModernCard>
+
+            {/* Admin Pages Summary */}
+            <ModernCard>
+              <Group gap="sm" mb="lg">
+                <ThemeIcon size="sm" variant="light" color="indigo">
+                  <IconChartBar size={18} />
+                </ThemeIcon>
+                <Box>
+                  <Text fw={600} size="sm">Admin Pages Overview</Text>
+                  <Text size="xs" c="dimmed">Quick access to all admin sections</Text>
+                </Box>
+              </Group>
+              <Stack gap="md">
+                {adminPagesSummary.map((page, index) => (
+                  <Paper
+                    key={index}
+                    p="md"
+                    radius="md"
+                    withBorder
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)',
+                      border: `1px solid var(--mantine-color-${page.color}-2)`,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)'
+                      e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.1)'
+                    }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
+                  >
+                    <Group justify="space-between" align="flex-start">
+                      <Group gap="sm">
+                        <ThemeIcon 
+                          size="sm" 
+                          variant="light" 
+                          color={page.color}
+                        >
+                          <page.icon size={16} />
+                        </ThemeIcon>
+                        <Box>
+                          <Text fw={600} size="sm">{page.title}</Text>
+                          <Text size="xs" c="dimmed" lineClamp={1}>
+                            {page.description}
+                          </Text>
+                        </Box>
+                      </Group>
+                      <Group gap="xs">
+                        {Object.entries(page.stats).map(([key, value]) => (
+                          <Box key={key} ta="center">
+                            <Text size="xs" c="dimmed" tt="uppercase">
+                              {key}
+                            </Text>
+                            <Text size="xs" fw={600}>
+                              {value}
+                            </Text>
+                          </Box>
+                        ))}
+                      </Group>
+                    </Group>
+                  </Paper>
+                ))}
+              </Stack>
+            </ModernCard>
+          </SimpleGrid>
+
           {/* Enhanced Recent Transactions - Only show if user can view transactions */}
           {permissions.canViewTransactions && (
             <ModernCard>
@@ -1005,12 +1409,12 @@ export default function AdminDashboard() {
                         transition: 'all 0.2s ease',
                         height: '60px'
                       }}
-                      onMouseEnter={(e: any) => {
+                      onMouseEnter={(e: React.MouseEvent<HTMLTableRowElement>) => {
                         e.currentTarget.style.background = 'rgba(59, 130, 246, 0.04)'
                         e.currentTarget.style.transform = 'scale(1.002)'
                         e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.1)'
                       }}
-                      onMouseLeave={(e: any) => {
+                      onMouseLeave={(e: React.MouseEvent<HTMLTableRowElement>) => {
                         e.currentTarget.style.background = index % 2 === 0 ? 'rgba(248, 250, 252, 0.3)' : 'white'
                         e.currentTarget.style.transform = 'scale(1)'
                         e.currentTarget.style.boxShadow = 'none'

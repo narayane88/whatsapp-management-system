@@ -1,23 +1,14 @@
 'use client'
 
 import { Container, Loader, Center, Stack, Text, Title, Group, ThemeIcon, Skeleton, Box, Button, Badge, Paper, Card } from '@mantine/core'
-import { Suspense, lazy, useState, useEffect } from 'react'
-import { IconUsers, IconUserCheck, IconSettings, IconPlus, IconRefresh, IconShield, IconUserPlus, IconUserMinus, IconClock } from '@tabler/icons-react'
+import { Suspense, lazy } from 'react'
+import { IconUserPlus, IconUsers } from '@tabler/icons-react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import PagePermissionGuard from '@/components/auth/PagePermissionGuard'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { notifications } from '@mantine/notifications'
 
 // Lazy load the heavy UserManagementSystem component
 const UserManagementSystem = lazy(() => import('@/components/admin/UserManagementSystem'))
-
-// User statistics interface
-interface UserStats {
-  total: number
-  active: number
-  pending: number
-  blocked: number
-}
 
 function LoadingFallback() {
   return (
@@ -179,74 +170,7 @@ function LoadingFallback() {
 }
 
 export default function UsersPage() {
-  const [userStats, setUserStats] = useState<UserStats>({
-    total: 0,
-    active: 0,
-    pending: 0,
-    blocked: 0
-  })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  // Fetch user statistics
-  const fetchUserStats = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      // Simulate API call - replace with real endpoint
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Mock data - replace with real API response
-      setUserStats({
-        total: 247,
-        active: 189,
-        pending: 32,
-        blocked: 26
-      })
-    } catch (err) {
-      setError('Failed to load user statistics')
-      console.error('Error fetching user stats:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchUserStats()
-  }, [])
-
-  // Stats card data
-  const statsCards = [
-    {
-      icon: IconUsers,
-      label: 'Total Users',
-      value: userStats.total,
-      color: 'blue',
-      description: 'All registered users'
-    },
-    {
-      icon: IconUserCheck,
-      label: 'Active Users',
-      value: userStats.active,
-      color: 'green',
-      description: 'Currently active users'
-    },
-    {
-      icon: IconClock,
-      label: 'Pending Users',
-      value: userStats.pending,
-      color: 'yellow',
-      description: 'Awaiting verification'
-    },
-    {
-      icon: IconUserMinus,
-      label: 'Blocked Users',
-      value: userStats.blocked,
-      color: 'red',
-      description: 'Suspended accounts'
-    }
-  ]
+  // Statistics and data are now handled within UserManagementSystem component
 
   return (
     <PagePermissionGuard requiredPermissions={['users.page.access']}>
@@ -257,15 +181,7 @@ export default function UsersPage() {
           breadcrumbs={[
             { title: 'Users', href: '/admin/users' }
           ]}
-          loading={loading}
-          error={error}
-          onRefresh={fetchUserStats}
           enableNotifications={true}
-          statusBadge={{
-            label: `${userStats.active} Active`,
-            color: 'green',
-            variant: 'light'
-          }}
           systemAlerts={[
             {
               type: 'info',
@@ -284,70 +200,7 @@ export default function UsersPage() {
             </Button>
           }
         >
-          {/* User Statistics Cards */}
-          <Group grow mb="xl">
-            {statsCards.map((stat, index) => (
-              <Card
-                key={index}
-                withBorder
-                p="lg"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)',
-                  border: `2px solid var(--mantine-color-${stat.color}-2)`,
-                  borderRadius: '16px',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                <Group justify="space-between" mb="lg">
-                  <Group gap="sm">
-                    <ThemeIcon 
-                      size="lg" 
-                      variant="light" 
-                      color={stat.color}
-                      style={{
-                        borderRadius: '12px'
-                      }}
-                    >
-                      <stat.icon size={20} />
-                    </ThemeIcon>
-                    <Box>
-                      <Text size="sm" fw={600} c="dark.7">
-                        {stat.label}
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        {stat.description}
-                      </Text>
-                    </Box>
-                  </Group>
-                </Group>
-                
-                <Text 
-                  size="2rem" 
-                  fw={700} 
-                  c={`${stat.color}.6`}
-                  mb="sm"
-                >
-                  {loading ? '-' : stat.value.toLocaleString()}
-                </Text>
-                
-                <Group gap="sm">
-                  <ThemeIcon 
-                    size="xs" 
-                    variant="light" 
-                    color={stat.color}
-                    style={{ borderRadius: '6px' }}
-                  >
-                    <IconRefresh size={10} />
-                  </ThemeIcon>
-                  <Text size="xs" c="dimmed">
-                    Live data
-                  </Text>
-                </Group>
-              </Card>
-            ))}
-          </Group>
-
-          {/* Main User Management System */}
+          {/* Main User Management System - includes all stats and functionality */}
           <Card
             withBorder
             p="xl"

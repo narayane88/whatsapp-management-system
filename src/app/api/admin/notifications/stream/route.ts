@@ -237,6 +237,3 @@ export async function GET(request: NextRequest) {
     return new Response('Internal Server Error', { status: 500 })
   }
 }
-
-// Export the broadcast function for use in other parts of the application
-export { broadcastToAdmins }

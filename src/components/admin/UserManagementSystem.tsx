@@ -44,7 +44,6 @@ import {
   FiLock,
   FiUnlock
 } from 'react-icons/fi'
-import { FaRupeeSign } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { notifications } from '@mantine/notifications'
@@ -162,6 +161,34 @@ function UserManagementSystemContent() {
   // Current user roles state
   const [currentUserRoles, setCurrentUserRoles] = useState<{role: Role; is_primary: boolean}[]>([])
 
+  // Statistics state
+  const [userStats, setUserStats] = useState({
+    total: 0,
+    active: 0,
+    blocked: 0,
+    pending: 0,
+    newThisMonth: 0,
+    staffUsers: 0,
+    customers: 0
+  })
+  const [statsLoading, setStatsLoading] = useState(true)
+
+  // Load statistics
+  const loadUserStats = async () => {
+    try {
+      setStatsLoading(true)
+      const response = await fetch('/api/admin/users/stats')
+      if (response.ok) {
+        const data = await response.json()
+        setUserStats(data.stats)
+      }
+    } catch (error) {
+      console.error('Failed to load user statistics:', error)
+    } finally {
+      setStatsLoading(false)
+    }
+  }
+
   // Load data
   useEffect(() => {
     if (session?.user) {
@@ -170,6 +197,7 @@ function UserManagementSystemContent() {
       loadPermissions()
       loadPermissionTemplates()
       loadCurrentUserRoles()
+      loadUserStats()
     }
   }, [session])
 
@@ -933,53 +961,85 @@ function UserManagementSystemContent() {
         </Group>
       </Card>
 
-      {/* Stats Cards */}
-      <SimpleGrid cols={{ base: 1, md: 4 }} spacing="md">
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
+      {/* Enhanced Stats Cards with Real Data */}
+      <SimpleGrid cols={{ base: 2, md: 4 }} spacing="md">
+        <Card shadow="sm" padding="lg" radius="md" withBorder
+          style={{
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.03) 100%)',
+            border: '2px solid rgba(59, 130, 246, 0.15)'
+          }}
+        >
           <Stack align="center" gap="xs">
             <Group gap="xs">
               <Box component={FiUsers} size={24} c="blue.5" />
               <Text size="1.75rem" fw={700} c="blue.6">
-                {users.length}
+                {statsLoading ? '-' : userStats.total.toLocaleString()}
               </Text>
             </Group>
             <Text size="xs" c="dimmed" ta="center">Total Users</Text>
+            <Text size="xs" c="blue.6" ta="center" fw={500}>
+              {statsLoading ? '' : `+${userStats.newThisMonth} this month`}
+            </Text>
           </Stack>
         </Card>
 
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card shadow="sm" padding="lg" radius="md" withBorder
+          style={{
+            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(134, 239, 172, 0.03) 100%)',
+            border: '2px solid rgba(34, 197, 94, 0.15)'
+          }}
+        >
           <Stack align="center" gap="xs">
             <Group gap="xs">
-              <Box component={FiShield} size={24} c="green.5" />
+              <Box component={FiUserCheck} size={24} c="green.5" />
               <Text size="1.75rem" fw={700} c="green.6">
-                {roles.length}
-              </Text>
-            </Group>
-            <Text size="xs" c="dimmed" ta="center">Total Roles</Text>
-          </Stack>
-        </Card>
-
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Stack align="center" gap="xs">
-            <Group gap="xs">
-              <Box component={FiKey} size={24} c="orange.5" />
-              <Text size="1.75rem" fw={700} c="orange.6">
-                {permissions.length}
-              </Text>
-            </Group>
-            <Text size="xs" c="dimmed" ta="center">Total Permissions</Text>
-          </Stack>
-        </Card>
-
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Stack align="center" gap="xs">
-            <Group gap="xs">
-              <Box component={FaRupeeSign} size={24} c="violet.5" />
-              <Text size="xl" fw={700} c="violet.6">
-                {users.filter(u => u.isActive).length}
+                {statsLoading ? '-' : userStats.active.toLocaleString()}
               </Text>
             </Group>
             <Text size="xs" c="dimmed" ta="center">Active Users</Text>
+            <Text size="xs" c="green.6" ta="center" fw={500}>
+              {statsLoading ? '' : `${Math.round((userStats.active / Math.max(userStats.total, 1)) * 100)}% of total`}
+            </Text>
+          </Stack>
+        </Card>
+
+        <Card shadow="sm" padding="lg" radius="md" withBorder
+          style={{
+            background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.05) 0%, rgba(254, 215, 170, 0.03) 100%)',
+            border: '2px solid rgba(251, 146, 60, 0.15)'
+          }}
+        >
+          <Stack align="center" gap="xs">
+            <Group gap="xs">
+              <Box component={FiShield} size={24} c="orange.5" />
+              <Text size="1.75rem" fw={700} c="orange.6">
+                {statsLoading ? '-' : userStats.staffUsers.toLocaleString()}
+              </Text>
+            </Group>
+            <Text size="xs" c="dimmed" ta="center">Staff Users</Text>
+            <Text size="xs" c="orange.6" ta="center" fw={500}>
+              {statsLoading ? '' : `${roles.length} roles`}
+            </Text>
+          </Stack>
+        </Card>
+
+        <Card shadow="sm" padding="lg" radius="md" withBorder
+          style={{
+            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(252, 165, 165, 0.03) 100%)',
+            border: '2px solid rgba(239, 68, 68, 0.15)'
+          }}
+        >
+          <Stack align="center" gap="xs">
+            <Group gap="xs">
+              <Box component={FiUserX} size={24} c="red.5" />
+              <Text size="1.75rem" fw={700} c="red.6">
+                {statsLoading ? '-' : (userStats.blocked + userStats.pending).toLocaleString()}
+              </Text>
+            </Group>
+            <Text size="xs" c="dimmed" ta="center">Inactive Users</Text>
+            <Text size="xs" c="red.6" ta="center" fw={500}>
+              {statsLoading ? '' : `${userStats.blocked} blocked, ${userStats.pending} pending`}
+            </Text>
           </Stack>
         </Card>
       </SimpleGrid>

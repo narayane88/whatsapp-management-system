@@ -58,6 +58,14 @@ import { useDynamicPermissions } from '@/hooks/useDynamicPermissions'
 import AdminStatusIndicator from '@/components/admin/AdminStatusIndicator'
 import { useMemo, useState, useEffect, useRef } from 'react'
 
+interface SystemStats {
+  activeUsers: number
+  whatsappConnections: number
+  totalUsers: number
+  todayMessages: number
+  isLoading: boolean
+}
+
 interface AdminLayoutProps {
   children: React.ReactNode
 }
@@ -175,6 +183,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const { hasPermission, isLoading } = useDynamicPermissions()
   const [searchValue, setSearchValue] = useState('')
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const [systemStats, setSystemStats] = useState<SystemStats>({
+    activeUsers: 0,
+    whatsappConnections: 0,
+    totalUsers: 0,
+    todayMessages: 0,
+    isLoading: true
+  })
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: '/auth/signin' })
