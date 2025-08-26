@@ -9,7 +9,19 @@ import {
   IconKey,
   IconServer,
   IconClock,
-  IconInfoCircle
+  IconInfoCircle,
+  IconPackage,
+  IconCoin,
+  IconUserCircle,
+  IconDevices,
+  IconSend,
+  IconHistory,
+  IconMail,
+  IconList,
+  IconHome,
+  IconFileText,
+  IconChartBar,
+  IconSettings
 } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import { useImpersonation } from '@/contexts/ImpersonationContext'
@@ -128,6 +140,45 @@ export default function CustomerDashboard() {
 
   return (
     <Stack gap="lg">
+      {/* Quick Stats Summary */}
+      <Card withBorder padding="lg" style={{
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%)',
+        border: '2px solid rgba(99, 102, 241, 0.1)'
+      }}>
+        <Group justify="space-between" mb="md">
+          <Text size="xl" fw={700} c="indigo">Customer Dashboard Overview</Text>
+          <Badge size="lg" variant="light" color="indigo">
+            {isImpersonating ? `Viewing: ${impersonationData?.targetUser?.email}` : session?.user?.email}
+          </Badge>
+        </Group>
+        <Grid>
+          <Grid.Col span={{ base: 6, sm: 3 }}>
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="green">{stats?.whatsappInstances || 0}</Text>
+              <Text size="xs" c="dimmed">WhatsApp Devices</Text>
+            </div>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, sm: 3 }}>
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="blue">{stats?.totalContacts?.toLocaleString() || 0}</Text>
+              <Text size="xs" c="dimmed">Total Contacts</Text>
+            </div>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, sm: 3 }}>
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="violet">{stats?.messagesSent?.toLocaleString() || 0}</Text>
+              <Text size="xs" c="dimmed">Messages Sent</Text>
+            </div>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, sm: 3 }}>
+            <div style={{ textAlign: 'center' }}>
+              <Text size="xl" fw={700} c="orange">{stats?.messagesToday || 0}</Text>
+              <Text size="xs" c="dimmed">Today's Messages</Text>
+            </div>
+          </Grid.Col>
+        </Grid>
+      </Card>
+
       {/* Enhanced Package Status */}
       {stats?.activePackage ? (
         <Card withBorder padding="lg" style={{
@@ -252,160 +303,465 @@ export default function CustomerDashboard() {
         </Card>
       )}
 
-      {/* Stats Grid */}
-      <Grid>
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm">
-              <IconBrandWhatsapp size={24} color="#25D366" />
-              <div>
-                <Text size="xl" fw={700}>
-                  {stats?.whatsappInstances || 0}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  WhatsApp Devices
-                </Text>
-                <Text size="xs" c="green" fw={500}>
-                  {stats?.whatsappInstances > 0 ? 'Connected' : 'No devices'}
-                </Text>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm">
-              <IconUsers size={24} color="#339af0" />
-              <div>
-                <Text size="xl" fw={700}>
-                  {stats?.totalContacts?.toLocaleString() || 0}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Total Contacts
-                </Text>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm" align="flex-start">
-              <IconMessageCircle size={24} color="#51cf66" />
-              <div style={{ flex: 1 }}>
-                <Text size="xl" fw={700}>
-                  {stats?.messagesSent?.toLocaleString() || 0}
-                </Text>
-                <Text size="sm" c="dimmed" mb="xs">
-                  Total Messages Sent
-                </Text>
-                <Group gap="lg">
-                  <div>
-                    <Text size="xs" c="dimmed">Today</Text>
-                    <Text size="sm" fw={600} c="green">
-                      {stats?.messagesToday?.toLocaleString() || 0}
-                    </Text>
-                  </div>
-                  <div>
-                    <Text size="xs" c="dimmed">This Month</Text>
-                    <Text size="sm" fw={600} c="blue">
-                      {stats?.messagesThisMonth?.toLocaleString() || 0}
-                    </Text>
-                  </div>
-                </Group>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm">
-              <IconClock size={24} color="#ffd43b" />
-              <div>
-                <Text size="xl" fw={700}>
-                  {stats?.queuedMessages || 0}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Queued Messages
-                </Text>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm">
-              <IconKey size={24} color="#e599f7" />
-              <div>
-                <Text size="xl" fw={700}>
-                  {stats?.apiKeys || 0}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  API Keys
-                </Text>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <Card withBorder padding="lg" style={{ height: '100%' }}>
-            <Group gap="sm">
-              <IconServer size={24} color="#ff6b6b" />
-              <div>
-                <Text size="xl" fw={700}>
-                  Connected
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Server Status
-                </Text>
-              </div>
-            </Group>
-          </Card>
-        </Grid.Col>
-      </Grid>
-
-      {/* Quick Actions */}
-      <Card withBorder padding="lg">
-        <Text size="lg" fw={600} mb="md">Quick Actions</Text>
-        <Group gap="sm">
+      {/* Quick Actions Bar */}
+      <Card withBorder padding="md" style={{
+        background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, rgba(168, 85, 247, 0.05) 50%, rgba(34, 197, 94, 0.05) 100%)',
+        border: '1px solid rgba(99, 102, 241, 0.1)'
+      }}>
+        <Group justify="center" gap="sm">
           <Button 
-            leftSection={<IconBrandWhatsapp size="1rem" />}
-            variant="light"
+            leftSection={<IconSend size="1rem" />}
+            variant="gradient"
+            gradient={{ from: 'blue', to: 'cyan' }}
             component="a"
-            href="/customer/whatsapp"
-          >
-            Manage WhatsApp
-          </Button>
-          <Button 
-            leftSection={<IconUsers size="1rem" />}
-            variant="light"
-            component="a"
-            href="/customer/contacts"
-          >
-            Add Contacts
-          </Button>
-          <Button 
-            leftSection={<IconMessageCircle size="1rem" />}
-            variant="light"
-            component="a"
-            href="/customer/whatsapp/queue"
+            href="/customer/whatsapp/send"
+            size="sm"
           >
             Send Message
           </Button>
           <Button 
-            leftSection={<IconKey size="1rem" />}
-            variant="light"
+            leftSection={<IconDevices size="1rem" />}
+            variant="gradient"
+            gradient={{ from: 'green', to: 'lime' }}
             component="a"
-            href="/customer/api-keys/docs"
+            href="/customer/whatsapp/devices"
+            size="sm"
           >
-            API Documentation
+            Connect Device
+          </Button>
+          <Button 
+            leftSection={<IconUsers size="1rem" />}
+            variant="gradient"
+            gradient={{ from: 'violet', to: 'grape' }}
+            component="a"
+            href="/customer/contacts"
+            size="sm"
+          >
+            Add Contacts
+          </Button>
+          <Button 
+            leftSection={<IconPackage size="1rem" />}
+            variant="gradient"
+            gradient={{ from: 'orange', to: 'yellow' }}
+            component="a"
+            href="/customer/subscription"
+            size="sm"
+          >
+            Upgrade Plan
           </Button>
         </Group>
       </Card>
+
+      {/* Detailed Statistics */}
+      <Stack gap="md">
+        <Text size="xl" fw={700}>Detailed Statistics</Text>
+        <Grid>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(37, 211, 102, 0.05) 0%, rgba(37, 211, 102, 0.02) 100%)'
+            }}>
+              <Group gap="sm">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(37, 211, 102, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconBrandWhatsapp size={24} color="#25D366" />
+                </div>
+                <div>
+                  <Text size="xl" fw={700} c="green">
+                    {stats?.whatsappInstances || 0}
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500}>
+                    WhatsApp Devices
+                  </Text>
+                  <Text size="xs" c={stats?.whatsappInstances > 0 ? 'green' : 'red'} fw={500}>
+                    {stats?.whatsappInstances > 0 ? '● Connected' : '● No devices'}
+                  </Text>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%)'
+            }}>
+              <Group gap="sm">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(59, 130, 246, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconUsers size={24} color="#3b82f6" />
+                </div>
+                <div>
+                  <Text size="xl" fw={700} c="blue">
+                    {stats?.totalContacts?.toLocaleString() || 0}
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500}>
+                    Total Contacts
+                  </Text>
+                  <Text size="xs" c="blue" fw={500}>
+                    ● Ready for messaging
+                  </Text>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(168, 85, 247, 0.02) 100%)'
+            }}>
+              <Group gap="sm" align="flex-start">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(168, 85, 247, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconMessageCircle size={24} color="#a855f7" />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <Text size="xl" fw={700} c="violet">
+                    {stats?.messagesSent?.toLocaleString() || 0}
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500} mb="xs">
+                    Messages Sent
+                  </Text>
+                  <Group gap="md">
+                    <div>
+                      <Text size="xs" c="dimmed">Today</Text>
+                      <Text size="sm" fw={600} c="green">
+                        {stats?.messagesToday?.toLocaleString() || 0}
+                      </Text>
+                    </div>
+                    <div>
+                      <Text size="xs" c="dimmed">This Month</Text>
+                      <Text size="sm" fw={600} c="blue">
+                        {stats?.messagesThisMonth?.toLocaleString() || 0}
+                      </Text>
+                    </div>
+                  </Group>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%)'
+            }}>
+              <Group gap="sm">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(245, 158, 11, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconList size={24} color="#f59e0b" />
+                </div>
+                <div>
+                  <Text size="xl" fw={700} c="orange">
+                    {stats?.queuedMessages || 0}
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500}>
+                    Queued Messages
+                  </Text>
+                  <Text size="xs" c="orange" fw={500}>
+                    ● Pending delivery
+                  </Text>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(236, 72, 153, 0.02) 100%)'
+            }}>
+              <Group gap="sm">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(236, 72, 153, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconKey size={24} color="#ec4899" />
+                </div>
+                <div>
+                  <Text size="xl" fw={700} c="pink">
+                    {stats?.apiKeys || 0}
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500}>
+                    API Keys
+                  </Text>
+                  <Text size="xs" c="pink" fw={500}>
+                    ● Active integrations
+                  </Text>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Card withBorder padding="lg" style={{ 
+              height: '100%',
+              background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%)'
+            }}>
+              <Group gap="sm">
+                <div style={{
+                  padding: '12px',
+                  borderRadius: '50%',
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <IconServer size={24} color="#22c55e" />
+                </div>
+                <div>
+                  <Text size="xl" fw={700} c="green">
+                    Online
+                  </Text>
+                  <Text size="sm" c="dimmed" fw={500}>
+                    System Status
+                  </Text>
+                  <Text size="xs" c="green" fw={500}>
+                    ● All services running
+                  </Text>
+                </div>
+              </Group>
+            </Card>
+          </Grid.Col>
+        </Grid>
+      </Stack>
+
+      {/* Navigation Cards Grid */}
+      <Stack gap="lg">
+        <Text size="xl" fw={700}>Navigation Center</Text>
+        
+        {/* WhatsApp Management Section */}
+        <Card withBorder padding="lg" style={{ background: 'linear-gradient(135deg, rgba(37, 211, 102, 0.05) 0%, rgba(37, 211, 102, 0.02) 100%)' }}>
+          <Text size="lg" fw={600} mb="md" c="green">WhatsApp Management</Text>
+          <Grid gutter="sm">
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconDevices size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp/devices"
+                size="sm"
+              >
+                Device Management
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconSend size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp/send"
+                size="sm"
+              >
+                Send Message
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconMail size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp/bulk"
+                size="sm"
+              >
+                Bulk Messages
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconList size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp/queue"
+                size="sm"
+              >
+                Message Queue
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconHistory size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp/sent"
+                size="sm"
+              >
+                Sent Messages
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconBrandWhatsapp size="1rem" />}
+                variant="light"
+                color="green"
+                component="a"
+                href="/customer/whatsapp"
+                size="sm"
+              >
+                WhatsApp Overview
+              </Button>
+            </Grid.Col>
+          </Grid>
+        </Card>
+
+        {/* Account Management Section */}
+        <Card withBorder padding="lg" style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%)' }}>
+          <Text size="lg" fw={600} mb="md" c="blue">Account & Billing</Text>
+          <Grid gutter="sm">
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconPackage size="1rem" />}
+                variant="light"
+                color="blue"
+                component="a"
+                href="/customer/subscription"
+                size="sm"
+              >
+                Manage Subscription
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconPackage size="1rem" />}
+                variant="light"
+                color="blue"
+                component="a"
+                href="/customer/packages"
+                size="sm"
+              >
+                Browse Packages
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconCoin size="1rem" />}
+                variant="light"
+                color="blue"
+                component="a"
+                href="/customer/bizcoins"
+                size="sm"
+              >
+                BizCoins Wallet
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconUserCircle size="1rem" />}
+                variant="light"
+                color="blue"
+                component="a"
+                href="/customer/profile"
+                size="sm"
+              >
+                Profile Settings
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconHome size="1rem" />}
+                variant="light"
+                color="blue"
+                component="a"
+                href="/customer/host"
+                size="sm"
+              >
+                Host Settings
+              </Button>
+            </Grid.Col>
+          </Grid>
+        </Card>
+
+        {/* Data & API Management Section */}
+        <Card withBorder padding="lg" style={{ background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(168, 85, 247, 0.02) 100%)' }}>
+          <Text size="lg" fw={600} mb="md" c="violet">Data & API Management</Text>
+          <Grid gutter="sm">
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconUsers size="1rem" />}
+                variant="light"
+                color="violet"
+                component="a"
+                href="/customer/contacts"
+                size="sm"
+              >
+                Manage Contacts
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconKey size="1rem" />}
+                variant="light"
+                color="violet"
+                component="a"
+                href="/customer/api-keys"
+                size="sm"
+              >
+                API Keys
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+              <Button 
+                fullWidth
+                leftSection={<IconFileText size="1rem" />}
+                variant="light"
+                color="violet"
+                component="a"
+                href="/customer/api-keys/docs"
+                size="sm"
+              >
+                API Documentation
+              </Button>
+            </Grid.Col>
+          </Grid>
+        </Card>
+      </Stack>
     </Stack>
   )
 }
