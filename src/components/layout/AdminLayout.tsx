@@ -55,6 +55,7 @@ import { useTheme } from '@/hooks/useTheme'
 import { predefinedThemes } from '@/types/theme'
 import PermissionAwareNavigation from '@/components/layout/PermissionAwareNavigation'
 import { useDynamicPermissions } from '@/hooks/useDynamicPermissions'
+import AdminStatusIndicator from '@/components/admin/AdminStatusIndicator'
 import { useMemo, useState, useEffect, useRef } from 'react'
 
 interface AdminLayoutProps {
@@ -374,6 +375,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
           {/* Right Section */}
           <Group gap="sm">
+            {/* Real-time Status Indicators */}
+            <AdminStatusIndicator />
+            
             {/* Innovative Quick Actions Dropdown */}
             <Menu shadow="xl" width={320} position="bottom-end" offset={8} withArrow>
               <Menu.Target>

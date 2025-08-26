@@ -1,26 +1,35 @@
 'use client'
 
-import { Container, Loader, Center, Stack, Text, Title, Group, ThemeIcon, Skeleton, Box } from '@mantine/core'
-import { Suspense, lazy } from 'react'
-import { IconUsers, IconUserCheck, IconSettings } from '@tabler/icons-react'
+import { Container, Loader, Center, Stack, Text, Title, Group, ThemeIcon, Skeleton, Box, Button, Badge, Paper, Card } from '@mantine/core'
+import { Suspense, lazy, useState, useEffect } from 'react'
+import { IconUsers, IconUserCheck, IconSettings, IconPlus, IconRefresh, IconShield, IconUserPlus, IconUserMinus, IconClock } from '@tabler/icons-react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import PagePermissionGuard from '@/components/auth/PagePermissionGuard'
-import { ModernCard, ModernContainer, ModernLoader } from '@/components/ui/modern-components'
-import { ResponsiveStack } from '@/components/ui/responsive-layout'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { notifications } from '@mantine/notifications'
 
 // Lazy load the heavy UserManagementSystem component
 const UserManagementSystem = lazy(() => import('@/components/admin/UserManagementSystem'))
 
+// User statistics interface
+interface UserStats {
+  total: number
+  active: number
+  pending: number
+  blocked: number
+}
+
 function LoadingFallback() {
   return (
-    <ResponsiveStack gap="xl">
+    <Stack gap="xl">
       {/* Enhanced Header Skeleton */}
-      <ModernCard
+      <Card
+        withBorder
+        p="xl"
         style={{
           background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(167, 139, 250, 0.03) 100%)',
           border: '2px solid rgba(139, 92, 246, 0.15)',
-          borderRadius: '20px',
-          padding: '32px'
+          borderRadius: '20px'
         }}
       >
         <Group gap="lg" mb="lg">
@@ -35,18 +44,19 @@ function LoadingFallback() {
             </Group>
           </Box>
         </Group>
-      </ModernCard>
+      </Card>
       
       {/* Enhanced Stats Grid Skeleton */}
       <Group grow>
         {[1, 2, 3, 4].map((i) => (
-          <ModernCard 
+          <Card 
             key={i}
+            withBorder
+            p="lg"
             style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)',
               border: '2px solid rgba(226, 232, 240, 0.8)',
-              borderRadius: '16px',
-              padding: '24px'
+              borderRadius: '16px'
             }}
           >
             <Group justify="space-between" mb="lg">
@@ -63,17 +73,18 @@ function LoadingFallback() {
               <Skeleton height={24} width={24} radius="md" />
               <Skeleton height={16} width={80} />
             </Group>
-          </ModernCard>
+          </Card>
         ))}
       </Group>
       
       {/* Enhanced Main Content Skeleton */}
-      <ModernCard
+      <Card
+        withBorder
+        p="xl"
         style={{
           background: 'linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%)',
           border: '1px solid rgba(226, 232, 240, 0.6)',
-          borderRadius: '20px',
-          padding: '28px'
+          borderRadius: '20px'
         }}
       >
         <Box
@@ -126,16 +137,17 @@ function LoadingFallback() {
             </Box>
           ))}
         </Stack>
-      </ModernCard>
+      </Card>
       
       {/* Enhanced Loading Indicator */}
       <Center>
-        <ModernCard
+        <Card
+          withBorder
+          p="xl"
           style={{
             background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(167, 139, 250, 0.03) 100%)',
             border: '2px solid rgba(139, 92, 246, 0.15)',
             borderRadius: '16px',
-            padding: '32px',
             textAlign: 'center'
           }}
         >
@@ -158,79 +170,198 @@ function LoadingFallback() {
                 Initializing secure user interface with role-based permissions
               </Text>
             </Box>
-            <ModernLoader variant="primary" size="xs" />
+            <Loader size="xs" />
           </Stack>
-        </ModernCard>
+        </Card>
       </Center>
-    </ResponsiveStack>
+    </Stack>
   )
 }
 
 export default function UsersPage() {
+  const [userStats, setUserStats] = useState<UserStats>({
+    total: 0,
+    active: 0,
+    pending: 0,
+    blocked: 0
+  })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Fetch user statistics
+  const fetchUserStats = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Simulate API call - replace with real endpoint
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Mock data - replace with real API response
+      setUserStats({
+        total: 247,
+        active: 189,
+        pending: 32,
+        blocked: 26
+      })
+    } catch (err) {
+      setError('Failed to load user statistics')
+      console.error('Error fetching user stats:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserStats()
+  }, [])
+
+  // Stats card data
+  const statsCards = [
+    {
+      icon: IconUsers,
+      label: 'Total Users',
+      value: userStats.total,
+      color: 'blue',
+      description: 'All registered users'
+    },
+    {
+      icon: IconUserCheck,
+      label: 'Active Users',
+      value: userStats.active,
+      color: 'green',
+      description: 'Currently active users'
+    },
+    {
+      icon: IconClock,
+      label: 'Pending Users',
+      value: userStats.pending,
+      color: 'yellow',
+      description: 'Awaiting verification'
+    },
+    {
+      icon: IconUserMinus,
+      label: 'Blocked Users',
+      value: userStats.blocked,
+      color: 'red',
+      description: 'Suspended accounts'
+    }
+  ]
+
   return (
     <PagePermissionGuard requiredPermissions={['users.page.access']}>
       <AdminLayout>
-        <ModernContainer fluid>
-          {/* Enhanced Page Header */}
-          <ModernCard 
-            mb="xl"
-            style={{
-              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(167, 139, 250, 0.03) 100%)',
-              border: '2px solid rgba(139, 92, 246, 0.15)',
-              borderRadius: '20px',
-              boxShadow: '0 8px 32px rgba(139, 92, 246, 0.08)',
-              padding: '32px'
-            }}
-          >
-            <Group gap="lg">
-              <ThemeIcon 
-                size="2xl" 
-                variant="gradient" 
-                gradient={{ from: 'violet.6', to: 'purple.5', deg: 135 }}
+        <AdminPageWrapper
+          title="User Management System"
+          subtitle="Comprehensive user administration with role-based access control and permission management"
+          breadcrumbs={[
+            { title: 'Users', href: '/admin/users' }
+          ]}
+          loading={loading}
+          error={error}
+          onRefresh={fetchUserStats}
+          enableNotifications={true}
+          statusBadge={{
+            label: `${userStats.active} Active`,
+            color: 'green',
+            variant: 'light'
+          }}
+          systemAlerts={[
+            {
+              type: 'info',
+              title: 'System Status',
+              message: 'User management system is operating normally',
+              dismissible: true
+            }
+          ]}
+          headerActions={
+            <Button 
+              leftSection={<IconUserPlus size={16} />}
+              size="sm"
+              variant="light"
+            >
+              Add User
+            </Button>
+          }
+        >
+          {/* User Statistics Cards */}
+          <Group grow mb="xl">
+            {statsCards.map((stat, index) => (
+              <Card
+                key={index}
+                withBorder
+                p="lg"
                 style={{
-                  boxShadow: '0 8px 24px rgba(139, 92, 246, 0.3)'
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)',
+                  border: `2px solid var(--mantine-color-${stat.color}-2)`,
+                  borderRadius: '16px',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <IconUsers size={28} />
-              </ThemeIcon>
-              <Box>
-                <Title 
-                  order={1} 
-                  mb={8}
-                  c="dark.8"
-                  fw={600}
-                >
-                  User Management System
-                </Title>
-                <Text c="dimmed" size="md" fw={500}>
-                  Comprehensive user administration with role-based access control and permission management
-                </Text>
-                
-                {/* Quick Status Indicators */}
-                <Group gap="xl" mt="md">
-                  <Group gap="xs">
-                    <IconUserCheck size={16} color="var(--mantine-color-green-6)" />
-                    <Text size="xs" c="green.6" fw={600}>Active Users</Text>
-                  </Group>
-                  <Group gap="xs">
-                    <IconSettings size={16} color="var(--mantine-color-violet-6)" />
-                    <Text size="xs" c="violet.6" fw={600}>Role Management</Text>
-                  </Group>
-                  <Group gap="xs">
-                    <ThemeIcon size="xs" variant="light" color="blue">
-                      <IconUsers size={12} />
+                <Group justify="space-between" mb="lg">
+                  <Group gap="sm">
+                    <ThemeIcon 
+                      size="lg" 
+                      variant="light" 
+                      color={stat.color}
+                      style={{
+                        borderRadius: '12px'
+                      }}
+                    >
+                      <stat.icon size={20} />
                     </ThemeIcon>
-                    <Text size="xs" c="blue.6" fw={600}>Permission Control</Text>
+                    <Box>
+                      <Text size="sm" fw={600} c="dark.7">
+                        {stat.label}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {stat.description}
+                      </Text>
+                    </Box>
                   </Group>
                 </Group>
-              </Box>
-            </Group>
-          </ModernCard>
-          
-          <Suspense fallback={<LoadingFallback />}>
-            <UserManagementSystem />
-          </Suspense>
-        </ModernContainer>
+                
+                <Text 
+                  size="2rem" 
+                  fw={700} 
+                  c={`${stat.color}.6`}
+                  mb="sm"
+                >
+                  {loading ? '-' : stat.value.toLocaleString()}
+                </Text>
+                
+                <Group gap="sm">
+                  <ThemeIcon 
+                    size="xs" 
+                    variant="light" 
+                    color={stat.color}
+                    style={{ borderRadius: '6px' }}
+                  >
+                    <IconRefresh size={10} />
+                  </ThemeIcon>
+                  <Text size="xs" c="dimmed">
+                    Live data
+                  </Text>
+                </Group>
+              </Card>
+            ))}
+          </Group>
+
+          {/* Main User Management System */}
+          <Card
+            withBorder
+            p="xl"
+            style={{
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%)',
+              border: '1px solid rgba(226, 232, 240, 0.6)',
+              borderRadius: '20px'
+            }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              <UserManagementSystem />
+            </Suspense>
+          </Card>
+        </AdminPageWrapper>
       </AdminLayout>
     </PagePermissionGuard>
   )
