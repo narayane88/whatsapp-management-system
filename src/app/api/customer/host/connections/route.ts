@@ -298,6 +298,80 @@ export async function POST(request: NextRequest) {
       console.log(`🎭 Admin user creating connection for customer ID: ${userId}`)
     }
 
+    // Check subscription limits before allowing device creation
+    try {
+      // Get user's current subscription and device limits
+      const subscriptionResult = await pool.query(`
+        SELECT 
+          cp.id,
+          cp."isActive",
+          cp."endDate",
+          cp."packageId",
+          p."instanceLimit",
+          CASE 
+            WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+            WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+            ELSE 'INACTIVE'
+          END as status
+        FROM customer_packages cp
+        JOIN packages p ON cp."packageId" = p.id
+        WHERE cp."userId" = $1::text 
+          AND cp."isActive" = true 
+          AND cp."endDate" > CURRENT_TIMESTAMP
+        ORDER BY cp."createdAt" DESC
+        LIMIT 1
+      `, [userId])
+
+      if (subscriptionResult.rows.length === 0) {
+        return NextResponse.json({ 
+          error: 'No active subscription found',
+          message: 'Please purchase a subscription plan to create WhatsApp devices.',
+          code: 'NO_SUBSCRIPTION'
+        }, { status: 402 })
+      }
+
+      const subscription = subscriptionResult.rows[0]
+      
+      if (subscription.status !== 'ACTIVE') {
+        return NextResponse.json({ 
+          error: 'Subscription expired',
+          message: 'Your subscription has expired. Please renew your plan to continue using WhatsApp devices.',
+          code: 'SUBSCRIPTION_EXPIRED'
+        }, { status: 402 })
+      }
+
+      // Count current WhatsApp devices for this user
+      const deviceCountResult = await pool.query(`
+        SELECT COUNT(*) as count FROM whatsapp_instances WHERE "userId" = $1::text
+      `, [userId])
+      
+      const currentDevices = parseInt(deviceCountResult.rows[0].count) || 0
+      const deviceLimit = subscription.instanceLimit
+
+      if (deviceLimit > 0 && currentDevices >= deviceLimit) {
+        return NextResponse.json({ 
+          error: 'Device limit reached',
+          message: `You have reached the maximum limit of ${deviceLimit} WhatsApp devices for your current plan. Please upgrade your subscription to add more devices.`,
+          code: 'DEVICE_LIMIT_EXCEEDED',
+          details: {
+            currentDevices,
+            deviceLimit,
+            subscriptionPlan: subscription.packageId
+          }
+        }, { status: 402 })
+      }
+
+      console.log(`✅ Subscription check passed: ${currentDevices}/${deviceLimit} devices used`)
+      
+    } catch (subscriptionError) {
+      console.error('Error checking subscription limits:', subscriptionError)
+      return NextResponse.json({ 
+        error: 'Unable to verify subscription',
+        message: 'Please try again or contact support if the problem persists.',
+        code: 'SUBSCRIPTION_CHECK_FAILED'
+      }, { status: 500 })
+    }
+
     // Check if account name already exists for this user
     const existingResult = await pool.query(`
       SELECT id FROM whatsapp_instances 

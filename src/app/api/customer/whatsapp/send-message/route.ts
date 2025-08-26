@@ -81,6 +81,76 @@ export async function POST(request: NextRequest) {
       console.log(`🎭 Admin user sending message for customer ID: ${userId}`)
     }
 
+    // Check subscription limits before allowing message sending
+    try {
+      // Get user's current subscription and message limits
+      const subscriptionResult = await pool.query(`
+        SELECT 
+          cp.id,
+          cp."isActive",
+          cp."endDate",
+          cp."packageId",
+          cp."messagesUsed",
+          p."messageLimit",
+          CASE 
+            WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
+            WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
+            ELSE 'INACTIVE'
+          END as status
+        FROM customer_packages cp
+        JOIN packages p ON cp."packageId" = p.id
+        WHERE cp."userId" = $1::text 
+          AND cp."isActive" = true 
+          AND cp."endDate" > CURRENT_TIMESTAMP
+        ORDER BY cp."createdAt" DESC
+        LIMIT 1
+      `, [userId])
+
+      if (subscriptionResult.rows.length === 0) {
+        return NextResponse.json({ 
+          error: 'No active subscription found',
+          message: 'Please purchase a subscription plan to send messages.',
+          code: 'NO_SUBSCRIPTION'
+        }, { status: 402 })
+      }
+
+      const subscription = subscriptionResult.rows[0]
+      
+      if (subscription.status !== 'ACTIVE') {
+        return NextResponse.json({ 
+          error: 'Subscription expired',
+          message: 'Your subscription has expired. Please renew your plan to continue sending messages.',
+          code: 'SUBSCRIPTION_EXPIRED'
+        }, { status: 402 })
+      }
+
+      const messagesUsed = subscription.messagesUsed || 0
+      const messageLimit = subscription.messageLimit
+
+      if (messageLimit > 0 && messagesUsed >= messageLimit) {
+        return NextResponse.json({ 
+          error: 'Message limit reached',
+          message: `You have reached the maximum limit of ${messageLimit} messages for your current plan. Please upgrade your subscription to send more messages.`,
+          code: 'MESSAGE_LIMIT_EXCEEDED',
+          details: {
+            messagesUsed,
+            messageLimit,
+            subscriptionPlan: subscription.packageId
+          }
+        }, { status: 402 })
+      }
+
+      console.log(`✅ Message subscription check passed: ${messagesUsed}/${messageLimit} messages used`)
+      
+    } catch (subscriptionError) {
+      console.error('Error checking message subscription limits:', subscriptionError)
+      return NextResponse.json({ 
+        error: 'Unable to verify subscription',
+        message: 'Please try again or contact support if the problem persists.',
+        code: 'SUBSCRIPTION_CHECK_FAILED'
+      }, { status: 500 })
+    }
+
     // Verify device belongs to user
     console.log(`Looking for device: ${deviceName} for user: ${userId}`)
     const deviceResult = await pool.query(`

@@ -84,6 +84,12 @@ interface CurrentSubscription {
   isActive: boolean
   messagesUsed: number
   messageLimit: number
+  contactsUsed: number
+  contactLimit: number
+  apiKeysUsed: number
+  apiKeyLimit: number
+  devicesUsed: number
+  instanceLimit: number
   paymentMethod: string
   status: string
   price: number
@@ -596,7 +602,10 @@ export default function SubscriptionPage() {
                   <Text fw={600}>{data.currentSubscription.packageName}</Text>
                   <Text size="sm" c="dimmed">
                     {data.currentSubscription.daysRemaining} days remaining • 
-                    {data.currentSubscription.messagesUsed}/{data.currentSubscription.messageLimit} messages used
+                    {data.currentSubscription.messagesUsed}/{data.currentSubscription.messageLimit} messages • 
+                    {data.currentSubscription.contactsUsed}/{data.currentSubscription.contactLimit === 0 ? '∞' : data.currentSubscription.contactLimit} contacts • 
+                    {data.currentSubscription.apiKeysUsed}/{data.currentSubscription.apiKeyLimit === 0 ? '∞' : data.currentSubscription.apiKeyLimit} API keys • 
+                    {data.currentSubscription.devicesUsed}/{data.currentSubscription.instanceLimit === 0 ? '∞' : data.currentSubscription.instanceLimit} devices
                   </Text>
                 </div>
                 <Button 
@@ -608,6 +617,135 @@ export default function SubscriptionPage() {
                 </Button>
               </Group>
             </Alert>
+          )}
+
+          {/* Usage Details Card */}
+          {data.currentSubscription && (
+            <Card withBorder padding="lg">
+              <Title order={4} mb="md">Usage Overview</Title>
+              <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 5 }} spacing="lg">
+                
+                {/* Messages Usage */}
+                <div>
+                  <Group justify="space-between" mb="xs">
+                    <Text size="sm" fw={500} c="dimmed">Messages</Text>
+                    <Text size="sm" fw={600}>
+                      {data.currentSubscription.messagesUsed.toLocaleString()}/{data.currentSubscription.messageLimit === 0 ? '∞' : data.currentSubscription.messageLimit.toLocaleString()}
+                    </Text>
+                  </Group>
+                  <Progress 
+                    value={data.currentSubscription.messageLimit === 0 ? 0 : (data.currentSubscription.messagesUsed / data.currentSubscription.messageLimit) * 100}
+                    color={data.currentSubscription.messageLimit === 0 ? 'green' : 
+                           (data.currentSubscription.messagesUsed / data.currentSubscription.messageLimit) > 0.8 ? 'red' :
+                           (data.currentSubscription.messagesUsed / data.currentSubscription.messageLimit) > 0.6 ? 'yellow' : 'green'}
+                    size="sm"
+                  />
+                </div>
+
+                {/* Contacts Usage */}
+                <div>
+                  <Group justify="space-between" mb="xs">
+                    <Text size="sm" fw={500} c="dimmed">Contacts</Text>
+                    <Text size="sm" fw={600}>
+                      {data.currentSubscription.contactsUsed.toLocaleString()}/{data.currentSubscription.contactLimit === 0 ? '∞' : data.currentSubscription.contactLimit.toLocaleString()}
+                    </Text>
+                  </Group>
+                  <Progress 
+                    value={data.currentSubscription.contactLimit === 0 ? 0 : (data.currentSubscription.contactsUsed / data.currentSubscription.contactLimit) * 100}
+                    color={data.currentSubscription.contactLimit === 0 ? 'green' : 
+                           (data.currentSubscription.contactsUsed / data.currentSubscription.contactLimit) > 0.8 ? 'red' :
+                           (data.currentSubscription.contactsUsed / data.currentSubscription.contactLimit) > 0.6 ? 'yellow' : 'green'}
+                    size="sm"
+                  />
+                </div>
+
+                {/* API Keys Usage */}
+                <div>
+                  <Group justify="space-between" mb="xs">
+                    <Text size="sm" fw={500} c="dimmed">API Keys</Text>
+                    <Text size="sm" fw={600}>
+                      {data.currentSubscription.apiKeysUsed.toLocaleString()}/{data.currentSubscription.apiKeyLimit === 0 ? '∞' : data.currentSubscription.apiKeyLimit.toLocaleString()}
+                    </Text>
+                  </Group>
+                  <Progress 
+                    value={data.currentSubscription.apiKeyLimit === 0 ? 0 : (data.currentSubscription.apiKeysUsed / data.currentSubscription.apiKeyLimit) * 100}
+                    color={data.currentSubscription.apiKeyLimit === 0 ? 'green' : 
+                           (data.currentSubscription.apiKeysUsed / data.currentSubscription.apiKeyLimit) > 0.8 ? 'red' :
+                           (data.currentSubscription.apiKeysUsed / data.currentSubscription.apiKeyLimit) > 0.6 ? 'yellow' : 'green'}
+                    size="sm"
+                  />
+                </div>
+
+                {/* WhatsApp Devices Usage */}
+                <div>
+                  <Group justify="space-between" mb="xs">
+                    <Text size="sm" fw={500} c="dimmed">WA Devices</Text>
+                    <Text size="sm" fw={600}>
+                      {data.currentSubscription.devicesUsed.toLocaleString()}/{data.currentSubscription.instanceLimit === 0 ? '∞' : data.currentSubscription.instanceLimit.toLocaleString()}
+                    </Text>
+                  </Group>
+                  <Progress 
+                    value={data.currentSubscription.instanceLimit === 0 ? 0 : (data.currentSubscription.devicesUsed / data.currentSubscription.instanceLimit) * 100}
+                    color={data.currentSubscription.instanceLimit === 0 ? 'green' : 
+                           (data.currentSubscription.devicesUsed / data.currentSubscription.instanceLimit) > 0.8 ? 'red' :
+                           (data.currentSubscription.devicesUsed / data.currentSubscription.instanceLimit) > 0.6 ? 'yellow' : 'green'}
+                    size="sm"
+                  />
+                </div>
+
+                {/* Days Remaining */}
+                <div>
+                  <Group justify="space-between" mb="xs">
+                    <Text size="sm" fw={500} c="dimmed">Subscription</Text>
+                    <Text size="sm" fw={600}>
+                      {data.currentSubscription.daysRemaining} days left
+                    </Text>
+                  </Group>
+                  <Progress 
+                    value={Math.max(0, Math.min(100, (data.currentSubscription.daysRemaining / 30) * 100))}
+                    color={data.currentSubscription.daysRemaining > 7 ? 'green' : 
+                           data.currentSubscription.daysRemaining > 3 ? 'yellow' : 'red'}
+                    size="sm"
+                  />
+                </div>
+
+              </SimpleGrid>
+
+              <Group justify="center" mt="md" gap="sm">
+                <Button 
+                  variant="light" 
+                  size="sm"
+                  leftSection={<IconBrandWhatsapp size="1rem" />}
+                  onClick={() => router.push('/customer/whatsapp/sent')}
+                >
+                  Messages ({data.currentSubscription.messagesUsed})
+                </Button>
+                <Button 
+                  variant="light" 
+                  size="sm"
+                  leftSection={<IconUsers size="1rem" />}
+                  onClick={() => router.push('/customer/contacts')}
+                >
+                  Contacts ({data.currentSubscription.contactsUsed})
+                </Button>
+                <Button 
+                  variant="light" 
+                  size="sm"
+                  leftSection={<IconKey size="1rem" />}
+                  onClick={() => router.push('/customer/api-keys')}
+                >
+                  API Keys ({data.currentSubscription.apiKeysUsed})
+                </Button>
+                <Button 
+                  variant="light" 
+                  size="sm"
+                  leftSection={<IconDeviceMobile size="1rem" />}
+                  onClick={() => router.push('/customer/whatsapp/devices')}
+                >
+                  Devices ({data.currentSubscription.devicesUsed})
+                </Button>
+              </Group>
+            </Card>
           )}
 
           {/* Header */}

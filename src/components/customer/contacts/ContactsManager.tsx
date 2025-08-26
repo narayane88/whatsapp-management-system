@@ -41,22 +41,23 @@ export default function ContactsManager() {
         const data = await response.json()
         setStats(data)
       } else {
-        // Mock data for now
+        console.error('Failed to fetch stats:', response.status)
+        // Use zero data to show actual state
         setStats({
-          totalContacts: 150,
-          totalGroups: 5,
-          subscribedContacts: 142,
-          unsubscribedContacts: 8
+          totalContacts: 0,
+          totalGroups: 0,
+          subscribedContacts: 0,
+          unsubscribedContacts: 0
         })
       }
     } catch (error) {
       console.error('Contacts stats error:', error)
-      // Use mock data
+      // Use zero data to show actual state
       setStats({
-        totalContacts: 150,
-        totalGroups: 5,
-        subscribedContacts: 142,
-        unsubscribedContacts: 8
+        totalContacts: 0,
+        totalGroups: 0,
+        subscribedContacts: 0,
+        unsubscribedContacts: 0
       })
     }
   }

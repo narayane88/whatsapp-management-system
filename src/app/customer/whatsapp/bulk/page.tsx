@@ -118,12 +118,14 @@ export default function BulkMessagePage() {
   // Real-time device status updates
   const handleDeviceStatusUpdate = useCallback((data: any) => {
     if (data.devices) {
-      const connectedDevices = data.devices.filter((device: any) => device.status === 'CONNECTED')
-      setDevices(connectedDevices)
+      // Show all devices, not just connected ones
+      setDevices(data.devices)
       
-      // Auto-select first device if none selected
-      if (connectedDevices.length > 0 && !selectedDevice) {
-        setSelectedDevice(connectedDevices[0].id)
+      // Auto-select first connected device if none selected, or first available device
+      if (data.devices.length > 0 && !selectedDevice) {
+        const connectedDevice = data.devices.find((device: any) => device.status === 'CONNECTED')
+        const deviceToSelect = connectedDevice || data.devices[0]
+        setSelectedDevice(deviceToSelect.id)
       }
     }
   }, [selectedDevice])
@@ -160,7 +162,67 @@ export default function BulkMessagePage() {
   useEffect(() => {
     fetchConnectedDevices()
     checkSubscriptionStatus()
+    loadContactsFromURL()
   }, [])
+
+  // Load contacts/groups from URL parameters
+  const loadContactsFromURL = async () => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const contactsParam = urlParams.get('contacts')
+    const groupParam = urlParams.get('group')
+    
+    if (contactsParam) {
+      // Load contacts from URL parameter
+      const phoneNumbers = contactsParam.split(',')
+      const newRecipients = phoneNumbers.map((phoneNumber, index) => ({
+        id: `url-contact-${Date.now()}-${index}`,
+        phoneNumber: phoneNumber.trim(),
+        status: 'pending' as const
+      }))
+      
+      setRecipients(prev => [...prev, ...newRecipients])
+      
+      notifications.show({
+        title: '📱 Contacts Loaded',
+        message: `Loaded ${phoneNumbers.length} contacts from contact management`,
+        color: 'green'
+      })
+    }
+    
+    if (groupParam) {
+      // Load group contacts from API
+      try {
+        const response = await fetch(`/api/customer/groups/${groupParam}`)
+        if (response.ok) {
+          const group = await response.json()
+          
+          if (group.contacts && group.contacts.length > 0) {
+            const newRecipients = group.contacts.map((member: any, index: number) => ({
+              id: `group-${groupParam}-${index}`,
+              phoneNumber: member.contact.phoneNumber,
+              name: member.contact.name,
+              status: 'pending' as const
+            }))
+            
+            setRecipients(prev => [...prev, ...newRecipients])
+            
+            notifications.show({
+              title: '👥 Group Loaded',
+              message: `Loaded ${newRecipients.length} contacts from group: ${group.name}`,
+              color: 'green'
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Error loading group contacts:', error)
+        notifications.show({
+          title: 'Group Load Error',
+          message: 'Failed to load contacts from group',
+          color: 'red'
+        })
+      }
+    }
+  }
 
   const fetchConnectedDevices = async () => {
     try {
@@ -802,18 +864,35 @@ export default function BulkMessagePage() {
                   <Title order={4} mb="lg">💬 Message Configuration</Title>
                   <Stack gap="md">
                     {/* Device Selection */}
-                    <Select
-                      label="Select Device"
-                      placeholder="Choose a connected device"
-                      data={devices.map(device => ({
-                        value: device.id,
-                        label: `${device.phoneNumber ? `(${device.phoneNumber})` : 'No Phone'} - ${device.serverName}`
-                      }))}
-                      value={selectedDevice}
-                      onChange={(value) => setSelectedDevice(value || '')}
-                      leftSection={<IconDeviceMobile size="1rem" />}
-                      disabled={devices.length === 0}
-                    />
+                    <Stack gap="xs">
+                      <Select
+                        label="Select WhatsApp Instance"
+                        placeholder="Choose a WhatsApp device instance"
+                        data={devices.map(device => ({
+                          value: device.id,
+                          label: `${device.accountName || device.id} ${device.phoneNumber ? `(${device.phoneNumber})` : '(No Phone)'} - ${device.status} - ${device.serverName}`
+                        }))}
+                        value={selectedDevice}
+                        onChange={(value) => setSelectedDevice(value || '')}
+                        leftSection={<IconDeviceMobile size="1rem" />}
+                        disabled={devices.length === 0}
+                        description={devices.length === 0 ? 'No WhatsApp instances found. Please create a device first.' : `${devices.length} instance(s) available`}
+                      />
+                      {selectedDevice && devices.length > 0 && (() => {
+                        const device = devices.find(d => d.id === selectedDevice)
+                        if (device && device.status !== 'CONNECTED') {
+                          return (
+                            <Alert color="yellow" size="sm">
+                              <Text size="sm">
+                                ⚠️ Selected device is <strong>{device.status}</strong>. 
+                                Messages may not be sent until device is connected.
+                              </Text>
+                            </Alert>
+                          )
+                        }
+                        return null
+                      })()}
+                    </Stack>
 
                     {/* Message Type */}
                     <Select

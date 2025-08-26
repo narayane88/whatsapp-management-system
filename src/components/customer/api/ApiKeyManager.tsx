@@ -236,14 +236,52 @@ export default function ApiKeyManager() {
         fetchApiKeys()
         fetchApiStats()
       } else {
-        throw new Error('Failed to create API key')
+        // Handle different types of errors from the API
+        const errorData = await response.json().catch(() => ({}))
+        
+        if (response.status === 402) {
+          // Subscription-related errors
+          let title = '🚫 Subscription Required'
+          let message = errorData.message || 'Subscription validation failed'
+
+          switch (errorData.code) {
+            case 'NO_SUBSCRIPTION':
+              title = '📦 No Active Subscription'
+              message = errorData.message || 'Please purchase a subscription plan to create API keys.'
+              break
+            case 'SUBSCRIPTION_EXPIRED':
+              title = '⏰ Subscription Expired'
+              message = errorData.message || 'Your subscription has expired. Please renew your plan.'
+              break
+            case 'API_KEY_LIMIT_EXCEEDED':
+              title = '🚫 API Key Limit Reached'
+              message = errorData.message || `You've reached your API key limit. Please upgrade your plan.`
+              break
+            default:
+              title = '🚫 Subscription Issue'
+              message = errorData.message || 'Unable to create API key due to subscription limits.'
+          }
+
+          notifications.show({
+            title,
+            message,
+            color: 'orange',
+            autoClose: 8000
+          })
+        } else {
+          // Other types of errors
+          throw new Error(errorData.message || 'Failed to create API key')
+        }
       }
-    } catch (error) {
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to create API key',
-        color: 'red',
-      })
+    } catch (error: any) {
+      if (error.message && !error.message.includes('Failed to create API key')) {
+        // This is a network or other error, not handled above
+        notifications.show({
+          title: '❌ Network Error',
+          message: error.message || 'Failed to create API key',
+          color: 'red',
+        })
+      }
     }
   }
 

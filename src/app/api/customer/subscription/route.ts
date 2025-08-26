@@ -115,6 +115,49 @@ export async function GET(request: NextRequest) {
       LIMIT 10
     `, [userId])
 
+    // Get current usage data for active subscription
+    let contactsUsed = 0
+    let contactLimit = 0
+    let apiKeysUsed = 0
+    let apiKeyLimit = 0
+    let devicesUsed = 0
+    let instanceLimit = 0
+    
+    if (currentSubscriptionResult.rows.length > 0) {
+      try {
+        // Count current contacts for this user
+        const contactCountResult = await pool.query(`
+          SELECT COUNT(*) as count FROM contacts WHERE "userId" = $1::text
+        `, [userId])
+        contactsUsed = parseInt(contactCountResult.rows[0].count) || 0
+        
+        // Count current API keys for this user
+        const apiKeyCountResult = await pool.query(`
+          SELECT COUNT(*) as count FROM api_keys WHERE "userId" = $1::text AND "isActive" = true
+        `, [userId])
+        apiKeysUsed = parseInt(apiKeyCountResult.rows[0].count) || 0
+        
+        // Count current WhatsApp instances/devices for this user
+        const deviceCountResult = await pool.query(`
+          SELECT COUNT(*) as count FROM whatsapp_instances WHERE "userId" = $1::text
+        `, [userId])
+        devicesUsed = parseInt(deviceCountResult.rows[0].count) || 0
+        
+        // Get package limits
+        const packageResult = await pool.query(`
+          SELECT contact_limit, api_key_limit, "instanceLimit" FROM packages WHERE id = $1
+        `, [currentSubscriptionResult.rows[0].packageId])
+        
+        if (packageResult.rows[0]) {
+          contactLimit = packageResult.rows[0].contact_limit || 0
+          apiKeyLimit = packageResult.rows[0].api_key_limit || 0
+          instanceLimit = packageResult.rows[0].instanceLimit || 0
+        }
+      } catch (error) {
+        console.warn('Failed to get usage data:', error)
+      }
+    }
+
     // Format packages
     const packages = packagesResult.rows.map(pkg => ({
       id: pkg.id,
@@ -147,6 +190,12 @@ export async function GET(request: NextRequest) {
       isActive: currentSubscriptionResult.rows[0].isActive,
       messagesUsed: currentSubscriptionResult.rows[0].messagesUsed,
       messageLimit: currentSubscriptionResult.rows[0].messageLimit,
+      contactsUsed: contactsUsed,
+      contactLimit: contactLimit,
+      apiKeysUsed: apiKeysUsed,
+      apiKeyLimit: apiKeyLimit,
+      devicesUsed: devicesUsed,
+      instanceLimit: instanceLimit,
       paymentMethod: currentSubscriptionResult.rows[0].paymentMethod,
       status: currentSubscriptionResult.rows[0].status,
       price: parseFloat(currentSubscriptionResult.rows[0].price),

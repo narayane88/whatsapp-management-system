@@ -34,7 +34,11 @@ import {
   IconMail,
   IconDownload,
   IconUpload,
-  IconInfoCircle
+  IconInfoCircle,
+  IconLink,
+  IconCopy,
+  IconMessages,
+  IconUsers
 } from '@tabler/icons-react'
 
 interface Contact {
@@ -101,58 +105,28 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
         page: currentPage.toString(),
         limit: '20',
         search: searchTerm,
-        status: statusFilter,
+        ...(statusFilter === 'subscribed' && { isSubscribed: 'true' }),
+        ...(statusFilter === 'unsubscribed' && { isSubscribed: 'false' }),
+        ...(statusFilter === 'blocked' && { isBlocked: 'true' }),
       })
 
       const response = await fetch(`/api/customer/contacts?${params}`)
       if (response.ok) {
         const data = await response.json()
-        setContacts(data.contacts)
-        setTotalPages(data.totalPages)
+        // Map API response to expected format
+        const mappedContacts = data.data.map((contact: any) => ({
+          ...contact,
+          groupNames: contact.groups ? contact.groups.map((g: any) => g.group.name) : []
+        }))
+        setContacts(mappedContacts)
+        setTotalPages(data.pagination.totalPages)
       } else {
-        // Mock data for now
-        setContacts([
-          {
-            id: '1',
-            name: 'John Smith',
-            phoneNumber: '+1234567890',
-            email: 'john@example.com',
-            avatar: '',
-            isBlocked: false,
-            isSubscribed: true,
-            tags: ['customer', 'premium'],
-            notes: 'VIP customer',
-            createdAt: new Date().toISOString(),
-            groupNames: ['VIP Customers', 'Newsletter']
-          },
-          {
-            id: '2',
-            name: 'Jane Doe',
-            phoneNumber: '+1234567891',
-            email: 'jane@example.com',
-            avatar: '',
-            isBlocked: false,
-            isSubscribed: false,
-            tags: ['lead'],
-            notes: 'Potential customer',
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-            groupNames: ['Leads']
-          },
-          {
-            id: '3',
-            name: 'Bob Wilson',
-            phoneNumber: '+1234567892',
-            email: 'bob@example.com',
-            avatar: '',
-            isBlocked: true,
-            isSubscribed: false,
-            tags: ['blocked'],
-            notes: 'Spam complaints',
-            createdAt: new Date(Date.now() - 172800000).toISOString(),
-            groupNames: []
-          }
-        ])
-        setTotalPages(1)
+        console.error('Failed to fetch contacts')
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to load contacts',
+          color: 'red',
+        })
       }
     } catch (error) {
       console.error('Contacts fetch error:', error)
@@ -240,10 +214,9 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
 
   const handleToggleSubscription = async (contactId: string, isSubscribed: boolean) => {
     try {
-      const response = await fetch(`/api/customer/contacts/${contactId}/subscription`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isSubscribed: !isSubscribed }),
+      const action = isSubscribed ? 'unsubscribe' : 'subscribe'
+      const response = await fetch(`/api/customer/contacts/${contactId}/${action}`, {
+        method: 'POST'
       })
 
       if (response.ok) {
@@ -254,11 +227,14 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
           message: `Contact ${!isSubscribed ? 'subscribed' : 'unsubscribed'}`,
           color: 'green',
         })
+      } else {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to update subscription')
       }
-    } catch (error) {
+    } catch (error: any) {
       notifications.show({
         title: 'Error',
-        message: 'Failed to update subscription',
+        message: error.message || 'Failed to update subscription',
         color: 'red',
       })
     }
@@ -320,6 +296,77 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
     }
   }
 
+  const handleCopySubscriptionLink = async (phoneNumber: string) => {
+    try {
+      // Create subscription link with the phone number
+      const baseUrl = window.location.origin
+      const subscriptionLink = `${baseUrl}/subscribe?phone=${encodeURIComponent(phoneNumber)}`
+      
+      // Copy to clipboard
+      await navigator.clipboard.writeText(subscriptionLink)
+      
+      notifications.show({
+        title: 'Success',
+        message: 'Subscription link copied to clipboard!',
+        color: 'green',
+      })
+    } catch (error) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      const baseUrl = window.location.origin
+      const subscriptionLink = `${baseUrl}/subscribe?phone=${encodeURIComponent(phoneNumber)}`
+      textArea.value = subscriptionLink
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      
+      notifications.show({
+        title: 'Success',
+        message: 'Subscription link copied to clipboard!',
+        color: 'green',
+      })
+    }
+  }
+
+  const handleBroadcastToAll = () => {
+    // Get all subscribed contacts
+    const subscribedContacts = contacts.filter(c => c.isSubscribed && !c.isBlocked)
+    
+    if (subscribedContacts.length === 0) {
+      notifications.show({
+        title: 'No Contacts Available',
+        message: 'No subscribed, unblocked contacts available for broadcast',
+        color: 'yellow',
+      })
+      return
+    }
+    
+    // Create URL with contact phone numbers
+    const phoneNumbers = subscribedContacts.map(c => c.phoneNumber).join(',')
+    const url = `/customer/whatsapp/bulk?contacts=${encodeURIComponent(phoneNumbers)}`
+    window.open(url, '_blank')
+  }
+
+  const handleBroadcastToSubscribed = () => {
+    // Filter for subscribed contacts only
+    const subscribedContacts = contacts.filter(c => c.isSubscribed && !c.isBlocked)
+    
+    if (subscribedContacts.length === 0) {
+      notifications.show({
+        title: 'No Subscribed Contacts',
+        message: 'No subscribed contacts available for broadcast',
+        color: 'yellow',
+      })
+      return
+    }
+    
+    // Create URL with subscribed contact phone numbers
+    const phoneNumbers = subscribedContacts.map(c => c.phoneNumber).join(',')
+    const url = `/customer/whatsapp/bulk?contacts=${encodeURIComponent(phoneNumbers)}&type=subscribed`
+    window.open(url, '_blank')
+  }
+
   const getSubscriptionColor = (isSubscribed: boolean) => {
     return isSubscribed ? 'green' : 'red'
   }
@@ -353,6 +400,15 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
           </Group>
           
           <Group gap="sm">
+            <Button 
+              variant="light"
+              color="green"
+              leftSection={<IconMessages size="1rem" />}
+              onClick={handleBroadcastToSubscribed}
+              disabled={contacts.filter(c => c.isSubscribed && !c.isBlocked).length === 0}
+            >
+              Broadcast to Subscribed ({contacts.filter(c => c.isSubscribed && !c.isBlocked).length})
+            </Button>
             <Button 
               variant="light"
               leftSection={<IconUpload size="1rem" />}
@@ -461,6 +517,14 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
                     <Group gap="xs">
                       <ActionIcon 
                         variant="subtle" 
+                        color="green"
+                        title="Copy Subscription Link"
+                        onClick={() => handleCopySubscriptionLink(contact.phoneNumber)}
+                      >
+                        <IconLink size="1rem" />
+                      </ActionIcon>
+                      <ActionIcon 
+                        variant="subtle" 
                         color="blue"
                         onClick={() => handleEdit(contact)}
                       >
@@ -539,12 +603,6 @@ export default function ContactsList({ onStatsChange }: ContactsListProps) {
               placeholder="Add tags"
               data={['customer', 'lead', 'premium', 'vip', 'support']}
               searchable
-              creatable
-              getCreateLabel={(query) => `+ Create ${query}`}
-              onCreate={(query) => {
-                const item = { value: query, label: query }
-                return item
-              }}
               {...form.getInputProps('tags')}
             />
 

@@ -44,6 +44,12 @@ interface CurrentSubscription {
   isActive: boolean
   messagesUsed: number
   messageLimit: number
+  contactsUsed: number
+  contactLimit: number
+  apiKeysUsed: number
+  apiKeyLimit: number
+  devicesUsed: number
+  instanceLimit: number
   paymentMethod: string
   status: string
   price: number
@@ -256,11 +262,77 @@ export default function MyPlansPage() {
                       />
                     </div>
 
+                    <div>
+                      <Group justify="space-between" mb="xs">
+                        <Text size="sm" c="dimmed">Contacts Used</Text>
+                        <Text size="sm" fw={600}>
+                          {data.currentSubscription.contactsUsed}/{data.currentSubscription.contactLimit}
+                        </Text>
+                      </Group>
+                      <Progress 
+                        value={(data.currentSubscription.contactsUsed / data.currentSubscription.contactLimit) * 100}
+                        size="lg"
+                        color={data.currentSubscription.contactsUsed / data.currentSubscription.contactLimit > 0.8 ? 'red' : 'green'}
+                      />
+                    </div>
+
+                    <div>
+                      <Group justify="space-between" mb="xs">
+                        <Text size="sm" c="dimmed">API Keys Used</Text>
+                        <Text size="sm" fw={600}>
+                          {data.currentSubscription.apiKeysUsed}/{data.currentSubscription.apiKeyLimit}
+                        </Text>
+                      </Group>
+                      <Progress 
+                        value={(data.currentSubscription.apiKeysUsed / data.currentSubscription.apiKeyLimit) * 100}
+                        size="lg"
+                        color={data.currentSubscription.apiKeysUsed / data.currentSubscription.apiKeyLimit > 0.8 ? 'red' : 'green'}
+                      />
+                    </div>
+
+                    <div>
+                      <Group justify="space-between" mb="xs">
+                        <Text size="sm" c="dimmed">WhatsApp Devices</Text>
+                        <Text size="sm" fw={600}>
+                          {data.currentSubscription.devicesUsed}/{data.currentSubscription.instanceLimit}
+                        </Text>
+                      </Group>
+                      <Progress 
+                        value={(data.currentSubscription.devicesUsed / data.currentSubscription.instanceLimit) * 100}
+                        size="lg"
+                        color={data.currentSubscription.devicesUsed / data.currentSubscription.instanceLimit > 0.8 ? 'red' : 'green'}
+                      />
+                    </div>
+
                     <Alert color="blue" icon={<IconMessage size="1rem" />}>
                       <Text size="sm">
-                        You have {data.currentSubscription.messageLimit - data.currentSubscription.messagesUsed} messages remaining this month.
+                        Resource usage: {data.currentSubscription.messageLimit - data.currentSubscription.messagesUsed} messages, {data.currentSubscription.contactLimit - data.currentSubscription.contactsUsed} contacts, {data.currentSubscription.apiKeyLimit - data.currentSubscription.apiKeysUsed} API keys, and {data.currentSubscription.instanceLimit - data.currentSubscription.devicesUsed} devices remaining.
                       </Text>
                     </Alert>
+
+                    <Group gap="sm" mt="md">
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={() => router.push('/customer/contacts')}
+                      >
+                        Manage Contacts
+                      </Button>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={() => router.push('/customer/api-keys')}
+                      >
+                        Manage API Keys
+                      </Button>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        onClick={() => router.push('/customer/whatsapp/devices')}
+                      >
+                        Manage Devices
+                      </Button>
+                    </Group>
                   </Stack>
                 </Grid.Col>
               </Grid>

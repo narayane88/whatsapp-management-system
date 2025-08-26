@@ -72,23 +72,6 @@ export default function CustomerSidebar() {
       icon: IconUsers,
       label: 'Contacts',
       href: '/customer/contacts',
-      children: [
-        {
-          icon: IconUsers,
-          label: 'Save Contacts',
-          href: '/customer/contacts/save',
-        },
-        {
-          icon: IconUsers,
-          label: 'Contact Groups',
-          href: '/customer/contacts/groups',
-        },
-        {
-          icon: IconMessageCircle,
-          label: 'Subscribe',
-          href: '/customer/contacts/subscribe',
-        },
-      ],
     },
     {
       icon: IconKey,

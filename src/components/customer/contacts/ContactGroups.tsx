@@ -87,10 +87,21 @@ export default function ContactGroups({ onStatsChange }: ContactsGroupsProps) {
   const fetchGroups = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/customer/contacts/groups')
+      const response = await fetch('/api/customer/groups')
       if (response.ok) {
         const data = await response.json()
-        setGroups(data)
+        // Map API response to component format
+        const mappedGroups = data.data.map((group: any) => ({
+          ...group,
+          memberCount: group._count.contacts,
+          members: group.contacts.map((m: any) => ({
+            id: m.contact.id,
+            name: m.contact.name,
+            phoneNumber: m.contact.phoneNumber,
+            joinedAt: group.createdAt
+          }))
+        }))
+        setGroups(mappedGroups)
       } else {
         // Mock data for now
         setGroups([
@@ -162,7 +173,7 @@ export default function ContactGroups({ onStatsChange }: ContactsGroupsProps) {
       const response = await fetch('/api/customer/contacts?limit=1000')
       if (response.ok) {
         const data = await response.json()
-        setAvailableContacts(data.contacts || [])
+        setAvailableContacts(data.data || [])
       } else {
         // Mock data for now
         setAvailableContacts([
@@ -179,8 +190,8 @@ export default function ContactGroups({ onStatsChange }: ContactsGroupsProps) {
   const handleSubmit = async (values: GroupForm) => {
     try {
       const url = selectedGroup 
-        ? `/api/customer/contacts/groups/${selectedGroup.id}` 
-        : '/api/customer/contacts/groups'
+        ? `/api/customer/groups/${selectedGroup.id}` 
+        : '/api/customer/groups'
       const method = selectedGroup ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
@@ -224,7 +235,7 @@ export default function ContactGroups({ onStatsChange }: ContactsGroupsProps) {
 
   const handleDelete = async (groupId: string) => {
     try {
-      const response = await fetch(`/api/customer/contacts/groups/${groupId}`, {
+      const response = await fetch(`/api/customer/groups/${groupId}`, {
         method: 'DELETE',
       })
 
@@ -252,8 +263,8 @@ export default function ContactGroups({ onStatsChange }: ContactsGroupsProps) {
   }
 
   const handleSendGroupMessage = (groupId: string) => {
-    // Redirect to message queue with group pre-selected
-    window.open(`/customer/whatsapp/queue?group=${groupId}`, '_blank')
+    // Redirect to bulk messaging page with group pre-selected
+    window.open(`/customer/whatsapp/bulk?group=${groupId}`, '_blank')
   }
 
   return (

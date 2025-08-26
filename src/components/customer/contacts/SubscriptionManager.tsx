@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { 
   Stack,
   Group,
@@ -34,6 +34,7 @@ import {
   IconUsers,
   IconPlus
 } from '@tabler/icons-react'
+import { useWhatsAppRealTime } from '@/hooks/useWhatsAppRealTime'
 
 interface SubscriberContact {
   id: string
@@ -47,6 +48,14 @@ interface SubscriberContact {
   groups: string[]
   messagesSent: number
   lastMessageDate?: string
+}
+
+interface ConnectedDevice {
+  id: string
+  accountName: string
+  phoneNumber?: string
+  status: string
+  serverName: string
 }
 
 interface BroadcastForm {
@@ -74,6 +83,15 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
     messagesSentThisMonth: 0
   })
   
+  // WhatsApp devices state
+  const [devices, setDevices] = useState<ConnectedDevice[]>([])
+  const [devicesLoading, setDevicesLoading] = useState(false)
+  
+  // Groups state for Target Group dropdown
+  const [groups, setGroups] = useState<any[]>([])
+  const [groupsLoading, setGroupsLoading] = useState(false)
+  const [selectedGroupRecipients, setSelectedGroupRecipients] = useState(0)
+  
   const [broadcastModalOpened, { open: openBroadcastModal, close: closeBroadcastModal }] = useDisclosure(false)
 
   const broadcastForm = useForm<BroadcastForm>({
@@ -89,10 +107,37 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
     },
   })
 
+  // Real-time device status updates
+  const handleDeviceStatusUpdate = useCallback((data: any) => {
+    if (data.devices) {
+      // Show all devices, not just connected ones
+      setDevices(data.devices)
+    }
+  }, [])
+
+  // Initialize real-time connection
+  const { isConnected } = useWhatsAppRealTime({
+    onDeviceStatus: handleDeviceStatusUpdate,
+    enableNotifications: false, // Don't need notifications in this component
+    enableSounds: false,
+    autoReconnect: true
+  })
+
   useEffect(() => {
     fetchSubscribers()
     fetchSubscriptionStats()
+    fetchConnectedDevices()
+    fetchGroups()
   }, [currentPage, searchTerm, statusFilter])
+
+  // Recalculate recipients when group selection or subscriber filter changes
+  useEffect(() => {
+    if (broadcastForm.values.groupFilter) {
+      calculateGroupRecipients(broadcastForm.values.groupFilter, broadcastForm.values.subscribersOnly)
+    } else {
+      setSelectedGroupRecipients(0)
+    }
+  }, [broadcastForm.values.groupFilter, broadcastForm.values.subscribersOnly])
 
   const fetchSubscribers = async () => {
     try {
@@ -104,11 +149,32 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
         status: statusFilter,
       })
 
-      const response = await fetch(`/api/customer/contacts/subscriptions?${params}`)
+      // Use the contacts API with subscription filters
+      const contactsParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: '20',
+        search: searchTerm,
+        ...(statusFilter === 'subscribed' && { isSubscribed: 'true' }),
+        ...(statusFilter === 'unsubscribed' && { isSubscribed: 'false' })
+      })
+      const response = await fetch(`/api/customer/contacts?${contactsParams}`)
       if (response.ok) {
         const data = await response.json()
-        setSubscribers(data.subscribers)
-        setTotalPages(data.totalPages)
+        // Map API response to component format
+        const mappedSubscribers = data.data.map((contact: any) => ({
+          id: contact.id,
+          name: contact.name,
+          phoneNumber: contact.phoneNumber,
+          email: contact.email,
+          isSubscribed: contact.isSubscribed,
+          subscriptionDate: contact.createdAt,
+          subscriptionSource: 'manual',
+          groups: contact.groups ? contact.groups.map((g: any) => g.group.name) : [],
+          messagesSent: 0,
+          lastMessageDate: null
+        }))
+        setSubscribers(mappedSubscribers)
+        setTotalPages(data.pagination.totalPages)
       } else {
         // Mock data for now
         setSubscribers([
@@ -164,12 +230,103 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
     }
   }
 
+  const fetchConnectedDevices = async () => {
+    try {
+      setDevicesLoading(true)
+      const response = await fetch('/api/customer/host/connections')
+      if (response.ok) {
+        const allDevices = await response.json()
+        // Process through real-time handler for consistency
+        handleDeviceStatusUpdate({ devices: allDevices })
+      }
+    } catch (error) {
+      console.error('Error fetching devices:', error)
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to fetch connected devices',
+        color: 'red'
+      })
+    } finally {
+      setDevicesLoading(false)
+    }
+  }
+
+  const fetchGroups = async () => {
+    try {
+      setGroupsLoading(true)
+      const response = await fetch('/api/customer/groups')
+      if (response.ok) {
+        const groupsData = await response.json()
+        setGroups(groupsData.data || [])
+      }
+    } catch (error) {
+      console.error('Error fetching groups:', error)
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to fetch groups',
+        color: 'red'
+      })
+    } finally {
+      setGroupsLoading(false)
+    }
+  }
+
+  const calculateGroupRecipients = async (groupId: string, subscribersOnly: boolean) => {
+    if (!groupId) {
+      setSelectedGroupRecipients(0)
+      return
+    }
+
+    try {
+      console.log(`🔍 Calculating recipients for group ${groupId}, subscribersOnly: ${subscribersOnly}`)
+      const groupResponse = await fetch(`/api/customer/groups/${groupId}`)
+      if (groupResponse.ok) {
+        const groupData = await groupResponse.json()
+        const contactMembers = groupData.contacts || []
+        
+        console.log('📋 Group contact members data:', contactMembers)
+        
+        // Extract the actual contact data from the nested structure
+        const contacts = contactMembers.map((member: any) => member.contact)
+        
+        console.log('📊 Actual contact details:', contacts.map((c: any) => ({
+          name: c.name,
+          phoneNumber: c.phoneNumber,
+          isSubscribed: c.isSubscribed,
+          isBlocked: c.isBlocked
+        })))
+        
+        let count = 0
+        if (subscribersOnly) {
+          const subscribedContacts = contacts.filter((contact: any) => contact.isSubscribed && !contact.isBlocked)
+          count = subscribedContacts.length
+          console.log(`✅ Subscribed & unblocked contacts: ${count}`)
+        } else {
+          const unblockedContacts = contacts.filter((contact: any) => !contact.isBlocked)
+          count = unblockedContacts.length
+          console.log(`📋 All unblocked contacts: ${count}`)
+        }
+        
+        setSelectedGroupRecipients(count)
+        console.log(`🎯 Final recipient count: ${count}`)
+      }
+    } catch (error) {
+      console.error('Error calculating group recipients:', error)
+      setSelectedGroupRecipients(0)
+    }
+  }
+
   const fetchSubscriptionStats = async () => {
     try {
-      const response = await fetch('/api/customer/contacts/subscription-stats')
+      const response = await fetch('/api/customer/contacts/stats')
       if (response.ok) {
         const data = await response.json()
-        setStats(data)
+        setStats({
+          totalSubscribers: data.subscribedContacts,
+          totalUnsubscribed: data.unsubscribedContacts,
+          newThisWeek: 0, // Not available in current API
+          messagesSentThisMonth: 0 // Not available in current API
+        })
       } else {
         // Mock data for now
         setStats({
@@ -213,32 +370,129 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
 
   const handleBroadcast = async (values: BroadcastForm) => {
     try {
-      const response = await fetch('/api/customer/whatsapp/broadcast', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...values,
-          targetType: 'subscribers',
-          filters: {
-            subscriptionStatus: values.subscribersOnly ? 'subscribed' : 'all',
-            groups: values.groupFilter ? [values.groupFilter] : []
+      // Get the selected device
+      const selectedDeviceObj = devices.find(device => device.id === values.instanceId)
+      if (!selectedDeviceObj) {
+        notifications.show({
+          title: 'Error',
+          message: 'Selected device not found',
+          color: 'red',
+        })
+        return
+      }
+
+      // Build recipient list based on filters
+      let recipients: SubscriberContact[] = []
+      
+      if (values.groupFilter) {
+        // Get contacts from specific group
+        try {
+          const groupResponse = await fetch(`/api/customer/groups/${values.groupFilter}`)
+          if (groupResponse.ok) {
+            const groupData = await groupResponse.json()
+            recipients = groupData.contacts || []
+            
+            // Apply subscription filter
+            if (values.subscribersOnly) {
+              recipients = recipients.filter(contact => contact.isSubscribed && !contact.isBlocked)
+            }
           }
-        }),
+        } catch (groupError) {
+          console.error('Failed to fetch group contacts:', groupError)
+          notifications.show({
+            title: 'Error',
+            message: 'Failed to fetch group contacts',
+            color: 'red',
+          })
+          return
+        }
+      } else {
+        // Use current subscribers list
+        recipients = subscribers.filter(contact => {
+          if (values.subscribersOnly) {
+            return contact.isSubscribed && !contact.isBlocked
+          }
+          return !contact.isBlocked
+        })
+      }
+
+      if (recipients.length === 0) {
+        notifications.show({
+          title: 'No Recipients',
+          message: 'No contacts match the selected criteria',
+          color: 'yellow',
+        })
+        return
+      }
+
+      // Add messages to queue (like bulk messaging page)
+      let successCount = 0
+      let failureCount = 0
+      
+      notifications.show({
+        title: 'Queueing Broadcast',
+        message: `Adding ${recipients.length} messages to queue...`,
+        color: 'blue',
       })
 
-      if (response.ok) {
-        const result = await response.json()
-        notifications.show({
-          title: 'Broadcast Sent',
-          message: `Message queued for ${result.recipientCount} recipients`,
-          color: 'green',
-        })
-        closeBroadcastModal()
-        broadcastForm.reset()
-      } else {
-        throw new Error('Failed to send broadcast')
+      for (const recipient of recipients) {
+        try {
+          const queueData = {
+            toNumber: recipient.phoneNumber,
+            message: values.message,
+            messageType: 'text',
+            priority: 0,
+            instanceId: selectedDeviceObj.accountName,
+            instanceName: selectedDeviceObj.accountName,
+            metadata: {
+              messageType: 'text',
+              recipientName: recipient.name,
+              broadcastMessageId: Date.now().toString(),
+              source: 'subscription_broadcast'
+            }
+          }
+
+          const response = await fetch('/api/customer/whatsapp/queue', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(queueData)
+          })
+
+          if (response.ok) {
+            successCount++
+          } else {
+            failureCount++
+            const errorText = await response.text()
+            console.error(`Failed to queue message for ${recipient.phoneNumber}:`, errorText)
+          }
+          
+        } catch (sendError) {
+          failureCount++
+          console.error(`Error queueing message for ${recipient.phoneNumber}:`, sendError)
+        }
       }
+
+      // Show final results
+      if (successCount > 0) {
+        notifications.show({
+          title: 'Broadcast Queued',
+          message: `Successfully queued ${successCount}/${recipients.length} messages${failureCount > 0 ? `. ${failureCount} failed to queue.` : ''}`,
+          color: successCount === recipients.length ? 'green' : 'yellow',
+          autoClose: 5000
+        })
+      } else {
+        notifications.show({
+          title: 'Broadcast Failed',
+          message: `Failed to queue all ${recipients.length} messages`,
+          color: 'red',
+        })
+      }
+      
+      closeBroadcastModal()
+      broadcastForm.reset()
+      
     } catch (error) {
+      console.error('Broadcast error:', error)
       notifications.show({
         title: 'Error',
         message: 'Failed to send broadcast message',
@@ -345,7 +599,12 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
           
           <Button 
             leftSection={<IconSend size="1rem" />}
-            onClick={openBroadcastModal}
+            onClick={() => {
+              // Refresh devices and groups when opening broadcast modal
+              fetchConnectedDevices()
+              fetchGroups()
+              openBroadcastModal()
+            }}
           >
             Broadcast Message
           </Button>
@@ -470,14 +729,27 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
 
             <Select
               label="WhatsApp Instance"
-              placeholder="Select instance to send from"
-              data={[
-                { value: '1', label: 'Business Account (+1234567890)' },
-                { value: '2', label: 'Support Account (+1234567891)' },
-              ]}
+              placeholder={devicesLoading ? "Loading devices..." : devices.length === 0 ? "No devices available" : "Select instance to send from"}
+              data={devices.map(device => ({
+                value: device.id,
+                label: `${device.accountName} (${device.phoneNumber || 'No phone'}) - ${device.status}`
+              }))}
               {...broadcastForm.getInputProps('instanceId')}
               required
+              disabled={devicesLoading || devices.length === 0}
             />
+            
+            {devices.length > 0 && (
+              <Alert color="blue" variant="light">
+                {devices.length} instance(s) available
+              </Alert>
+            )}
+            
+            {devices.length === 0 && !devicesLoading && (
+              <Alert color="yellow" variant="light">
+                No WhatsApp instances available. Please connect a device first.
+              </Alert>
+            )}
 
             <Textarea
               label="Message"
@@ -489,14 +761,25 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
 
             <Select
               label="Target Group (Optional)"
-              placeholder="Send to specific group only"
+              placeholder={groupsLoading ? "Loading groups..." : "Send to specific group only"}
               data={[
                 { value: '', label: 'All Contacts' },
-                { value: 'vip-customers', label: 'VIP Customers' },
-                { value: 'newsletter', label: 'Newsletter Subscribers' },
-                { value: 'support-leads', label: 'Support Leads' },
+                ...groups.map(group => ({
+                  value: group.id,
+                  label: `${group.name} (${group._count?.contacts || 0} contacts)`
+                }))
               ]}
               {...broadcastForm.getInputProps('groupFilter')}
+              disabled={groupsLoading}
+              onChange={(value) => {
+                broadcastForm.setFieldValue('groupFilter', value || '')
+                // Manually trigger recipient calculation
+                if (value) {
+                  calculateGroupRecipients(value, broadcastForm.values.subscribersOnly)
+                } else {
+                  setSelectedGroupRecipients(0)
+                }
+              }}
             />
 
             <Switch
@@ -505,8 +788,20 @@ export default function SubscriptionManager({ onStatsChange }: SubscriptionManag
               {...broadcastForm.getInputProps('subscribersOnly')}
             />
 
-            <Alert color="yellow">
-              Estimated recipients: {statusFilter === 'subscribed' ? stats.totalSubscribers : stats.totalSubscribers + stats.totalUnsubscribed}
+            <Alert color="blue" variant="light">
+              Estimated recipients: {
+                (() => {
+                  if (broadcastForm.values.groupFilter) {
+                    return broadcastForm.values.subscribersOnly ? 
+                      `${selectedGroupRecipients} (subscribed from group)` : 
+                      `${selectedGroupRecipients} (from group)`
+                  } else {
+                    return broadcastForm.values.subscribersOnly ? 
+                      stats.totalSubscribers : 
+                      stats.totalSubscribers + stats.totalUnsubscribed
+                  }
+                })()
+              }
             </Alert>
 
             <Group justify="flex-end">
