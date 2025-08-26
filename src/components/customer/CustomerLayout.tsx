@@ -6,6 +6,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { signOut } from 'next-auth/react'
 import CustomerSidebar from './CustomerSidebar'
 import CustomerHeader from './CustomerHeader'
+import CustomerNotificationProvider from './CustomerNotificationProvider'
 import { IconSun, IconMoon } from '@tabler/icons-react'
 
 interface CustomerLayoutProps {
@@ -89,7 +90,9 @@ export default function CustomerLayout({ children, user }: CustomerLayoutProps) 
       </AppShell.Navbar>
 
       <AppShell.Main>
-        {children}
+        <CustomerNotificationProvider>
+          {children}
+        </CustomerNotificationProvider>
       </AppShell.Main>
     </AppShell>
   )

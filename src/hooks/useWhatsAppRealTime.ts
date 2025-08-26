@@ -2,11 +2,18 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { notifications } from '@mantine/notifications'
+import { useSession } from 'next-auth/react'
+import GlobalSSEManager from '@/lib/global-sse-manager'
 
 interface WhatsAppEvent {
-  type: 'queue-update' | 'message-sent' | 'device-status' | 'stats-update' | 'connected'
+  type: 'queue-update' | 'message-sent' | 'device-status' | 'stats-update' | 'connected' | 'heartbeat'
   data?: any
   timestamp: string
+  clientId?: string
+  serverTime?: string
+  source?: 'webhook' | 'system'
+  priority?: 'low' | 'normal' | 'medium' | 'high'
+  message?: string
 }
 
 interface UseWhatsAppRealTimeOptions {
@@ -15,172 +22,229 @@ interface UseWhatsAppRealTimeOptions {
   onDeviceStatus?: (data: any) => void
   onStatsUpdate?: (data: any) => void
   enableNotifications?: boolean
+  enableSounds?: boolean
   autoReconnect?: boolean
   reconnectInterval?: number
 }
 
 interface WhatsAppRealTimeState {
   connected: boolean
+  connecting: boolean
   error: string | null
   lastEventTime: Date | null
+  reconnectAttempts: number
+}
+
+// Sound utility functions
+const playNotificationSound = (type: 'success' | 'info' | 'warning' | 'error' = 'info') => {
+  try {
+    // Create audio context if it doesn't exist
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    
+    // Different frequencies for different notification types
+    const frequencies = {
+      success: [523.25, 659.25, 783.99], // C5, E5, G5 - success chord
+      info: [440, 554.37], // A4, C#5 - info tone
+      warning: [349.23, 415.30], // F4, G#4 - warning tone
+      error: [233.08, 277.18] // A#3, C#4 - error tone
+    }
+    
+    const freq = frequencies[type] || frequencies.info
+    
+    // Play a pleasant notification sound
+    freq.forEach((frequency, index) => {
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      oscillator.frequency.value = frequency
+      oscillator.type = 'sine'
+      
+      // Volume and timing
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime + index * 0.1)
+      gainNode.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + index * 0.1 + 0.05)
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + index * 0.1 + 0.25)
+      
+      oscillator.start(audioContext.currentTime + index * 0.1)
+      oscillator.stop(audioContext.currentTime + index * 0.1 + 0.25)
+    })
+  } catch (error) {
+    console.log('Could not play notification sound:', error)
+    // Fallback to system beep if available
+    try {
+      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2+/JdysF')
+      audio.volume = 0.3
+      audio.play().catch(() => {})
+    } catch (e) {
+      // Silent fallback
+    }
+  }
 }
 
 export function useWhatsAppRealTime(options: UseWhatsAppRealTimeOptions = {}) {
+  const { data: session } = useSession()
   const {
     onQueueUpdate,
     onMessageSent,
     onDeviceStatus, 
     onStatsUpdate,
     enableNotifications = false,
-    autoReconnect = true,
-    reconnectInterval = 3000
+    enableSounds = true,
+    autoReconnect = true
   } = options
+
+  // Load notification settings from localStorage
+  const [effectiveNotifications, setEffectiveNotifications] = useState(enableNotifications)
+  const [effectiveSounds, setEffectiveSounds] = useState(enableSounds)
+
+  useEffect(() => {
+    const savedNotifications = localStorage.getItem('whatsapp-notifications')
+    const savedSounds = localStorage.getItem('whatsapp-sounds')
+    
+    if (savedNotifications !== null) {
+      setEffectiveNotifications(JSON.parse(savedNotifications))
+    } else {
+      setEffectiveNotifications(enableNotifications)
+    }
+    
+    if (savedSounds !== null) {
+      setEffectiveSounds(JSON.parse(savedSounds))
+    } else {
+      setEffectiveSounds(enableSounds)
+    }
+  }, [enableNotifications, enableSounds])
 
   const [state, setState] = useState<WhatsAppRealTimeState>({
     connected: false,
+    connecting: false,
     error: null,
-    lastEventTime: null
+    lastEventTime: null,
+    reconnectAttempts: 0
   })
 
-  const eventSourceRef = useRef<EventSource | null>(null)
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const clientIdRef = useRef<string>()
+  // Use global SSE manager instead of individual connections
+  const manager = GlobalSSEManager.getInstance()
+  const isUnmountedRef = useRef<boolean>(false)
 
-  // Generate client ID once
-  if (!clientIdRef.current) {
-    clientIdRef.current = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-  }
-
-  const handleEvent = useCallback((event: MessageEvent) => {
-    try {
-      const parsedEvent: WhatsAppEvent = JSON.parse(event.data)
+  // Initialize global connection and event handlers
+  useEffect(() => {
+    if (!session?.user?.id) return
+    
+    isUnmountedRef.current = false
+    
+    // Subscribe to connection state changes
+    const unsubscribeState = manager.subscribeToState((connectionState) => {
+      if (isUnmountedRef.current) return
       
       setState(prev => ({
         ...prev,
-        lastEventTime: new Date(),
-        error: null
+        connected: connectionState.connected,
+        connecting: connectionState.connecting,
+        error: connectionState.error,
+        lastEventTime: connectionState.lastEventTime,
+        reconnectAttempts: 0
       }))
+    })
 
-      // Handle specific event types
-      switch (parsedEvent.type) {
-        case 'connected':
-          setState(prev => ({ ...prev, connected: true, error: null }))
-          if (enableNotifications) {
-            notifications.show({
-              title: 'Connected',
-              message: 'Real-time updates are now active',
-              color: 'green',
-              autoClose: 3000
-            })
-          }
-          break
+    // Subscribe to events and handle notifications
+    const unsubscribeEvents: Array<() => void> = []
 
-        case 'queue-update':
-          onQueueUpdate?.(parsedEvent.data)
-          break
-
-        case 'message-sent':
-          onMessageSent?.(parsedEvent.data)
-          if (enableNotifications) {
-            notifications.show({
-              title: 'Message Sent',
-              message: `Message sent to ${parsedEvent.data?.to || 'recipient'}`,
-              color: 'green',
-              autoClose: 5000
-            })
-          }
-          break
-
-        case 'device-status':
-          onDeviceStatus?.(parsedEvent.data)
-          if (enableNotifications && parsedEvent.data?.status) {
-            const statusColor = parsedEvent.data.status === 'CONNECTED' ? 'green' : 'red'
-            notifications.show({
-              title: 'Device Status Changed',
-              message: `${parsedEvent.data.deviceName || 'Device'} is now ${parsedEvent.data.status}`,
-              color: statusColor,
-              autoClose: 5000
-            })
-          }
-          break
-
-        case 'stats-update':
-          onStatsUpdate?.(parsedEvent.data)
-          break
-      }
-    } catch (error) {
-      console.error('Error parsing SSE event:', error)
-      setState(prev => ({ ...prev, error: 'Invalid event data received' }))
-    }
-  }, [onQueueUpdate, onMessageSent, onDeviceStatus, onStatsUpdate, enableNotifications])
-
-  const handleError = useCallback((error: Event) => {
-    console.error('SSE connection error:', error)
-    setState(prev => ({
-      ...prev,
-      connected: false,
-      error: 'Connection error occurred'
-    }))
-
-    if (enableNotifications) {
-      notifications.show({
-        title: 'Connection Lost',
-        message: 'Attempting to reconnect...',
-        color: 'orange',
-        autoClose: 5000
+    // Queue update handler
+    if (onQueueUpdate) {
+      const unsubscribe = manager.subscribe('queue-update', (event) => {
+        if (!isUnmountedRef.current) {
+          onQueueUpdate(event.data)
+        }
       })
-    }
-  }, [enableNotifications])
-
-  const connect = useCallback(() => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close()
+      unsubscribeEvents.push(unsubscribe)
     }
 
-    const eventSource = new EventSource(
-      `/api/customer/whatsapp/events?clientId=${clientIdRef.current}`
-    )
-
-    eventSource.onmessage = handleEvent
-    eventSource.onerror = (error) => {
-      handleError(error)
-      
-      // Auto-reconnect if enabled
-      if (autoReconnect && !reconnectTimeoutRef.current) {
-        reconnectTimeoutRef.current = setTimeout(() => {
-          reconnectTimeoutRef.current = null
-          connect()
-        }, reconnectInterval)
-      }
+    // Message sent handler with notifications
+    if (onMessageSent) {
+      const unsubscribe = manager.subscribe('message-sent', (event) => {
+        if (!isUnmountedRef.current) {
+          onMessageSent(event.data)
+          
+          if (effectiveNotifications && event.data?.to) {
+            if (effectiveSounds) {
+              playNotificationSound('success')
+            }
+            setTimeout(() => {
+              notifications.show({
+                title: 'Message Delivered',
+                message: `Sent to ${event.data.to}`,
+                color: 'green',
+                autoClose: 3000
+              })
+            }, 200)
+          }
+        }
+      })
+      unsubscribeEvents.push(unsubscribe)
     }
 
-    eventSourceRef.current = eventSource
-  }, [handleEvent, handleError, autoReconnect, reconnectInterval])
-
-  const disconnect = useCallback(() => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close()
-      eventSourceRef.current = null
+    // Device status handler with notifications
+    if (onDeviceStatus) {
+      const unsubscribe = manager.subscribe('device-status', (event) => {
+        if (!isUnmountedRef.current) {
+          onDeviceStatus(event.data)
+          
+          if (effectiveNotifications && event.data?.status && event.data?.deviceName) {
+            const statusColor = event.data.status === 'CONNECTED' ? 'green' : 'orange'
+            const statusText = event.data.status === 'CONNECTED' ? 'connected' : 'disconnected'
+            const soundType = event.data.status === 'CONNECTED' ? 'success' : 'warning'
+            
+            if (effectiveSounds) {
+              playNotificationSound(soundType)
+            }
+            setTimeout(() => {
+              notifications.show({
+                title: 'Device Status',
+                message: `${event.data.deviceName} ${statusText}`,
+                color: statusColor,
+                autoClose: 4000
+              })
+            }, 300)
+          }
+        }
+      })
+      unsubscribeEvents.push(unsubscribe)
     }
 
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current)
-      reconnectTimeoutRef.current = null
+    // Stats update handler
+    if (onStatsUpdate) {
+      const unsubscribe = manager.subscribe('stats-update', (event) => {
+        if (!isUnmountedRef.current) {
+          onStatsUpdate(event.data)
+        }
+      })
+      unsubscribeEvents.push(unsubscribe)
     }
 
-    setState(prev => ({ ...prev, connected: false }))
-  }, [])
-
-  // Connect on mount, disconnect on unmount
-  useEffect(() => {
-    connect()
+    // Connect to global SSE
+    manager.connect(session.user.id)
 
     return () => {
-      disconnect()
+      isUnmountedRef.current = true
+      unsubscribeState()
+      unsubscribeEvents.forEach(fn => fn())
     }
-  }, [connect, disconnect])
+  }, [session?.user?.id, onQueueUpdate, onMessageSent, onDeviceStatus, onStatsUpdate, effectiveNotifications, effectiveSounds])
 
-  // Manual reconnect function
+  // Manual connect/disconnect functions
+  const connect = useCallback(() => {
+    if (session?.user?.id) {
+      return manager.connect(session.user.id)
+    }
+    return Promise.resolve(false)
+  }, [session?.user?.id])
+
+  const disconnect = useCallback(() => {
+    manager.disconnect()
+  }, [])
+
   const reconnect = useCallback(() => {
     setState(prev => ({ ...prev, error: null }))
     connect()
@@ -191,29 +255,34 @@ export function useWhatsAppRealTime(options: UseWhatsAppRealTimeOptions = {}) {
     reconnect,
     disconnect,
     isConnected: state.connected,
-    hasError: !!state.error
+    hasError: !!state.error,
+    isConnecting: state.connecting
   }
 }
 
 // Specialized hook for queue updates only
 export function useWhatsAppQueueRealTime(
   onQueueUpdate: (data: any) => void,
-  enableNotifications = true
+  enableNotifications = true,
+  enableSounds = true
 ) {
   return useWhatsAppRealTime({
     onQueueUpdate,
     enableNotifications,
+    enableSounds,
     autoReconnect: true
   })
 }
 
 // Specialized hook for stats updates only  
 export function useWhatsAppStatsRealTime(
-  onStatsUpdate: (data: any) => void
+  onStatsUpdate: (data: any) => void,
+  enableSounds = false
 ) {
   return useWhatsAppRealTime({
     onStatsUpdate,
     enableNotifications: false,
+    enableSounds,
     autoReconnect: true
   })
 }

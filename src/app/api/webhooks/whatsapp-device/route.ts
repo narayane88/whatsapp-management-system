@@ -268,11 +268,13 @@ async function broadcastDeviceStatusUpdate(userId: string): Promise<void> {
       createdAt: device.createdAt
     }))
 
-    // Broadcast to all connected clients for this user
+    // Broadcast to all connected clients for this user using enhanced webhook method
     const streamer = WhatsAppEventStreamer.getInstance()
-    streamer.sendDeviceStatus({
+    streamer.sendWebhookEvent('device-status', {
       devices: devices,
-      userId: userId
+      userId: userId,
+      source: 'webhook',
+      priority: 'high'
     })
 
     console.log(`📡 Broadcasted device status update to user ${userId}`)

@@ -148,7 +148,8 @@ export default function BulkMessagePage() {
   const { isConnected } = useWhatsAppRealTime({
     onDeviceStatus: handleDeviceStatusUpdate,
     onQueueUpdate: handleQueueUpdate,
-    enableNotifications: false,
+    enableNotifications: true, // Enable notifications and sounds
+    enableSounds: true,
     autoReconnect: true
   })
 

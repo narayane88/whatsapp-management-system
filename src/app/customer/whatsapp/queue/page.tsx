@@ -155,6 +155,7 @@ export default function MessageQueuePage() {
     onQueueUpdate: handleQueueUpdate,
     onMessageSent: handleMessageSent,
     enableNotifications: true,
+    enableSounds: true, // Enable notification sounds
     autoReconnect: true
   })
 

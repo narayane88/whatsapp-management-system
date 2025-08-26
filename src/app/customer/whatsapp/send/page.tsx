@@ -109,7 +109,8 @@ export default function SendMessagePage() {
   const { isConnected } = useWhatsAppRealTime({
     onDeviceStatus: handleDeviceStatusUpdate,
     onMessageSent: handleMessageSent,
-    enableNotifications: false, // We handle notifications manually
+    enableNotifications: true, // Enable notifications and sounds
+    enableSounds: true,
     autoReconnect: true
   })
 

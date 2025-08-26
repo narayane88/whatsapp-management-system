@@ -122,6 +122,9 @@ export async function POST(request: NextRequest) {
       const updatedMessage = result.rows[0]
       console.log(`✅ Updated message status: ${updatedMessage.id} (to: ${updatedMessage.recipientNumber}) -> ${newStatus}`)
       
+      // Broadcast message status update via SSE
+      await broadcastMessageStatusUpdate(updatedMessage, newStatus, accountId)
+      
       // If no match found, try alternative matching by recipient and recent timestamp
     } else {
       console.log(`⚠️ No message found with messageId: ${messageId}. Trying alternative matching...`)
@@ -165,6 +168,9 @@ export async function POST(request: NextRequest) {
         if (fallbackResult.rowCount && fallbackResult.rowCount > 0) {
           const updatedMessage = fallbackResult.rows[0]
           console.log(`✅ Updated message status (fallback): ${updatedMessage.id} -> ${newStatus}`)
+          
+          // Broadcast message status update via SSE
+          await broadcastMessageStatusUpdate(updatedMessage, newStatus, accountId)
         } else {
           console.log(`❌ No matching message found for ${phoneNumber} from user ${userId}`)
         }
@@ -188,11 +194,59 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * Broadcast message status updates to connected SSE clients
+ */
+async function broadcastMessageStatusUpdate(message: any, newStatus: string, accountId: string): Promise<void> {
+  try {
+    // Import dynamically to avoid circular dependencies
+    const { WhatsAppEventStreamer } = await import('../../customer/whatsapp/events/route')
+    
+    // Find the device to get userId
+    const deviceResult = await pool.query(`
+      SELECT "userId" FROM whatsapp_instances 
+      WHERE name = $1
+    `, [accountId])
+    
+    if (deviceResult.rows.length === 0) {
+      console.log(`⚠️ Device not found for status broadcast: ${accountId}`)
+      return
+    }
+    
+    const userId = deviceResult.rows[0].userId
+    
+    // Broadcast to all connected clients for this user using enhanced webhook method
+    const streamer = WhatsAppEventStreamer.getInstance()
+    streamer.sendWebhookEvent('message-sent', {
+      messageId: message.id,
+      recipientNumber: message.recipientNumber,
+      status: newStatus,
+      message: message.message,
+      userId: userId,
+      accountId: accountId,
+      timestamp: new Date().toISOString(),
+      source: 'webhook',
+      priority: 'medium'
+    })
+
+    console.log(`📡 Broadcasted message status update: ${message.id} -> ${newStatus}`)
+
+  } catch (error) {
+    console.error('Error broadcasting message status update:', error)
+  }
+}
+
 // Handle GET requests for webhook verification
 export async function GET(request: NextRequest) {
   return NextResponse.json({ 
     message: 'WhatsApp Status Webhook Endpoint',
     status: 'active',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    events: [
+      'message.status',
+      'message.sent',
+      'message.delivered', 
+      'message.read'
+    ]
   })
 }

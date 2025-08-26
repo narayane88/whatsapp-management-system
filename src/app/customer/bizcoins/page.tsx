@@ -36,6 +36,7 @@ import {
 } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
+import { useCustomerNotifications } from '@/hooks/useCustomerNotifications'
 import CustomerHeader from '@/components/customer/CustomerHeader'
 
 interface Transaction {
@@ -72,6 +73,7 @@ interface BizCoinsData {
 
 export default function BizCoinsPage() {
   const router = useRouter()
+  const { showPaymentNotification } = useCustomerNotifications()
   const [data, setData] = useState<BizCoinsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)

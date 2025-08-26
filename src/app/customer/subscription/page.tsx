@@ -51,6 +51,7 @@ import { useImpersonation } from '@/contexts/ImpersonationContext'
 import CustomerHeader from '@/components/customer/CustomerHeader'
 import PaymentModal from '@/components/payments/PaymentModal'
 import PaymentIframe from '@/components/payments/PaymentIframe'
+import { useCustomerNotifications } from '@/hooks/useCustomerNotifications'
 import * as Icons from 'react-icons/fi'
 
 interface Package {
@@ -393,6 +394,7 @@ export default function SubscriptionPage() {
   const router = useRouter()
   const { data: session } = useSession()
   const { isImpersonating, impersonationData } = useImpersonation()
+  const { showSubscriptionNotification, showPaymentNotification } = useCustomerNotifications()
   const [data, setData] = useState<SubscriptionData | null>(null)
   const [loading, setLoading] = useState(true)
   const [purchasing, setPurchasing] = useState(false)
@@ -429,6 +431,7 @@ export default function SubscriptionPage() {
       
     } catch (error) {
       console.error('Error fetching subscription data:', error)
+      showSubscriptionNotification('Failed to fetch subscription data', 'error')
       notifications.show({
         title: 'Error',
         message: 'Failed to fetch subscription data',
@@ -441,6 +444,10 @@ export default function SubscriptionPage() {
 
   const handleSubscribe = (pkg: Package) => {
     if (data?.currentSubscription?.status === 'ACTIVE') {
+      showSubscriptionNotification(
+        'You already have an active subscription. Please wait for it to expire.',
+        'warning'
+      )
       notifications.show({
         title: 'Active Subscription',
         message: 'You already have an active subscription. Please wait for it to expire.',
@@ -464,6 +471,12 @@ export default function SubscriptionPage() {
 
   const handlePaymentSuccess = (paymentData: any) => {
     console.log('Payment successful:', paymentData)
+    
+    // Show success notification with sound
+    showPaymentNotification(
+      `Welcome to ${selectedPackage?.name}! Your subscription is now active.`,
+      'success'
+    )
     
     notifications.show({
       title: '🎉 Payment Successful!',

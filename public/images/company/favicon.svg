@@ -1,11 +1,13 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="32" height="32" fill="#10B981" rx="6"/>
+  <!-- Background rounded rectangle -->
+  <rect x="2" y="2" width="28" height="28" rx="6" ry="6" fill="#FF5722"/>
   
-  <!-- Check Mark -->
-  <path d="M9 15 L13 19 L23 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Letter B -->
+  <path d="M 10 10 L 10 22 L 17 22 C 19 22 20.5 21 20.5 19 C 20.5 17.5 19.5 16.5 18.5 16.25 C 19.5 15.75 20 14.75 20 13.5 C 20 11.5 18.5 10 16.5 10 L 10 10 Z M 13 12.5 L 16 12.5 C 16.75 12.5 17.25 13 17.25 13.75 C 17.25 14.5 16.75 15 16 15 L 13 15 L 13 12.5 Z M 13 17.5 L 16.5 17.5 C 17.25 17.5 17.75 18 17.75 18.75 C 17.75 19.5 17.25 20 16.5 20 L 13 20 L 13 17.5 Z" fill="white"/>
   
-  <!-- Small WhatsApp dot -->
-  <circle cx="25" cy="7" r="3" fill="#25D366"/>
-  <path d="M23.5 6.5 L24.5 7.5 L26.5 5.5" stroke="white" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top highlight for 3D effect -->
+  <path d="M 2 8 C 2 4.7 4.7 2 8 2 L 24 2 C 27.3 2 30 4.7 30 8 L 30 9 C 30 5.7 27.3 3 24 3 L 8 3 C 4.7 3 2 5.7 2 9 Z" fill="white" opacity="0.3"/>
+  
+  <!-- Bottom shadow for depth -->
+  <path d="M 2 24 C 2 27.3 4.7 30 8 30 L 24 30 C 27.3 30 30 27.3 30 24 L 30 23 C 30 26.3 27.3 29 24 29 L 8 29 C 4.7 29 2 26.3 2 23 Z" fill="black" opacity="0.2"/>
 </svg>

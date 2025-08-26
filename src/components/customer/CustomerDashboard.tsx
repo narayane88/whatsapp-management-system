@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import { useImpersonation } from '@/contexts/ImpersonationContext'
+import { useCustomerNotifications } from '@/hooks/useCustomerNotifications'
 
 interface DashboardStats {
   whatsappInstances: number
@@ -40,6 +41,7 @@ interface DashboardStats {
 export default function CustomerDashboard() {
   const { data: session } = useSession()
   const { isImpersonating, impersonationData } = useImpersonation()
+  const { showQuotaNotification, showSystemNotification } = useCustomerNotifications()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -62,6 +64,31 @@ export default function CustomerDashboard() {
       }
       const data = await response.json()
       setStats(data)
+      
+      // Check for quota notifications
+      if (data.activePackage?.usagePercentage) {
+        const { usagePercentage, messagesUsed, messageLimit } = data.activePackage
+        
+        if (usagePercentage >= 95) {
+          showQuotaNotification(
+            `Critical: ${usagePercentage}% quota used! ${messagesUsed}/${messageLimit} messages.`,
+            'error'
+          )
+        } else if (usagePercentage >= 80) {
+          showQuotaNotification(
+            `Warning: ${usagePercentage}% quota used. ${messagesUsed}/${messageLimit} messages.`,
+            'warning'
+          )
+        }
+      }
+      
+      // Check for subscription expiry
+      if (data.activePackage?.daysRemaining <= 3) {
+        showSystemNotification(
+          `Subscription expires in ${data.activePackage.daysRemaining} days. Please renew soon.`,
+          'warning'
+        )
+      }
     } catch (error) {
       console.error('Dashboard stats error:', error)
       setError('Failed to load dashboard data')

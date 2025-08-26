@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable React Strict Mode to prevent double mounting in dev
+  reactStrictMode: false,
   
   // ESLint configuration - Ignore during builds to prevent warnings from failing build
   eslint: {
