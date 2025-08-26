@@ -218,21 +218,27 @@ model Package {
 }
 
 model CustomerPackage {
-  id            String   @id @default(cuid())
-  userId        String
-  packageId     String
-  startDate     DateTime @default(now())
-  endDate       DateTime
-  isActive      Boolean  @default(true)
-  messagesUsed  Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  createdBy     Int?
-  paymentMethod String?  @default("CASH")
-  creator       User?    @relation("SubscriptionCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_packages_createdby_fkey")
-  package       Package  @relation(fields: [packageId], references: [id])
+  id                     String   @id @default(cuid())
+  userId                 String
+  packageId              String
+  startDate              DateTime @default(now())
+  endDate                DateTime
+  isActive               Boolean  @default(true)
+  messagesUsed           Int      @default(0)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  createdBy              Int?
+  paymentMethod          String?  @default("CASH")
+  scheduledStartDate     DateTime?
+  purchaseType           String   @default("IMMEDIATE")
+  previousSubscriptionId String?
+  status                 String   @default("ACTIVE")
+  creator                User?    @relation("SubscriptionCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customer_packages_createdby_fkey")
+  package                Package  @relation(fields: [packageId], references: [id])
 
   @@index([userId, isActive], map: "idx_customer_packages_user_active")
+  @@index([status], map: "idx_customer_packages_status")
+  @@index([scheduledStartDate], map: "idx_customer_packages_scheduled_start")
   @@map("customer_packages")
 }
 
