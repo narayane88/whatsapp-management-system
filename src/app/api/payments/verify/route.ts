@@ -14,8 +14,13 @@ interface VerifyPaymentRequest {
   razorpay_order_id: string
   razorpay_payment_id: string
   razorpay_signature: string
-  customer_id: string
-  package_id: string
+  customerId: string
+  packageId: string
+  bizcoinPayment?: {
+    useBizcoins: boolean
+    bizcoinAmount: number
+    finalAmount: number
+  }
 }
 
 // Load payment methods configuration with CSV credentials
@@ -83,7 +88,7 @@ async function logPaymentSuccess(paymentData: any) {
 }
 
 // Process subscription activation with database operations
-async function activateSubscription(customerId: string, packageId: string, paymentData: any, session: any) {
+async function activateSubscription(customerId: string, packageId: string, paymentData: any, session: any, bizcoinPayment?: any) {
   try {
     // Get real user data from session to ensure correct user is used
     let realUserId = customerId
@@ -128,6 +133,47 @@ async function activateSubscription(customerId: string, packageId: string, payme
 
     const pkg = packageResult.rows[0]
     const duration = pkg.duration || 30 // fallback to 30 days
+
+    // Process bizcoin deduction if applicable
+    if (bizcoinPayment?.useBizcoins && bizcoinPayment?.bizcoinAmount > 0) {
+      // Get current user balance
+      const balanceResult = await pool.query(`
+        SELECT COALESCE(biz_points, 0) as biz_points FROM users WHERE id = $1
+      `, [realUserId])
+
+      if (balanceResult.rows.length > 0) {
+        const currentBalance = parseFloat(balanceResult.rows[0].biz_points)
+        
+        if (currentBalance >= bizcoinPayment.bizcoinAmount) {
+          // Deduct bizcoins
+          const newBalance = currentBalance - bizcoinPayment.bizcoinAmount
+          await pool.query(`
+            UPDATE users SET biz_points = $1 WHERE id = $2
+          `, [newBalance, realUserId])
+
+          // Record bizcoin transaction
+          await pool.query(`
+            INSERT INTO bizpoints_transactions (
+              user_id, type, amount, balance, description, reference
+            ) VALUES ($1, $2, $3, $4, $5, $6)
+          `, [
+            realUserId,
+            'DEBIT',
+            -bizcoinPayment.bizcoinAmount,
+            newBalance,
+            `Package purchase payment: ${pkg.name}`,
+            `PAYMENT_${paymentData.razorpay_payment_id}`
+          ])
+
+          console.log('✅ Bizcoins deducted:', {
+            userId: realUserId,
+            amount: bizcoinPayment.bizcoinAmount,
+            previousBalance: currentBalance,
+            newBalance: newBalance
+          })
+        }
+      }
+    }
 
     // Create transaction record
     const transactionId = `tx_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
@@ -232,8 +278,9 @@ export async function POST(request: NextRequest) {
       razorpay_order_id, 
       razorpay_payment_id, 
       razorpay_signature,
-      customer_id,
-      package_id
+      customerId,
+      packageId,
+      bizcoinPayment
     } = body
 
     // Validate required fields
@@ -297,19 +344,19 @@ export async function POST(request: NextRequest) {
     await logPaymentSuccess({
       razorpay_payment_id,
       razorpay_order_id,
-      customer_id,
-      package_id,
+      customer_id: customerId,
+      package_id: packageId,
       amount: paymentDetails.amount / 100, // Convert from paise
       currency: paymentDetails.currency
     })
 
     // Activate subscription
-    const subscription = await activateSubscription(customer_id, package_id, {
+    const subscription = await activateSubscription(customerId, packageId, {
       razorpay_payment_id,
       razorpay_order_id,
       amount: paymentDetails.amount / 100,
       currency: paymentDetails.currency
-    }, session)
+    }, session, bizcoinPayment)
 
     // Process dealer commission if customer has a dealer assigned
     let commissionResult = null

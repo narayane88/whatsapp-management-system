@@ -22,7 +22,7 @@ import { notifications } from '@mantine/notifications'
 import { useDisclosure } from '@mantine/hooks'
 import * as Icons from 'react-icons/fi'
 import { FaRupeeSign } from 'react-icons/fa'
-import PaymentModal from '@/components/payments/PaymentModal'
+import EnhancedPaymentModal from '@/components/payments/EnhancedPaymentModal'
 import PaymentIframe from '@/components/payments/PaymentIframe'
 
 interface Package {
@@ -258,6 +258,8 @@ export default function CustomerPackagesPage() {
   const { data: session } = useSession()
   const [packages, setPackages] = useState<Package[]>([])
   const [loading, setLoading] = useState(true)
+  const [bizcoinBalance, setBizcoinBalance] = useState(0)
+  const [bizcoinLoading, setBizcoinLoading] = useState(true)
   const [paymentModalOpened, { open: openPaymentModal, close: closePaymentModal }] = useDisclosure(false)
   const [paymentIframeOpened, { open: openPaymentIframe, close: closePaymentIframe }] = useDisclosure(false)
   const [paymentMethodModalOpened, { open: openPaymentMethodModal, close: closePaymentMethodModal }] = useDisclosure(false)
@@ -265,7 +267,10 @@ export default function CustomerPackagesPage() {
 
   useEffect(() => {
     loadPackages()
-  }, [])
+    if (session?.user) {
+      loadBizcoinBalance()
+    }
+  }, [session])
 
   const loadPackages = async () => {
     try {
@@ -291,6 +296,22 @@ export default function CustomerPackagesPage() {
       })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadBizcoinBalance = async () => {
+    try {
+      setBizcoinLoading(true)
+      const response = await fetch('/api/customer/bizcoins/balance')
+      const data = await response.json()
+      
+      if (response.ok) {
+        setBizcoinBalance(data.balance || 0)
+      }
+    } catch (error) {
+      console.error('Failed to load bizcoin balance:', error)
+    } finally {
+      setBizcoinLoading(false)
     }
   }
 
@@ -328,6 +349,9 @@ export default function CustomerPackagesPage() {
     closePaymentModal()
     closePaymentIframe()
     setSelectedPackage(null)
+    
+    // Reload bizcoin balance after payment
+    loadBizcoinBalance()
   }
 
   return (
@@ -342,6 +366,45 @@ export default function CustomerPackagesPage() {
             Select the perfect WhatsApp Business plan for your needs. 
             All plans include our core features with flexible scalability.
           </Text>
+          
+          {/* Bizcoin Balance Display */}
+          {session?.user && (
+            <Paper 
+              p="lg" 
+              radius="lg" 
+              withBorder
+              style={{
+                background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.05) 0%, rgba(245, 158, 11, 0.03) 100%)',
+                border: '2px solid rgba(251, 146, 60, 0.15)',
+                marginTop: '1rem'
+              }}
+            >
+              <Group gap="lg" justify="center">
+                <Group gap="sm">
+                  <Icons.FiCoins size={24} color="#f59e0b" />
+                  <Box ta="center">
+                    <Text size="xs" c="dimmed" fw={500}>Available Bizcoins</Text>
+                    <Text size="xl" fw={700} c="orange.7">
+                      {bizcoinLoading ? <Loader size="sm" /> : bizcoinBalance.toLocaleString()}
+                    </Text>
+                  </Box>
+                </Group>
+                
+                {bizcoinBalance > 0 && (
+                  <Alert
+                    icon={<Icons.FiInfo size={16} />}
+                    color="orange"
+                    variant="light"
+                    style={{ border: 'none', padding: '8px 12px' }}
+                  >
+                    <Text size="sm">
+                      💡 Use your bizcoins to get ₹{bizcoinBalance} discount on any package!
+                    </Text>
+                  </Alert>
+                )}
+              </Group>
+            </Paper>
+          )}
         </Stack>
 
         {/* Packages Grid */}
@@ -450,8 +513,8 @@ export default function CustomerPackagesPage() {
         </Stack>
       </Modal>
 
-      {/* Traditional Payment Modal */}
-      <PaymentModal
+      {/* Enhanced Payment Modal with Bizcoin Support */}
+      <EnhancedPaymentModal
         opened={paymentModalOpened}
         onClose={closePaymentModal}
         package={selectedPackage}
