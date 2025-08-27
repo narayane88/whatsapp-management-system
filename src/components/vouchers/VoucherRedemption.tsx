@@ -27,7 +27,7 @@ import {
   FiMessageCircle,
   FiPercent,
   FiPackage,
-  FiHistory
+  FiList
 } from 'react-icons/fi'
 import { FaRupeeSign } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
@@ -219,7 +219,7 @@ export default function VoucherRedemption() {
             <Group justify="space-between">
               <Button
                 variant="outline"
-                leftSection={<FiHistory size={16} />}
+                leftSection={<FiList size={16} />}
                 onClick={openHistory}
               >
                 View History
