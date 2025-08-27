@@ -6,7 +6,7 @@ import { authOptions } from '@/lib/auth'
 
 const pool = new Pool(getDatabaseConfig())
 
-// POST /api/vouchers/redeem - Redeem a voucher
+// Enhanced POST /api/vouchers/redeem - Redeem a voucher with type-specific handling
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     }
 
     const voucherCode = code.toUpperCase().trim()
-    const userId = session.user.id || session.user.email
     const userEmail = session.user.email
 
     // Get client IP and user agent for audit
@@ -37,11 +36,34 @@ export async function POST(request: NextRequest) {
     try {
       await client.query('BEGIN')
 
-      // 1. Find and validate voucher
+      // 1. Get user information
+      const userResult = await client.query(`
+        SELECT 
+          u.id, 
+          u.email, 
+          u.name,
+          COALESCE(u.biz_points, 0) as biz_points,
+          r.name as role_name,
+          r.level as role_level
+        FROM users u
+        LEFT JOIN user_roles ur ON u.id = ur.user_id AND ur.is_primary = true
+        LEFT JOIN roles r ON ur.role_id = r.id
+        WHERE LOWER(u.email) = LOWER($1)
+      `, [userEmail])
+
+      if (userResult.rows.length === 0) {
+        await client.query('COMMIT')
+        return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      }
+
+      const user = userResult.rows[0]
+      const userId = user.id
+
+      // 2. Find and validate voucher
       const voucherResult = await client.query(`
         SELECT 
           id, code, type, value, usage_limit, usage_count, is_active, 
-          expires_at, dealer_id, allow_dealer_redemption, created_by,
+          expires_at, package_id, description,
           CASE 
             WHEN expires_at < CURRENT_TIMESTAMP THEN 'expired'
             WHEN is_active = false THEN 'inactive'
@@ -49,7 +71,7 @@ export async function POST(request: NextRequest) {
             ELSE 'valid'
           END as voucher_status
         FROM vouchers 
-        WHERE code = $1
+        WHERE UPPER(code) = $1
       `, [voucherCode])
 
       if (voucherResult.rows.length === 0) {
@@ -68,7 +90,7 @@ export async function POST(request: NextRequest) {
 
       const voucher = voucherResult.rows[0]
 
-      // 2. Check if voucher is valid
+      // 3. Check voucher status
       if (voucher.voucher_status !== 'valid') {
         let errorMessage = 'Voucher is not available for redemption'
         switch (voucher.voucher_status) {
@@ -94,51 +116,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: errorMessage }, { status: 400 })
       }
 
-      // 3. Check if user is a dealer trying to redeem their own voucher
-      const userResult = await client.query(`
-        SELECT u.id, u.email, r.name as role_name
-        FROM users u
-        LEFT JOIN user_roles ur ON u.id = ur.user_id
-        LEFT JOIN roles r ON ur.role_id = r.id
-        WHERE u.email = $1
-      `, [userEmail])
-
-      if (userResult.rows.length > 0) {
-        const user = userResult.rows[0]
-        const isDealer = user.role_name && ['DEALER', 'SUBDEALER', 'OWNER'].includes(user.role_name)
-        const isDealerCreatedVoucher = voucher.dealer_id === userId || voucher.created_by === userEmail || voucher.created_by === user.id
-
-        // Block dealers from redeeming vouchers unless specifically allowed
-        if (isDealer && !voucher.allow_dealer_redemption) {
-          // Log blocked attempt
-          await client.query(`
-            INSERT INTO voucher_redemption_attempts (
-              voucher_id, user_id, user_email, attempt_status, failure_reason, ip_address, user_agent
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-          `, [voucher.id, userId, userEmail, 'blocked', 'Dealers cannot redeem vouchers', clientIp, userAgent])
-
-          await client.query('COMMIT')
-          return NextResponse.json({
-            error: 'Dealers cannot redeem vouchers'
-          }, { status: 403 })
-        }
-
-        // Block dealers from redeeming their own created vouchers
-        if (isDealer && isDealerCreatedVoucher) {
-          // Log blocked attempt
-          await client.query(`
-            INSERT INTO voucher_redemption_attempts (
-              voucher_id, user_id, user_email, attempt_status, failure_reason, ip_address, user_agent
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-          `, [voucher.id, userId, userEmail, 'blocked', 'Cannot redeem own created voucher', clientIp, userAgent])
-
-          await client.query('COMMIT')
-          return NextResponse.json({
-            error: 'You cannot redeem vouchers you created'
-          }, { status: 403 })
-        }
-      }
-
       // 4. Check if user has already used this voucher
       const existingUsage = await client.query(`
         SELECT id FROM voucher_usage 
@@ -159,96 +136,216 @@ export async function POST(request: NextRequest) {
         }, { status: 409 })
       }
 
-      // 5. Calculate voucher benefit based on type
-      let discountAmount = 0
-      let creditAmount = 0
-      let messageAmount = 0
+      // 5. Process voucher based on type
       let benefitDescription = ''
+      let appliedBenefit = {}
 
       switch (voucher.type) {
         case 'credit':
-          creditAmount = voucher.value
-          benefitDescription = `₹${voucher.value} account credit`
+          // Add bizcoins to user account
+          const newBizBalance = parseFloat(user.biz_points) + voucher.value
+          await client.query(`
+            UPDATE users 
+            SET biz_points = $1
+            WHERE id = $2
+          `, [newBizBalance, userId])
+
+          // Record bizcoin transaction
+          await client.query(`
+            INSERT INTO bizpoints_transactions (
+              user_id, type, amount, balance, description, reference
+            ) VALUES ($1, $2, $3, $4, $5, $6)
+          `, [
+            userId,
+            'CREDIT',
+            voucher.value,
+            newBizBalance,
+            `Voucher redemption: ${voucher.code}`,
+            `VOUCHER_${voucher.id}_${Date.now()}`
+          ])
+
+          benefitDescription = `₹${voucher.value} bizcoins added to your account`
+          appliedBenefit = {
+            type: 'credit',
+            amount: voucher.value,
+            newBalance: newBizBalance
+          }
           break
+
         case 'messages':
-          messageAmount = voucher.value
-          benefitDescription = `${voucher.value} free messages`
+          // Add messages to current active subscription
+          const activeSubscription = await client.query(`
+            SELECT 
+              cp.id,
+              cp."messagesUsed",
+              cp."packageId",
+              p."messageLimit"
+            FROM customer_packages cp
+            JOIN packages p ON cp."packageId" = p.id
+            WHERE cp."userId" = $1::text 
+              AND cp."isActive" = true
+              AND (cp."endDate" IS NULL OR cp."endDate" > CURRENT_TIMESTAMP)
+            ORDER BY cp."createdAt" DESC
+            LIMIT 1
+          `, [userId])
+
+          if (activeSubscription.rows.length > 0) {
+            const subscription = activeSubscription.rows[0]
+            // Instead of reducing messagesUsed, we'll increase the message limit effectively
+            // by creating a voucher messages credit record
+            await client.query(`
+              INSERT INTO voucher_message_credits (
+                user_id, subscription_id, voucher_id, message_count, created_at
+              ) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+              ON CONFLICT DO NOTHING
+            `, [userId, subscription.id, voucher.id, voucher.value])
+
+            benefitDescription = `${voucher.value} messages added to your subscription`
+            appliedBenefit = {
+              type: 'messages',
+              count: voucher.value,
+              subscriptionId: subscription.id
+            }
+          } else {
+            // No active subscription, store messages for future use
+            await client.query(`
+              UPDATE users 
+              SET message_balance = COALESCE(message_balance, 0) + $1
+              WHERE id = $2
+            `, [voucher.value, userId])
+
+            benefitDescription = `${voucher.value} messages added to your balance (will be applied to next subscription)`
+            appliedBenefit = {
+              type: 'messages',
+              count: voucher.value,
+              stored: true
+            }
+          }
           break
-        case 'percentage':
-          // For percentage vouchers, we'll calculate discount on next purchase
-          discountAmount = voucher.value
-          benefitDescription = `${voucher.value}% discount on next purchase`
-          break
+
         case 'package':
-          benefitDescription = 'Package upgrade voucher'
+          // Auto-activate package subscription
+          if (!voucher.package_id) {
+            throw new Error('Package voucher missing package information')
+          }
+
+          // Get package details
+          const packageResult = await client.query(`
+            SELECT * FROM packages WHERE id = $1 AND "isActive" = true
+          `, [voucher.package_id])
+
+          if (packageResult.rows.length === 0) {
+            throw new Error('Associated package not found or inactive')
+          }
+
+          const pkg = packageResult.rows[0]
+          
+          // Create subscription
+          const startDate = new Date()
+          const endDate = new Date()
+          endDate.setDate(endDate.getDate() + pkg.duration)
+
+          const subscriptionResult = await client.query(`
+            INSERT INTO customer_packages (
+              "userId", "packageId", "createdBy", "paymentMethod",
+              "startDate", "endDate", "isActive", "messagesUsed",
+              "createdAt", "updatedAt", status, "purchaseType",
+              voucher_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+            RETURNING id
+          `, [
+            userId.toString(),
+            pkg.id,
+            userId,
+            'VOUCHER',
+            startDate,
+            endDate,
+            true,
+            0,
+            new Date(),
+            new Date(),
+            'ACTIVE',
+            'voucher_redemption',
+            voucher.id
+          ])
+
+          benefitDescription = `${pkg.name} package activated for ${pkg.duration} days`
+          appliedBenefit = {
+            type: 'package',
+            packageId: pkg.id,
+            packageName: pkg.name,
+            duration: pkg.duration,
+            subscriptionId: subscriptionResult.rows[0].id
+          }
           break
+
+        case 'percentage':
+          // Store percentage discount for next purchase
+          await client.query(`
+            INSERT INTO user_discount_vouchers (
+              user_id, voucher_id, discount_percentage, is_used, created_at
+            ) VALUES ($1, $2, $3, false, CURRENT_TIMESTAMP)
+            ON CONFLICT DO NOTHING
+          `, [userId, voucher.id, voucher.value])
+
+          benefitDescription = `${voucher.value}% discount saved for your next purchase`
+          appliedBenefit = {
+            type: 'percentage',
+            discount: voucher.value
+          }
+          break
+
+        default:
+          throw new Error(`Unknown voucher type: ${voucher.type}`)
       }
 
       // 6. Record the voucher usage
       await client.query(`
         INSERT INTO voucher_usage (
           voucher_id, user_id, user_email, discount_amount, 
-          original_amount, final_amount, redemption_type, notes
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          original_amount, final_amount, redemption_type, notes, used_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP)
       `, [
         voucher.id, 
         userId, 
         userEmail, 
-        discountAmount,
-        0, // Will be updated when actually used in a transaction
-        0, // Will be updated when actually used in a transaction
+        voucher.type === 'percentage' ? voucher.value : 0,
+        0, 
+        0,
         'manual',
-        `Voucher redeemed: ${benefitDescription}`
+        benefitDescription
       ])
 
       // 7. Update voucher usage count
       await client.query(`
         UPDATE vouchers 
-        SET usage_count = usage_count + 1
+        SET usage_count = usage_count + 1,
+            updated_at = CURRENT_TIMESTAMP
         WHERE id = $1
       `, [voucher.id])
 
-      // 8. Apply the voucher benefit to user account (if applicable)
-      if (creditAmount > 0) {
-        // Add credit to user account (assuming there's a user credits table or field)
-        await client.query(`
-          UPDATE users 
-          SET account_balance = COALESCE(account_balance, 0) + $1
-          WHERE email = $2
-        `, [creditAmount, userEmail])
-      }
-
-      if (messageAmount > 0) {
-        // Add messages to user account (assuming there's a message balance field)
-        await client.query(`
-          UPDATE users 
-          SET message_balance = COALESCE(message_balance, 0) + $1
-          WHERE email = $2
-        `, [messageAmount, userEmail])
-      }
-
-      // 9. Log successful redemption
+      // 8. Log successful redemption
       await client.query(`
         INSERT INTO voucher_redemption_attempts (
-          voucher_id, user_id, user_email, attempt_status, ip_address, user_agent
-        ) VALUES ($1, $2, $3, $4, $5, $6)
+          voucher_id, user_id, user_email, attempt_status, ip_address, user_agent, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
       `, [voucher.id, userId, userEmail, 'success', clientIp, userAgent])
 
       await client.query('COMMIT')
 
       // Return success response
       return NextResponse.json({
+        success: true,
         message: 'Voucher redeemed successfully',
         voucher: {
           code: voucher.code,
           type: voucher.type,
-          value: voucher.value
+          value: voucher.value,
+          description: voucher.description
         },
         benefit: {
           description: benefitDescription,
-          creditAmount,
-          messageAmount,
-          discountPercent: voucher.type === 'percentage' ? voucher.value : 0
+          ...appliedBenefit
         },
         redemption: {
           redeemedAt: new Date().toISOString(),
@@ -259,6 +356,19 @@ export async function POST(request: NextRequest) {
 
     } catch (error) {
       await client.query('ROLLBACK')
+      
+      // Log error attempt
+      try {
+        await pool.query(`
+          INSERT INTO voucher_redemption_attempts (
+            voucher_id, user_id, user_email, attempt_status, failure_reason, 
+            ip_address, user_agent, created_at
+          ) VALUES (NULL, NULL, $1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+        `, [userEmail, 'error', error instanceof Error ? error.message : 'Unknown error', clientIp, userAgent])
+      } catch (logError) {
+        console.error('Failed to log error attempt:', logError)
+      }
+
       throw error
     } finally {
       client.release()
@@ -267,7 +377,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Voucher redemption error:', error)
     return NextResponse.json({ 
-      error: 'Failed to redeem voucher. Please try again.' 
+      error: 'Failed to redeem voucher',
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }
@@ -280,27 +391,43 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const userId = session.user.id || session.user.email
     const userEmail = session.user.email
 
-    // Get user's voucher usage history
+    // Get user ID
+    const userResult = await pool.query(`
+      SELECT id FROM users WHERE LOWER(email) = LOWER($1)
+    `, [userEmail])
+
+    if (userResult.rows.length === 0) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    const userId = userResult.rows[0].id
+
+    // Get user's voucher usage history with enhanced details
     const usageHistory = await pool.query(`
       SELECT 
         vu.id,
         v.code,
         v.type,
         v.value,
+        v.description as voucher_description,
         vu.discount_amount,
         vu.used_at,
         vu.notes,
         CASE 
-          WHEN v.type = 'credit' THEN CONCAT('₹', v.value, ' credit')
+          WHEN v.type = 'credit' THEN CONCAT('₹', v.value, ' bizcoins')
           WHEN v.type = 'messages' THEN CONCAT(v.value, ' messages')
           WHEN v.type = 'percentage' THEN CONCAT(v.value, '% discount')
-          ELSE 'Package benefit'
-        END as benefit_description
+          WHEN v.type = 'package' THEN 'Package activation'
+          ELSE 'Voucher benefit'
+        END as benefit_description,
+        cp.id as subscription_id,
+        p.name as package_name
       FROM voucher_usage vu
       JOIN vouchers v ON vu.voucher_id = v.id
+      LEFT JOIN customer_packages cp ON cp.voucher_id = v.id AND cp."userId" = $1::text
+      LEFT JOIN packages p ON v.package_id = p.id
       WHERE vu.user_id = $1 OR vu.user_email = $2
       ORDER BY vu.used_at DESC
     `, [userId, userEmail])
@@ -315,16 +442,31 @@ export async function GET(request: NextRequest) {
       GROUP BY attempt_status
     `, [userId, userEmail])
 
+    // Get available discount vouchers
+    const availableDiscounts = await pool.query(`
+      SELECT 
+        v.code,
+        v.value as discount_percentage,
+        udv.created_at
+      FROM user_discount_vouchers udv
+      JOIN vouchers v ON udv.voucher_id = v.id
+      WHERE udv.user_id = $1 AND udv.is_used = false
+      ORDER BY udv.created_at DESC
+    `, [userId])
+
     return NextResponse.json({
+      success: true,
       redemptionHistory: usageHistory.rows,
       attemptStatistics: attemptStats.rows,
+      availableDiscounts: availableDiscounts.rows,
       totalRedemptions: usageHistory.rows.length
     })
 
   } catch (error) {
     console.error('Get voucher history error:', error)
     return NextResponse.json({ 
-      error: 'Failed to fetch redemption history' 
+      error: 'Failed to fetch redemption history',
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }
