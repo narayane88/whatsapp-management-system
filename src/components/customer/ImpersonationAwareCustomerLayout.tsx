@@ -26,11 +26,11 @@ export default function ImpersonationAwareCustomerLayout({
 
   useEffect(() => {
     // If we're not impersonating and the user is not a customer, redirect to customer page
-    if (!isImpersonating && user.role !== 'CUSTOMER') {
+    if (!isImpersonating && user?.role !== 'CUSTOMER') {
       router.push('/customer')
       return
     }
-  }, [isImpersonating, user.role, router])
+  }, [isImpersonating, user?.role, router])
 
   // During impersonation, show the customer layout regardless of the actual user role
   const displayUser = isImpersonating && impersonationData ? {
