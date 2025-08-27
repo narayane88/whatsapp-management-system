@@ -31,7 +31,6 @@ import { useSession } from 'next-auth/react'
 import { notifications } from '@mantine/notifications'
 import CustomerHeader from '@/components/customer/CustomerHeader'
 import VoucherRedemption from '@/components/vouchers/VoucherRedemption'
-import ImpersonationAwareCustomerLayout from '@/components/customer/ImpersonationAwareCustomerLayout'
 
 interface VoucherStats {
   totalRedeemed: number
@@ -141,24 +140,17 @@ export default function CustomerVouchersPage() {
   }
 
   return (
-    <ImpersonationAwareCustomerLayout>
-      <Container size="xl">
-        <CustomerHeader />
-        
-        <Stack gap="xl" mt="lg">
-          {/* Page Header */}
-          <Box>
-            <Group justify="space-between" align="flex-start">
-              <Box>
-                <Title order={2} mb="xs">
-                  Vouchers & Rewards
-                </Title>
-                <Text c="dimmed" size="sm">
-                  Redeem voucher codes for exciting benefits and rewards
-                </Text>
-              </Box>
-              
-              {/* Bizcoin Balance Display */}
+    <div>
+      <CustomerHeader 
+        title="Vouchers & Rewards"
+        subtitle="Redeem voucher codes for exciting benefits and rewards"
+      />
+      
+      <Container size="xl" py="lg">
+        <Stack gap="xl">
+          {/* Bizcoin Balance Display */}
+          <Group justify="flex-end">
+            {/* Bizcoin Balance Display */}
               <Paper 
                 p="md" 
                 radius="lg" 
@@ -184,8 +176,7 @@ export default function CustomerVouchersPage() {
                   </Box>
                 </Group>
               </Paper>
-            </Group>
-          </Box>
+          </Group>
 
           {/* Stats Cards */}
           <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="lg">
@@ -414,6 +405,6 @@ export default function CustomerVouchersPage() {
           )}
         </Stack>
       </Container>
-    </ImpersonationAwareCustomerLayout>
+    </div>
   )
 }

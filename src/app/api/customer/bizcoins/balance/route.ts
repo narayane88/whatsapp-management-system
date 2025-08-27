@@ -27,12 +27,12 @@ export async function GET(request: NextRequest) {
           WHERE bt.user_id = u.id
         ) as total_transactions,
         (
-          SELECT SUM(CASE WHEN bt.type = 'CREDIT' THEN bt.amount ELSE 0 END)
+          SELECT COALESCE(SUM(CASE WHEN bt.amount > 0 THEN bt.amount ELSE 0 END), 0)
           FROM bizpoints_transactions bt 
           WHERE bt.user_id = u.id
         ) as total_earned,
         (
-          SELECT SUM(CASE WHEN bt.type = 'DEBIT' THEN ABS(bt.amount) ELSE 0 END)
+          SELECT COALESCE(SUM(CASE WHEN bt.amount < 0 THEN ABS(bt.amount) ELSE 0 END), 0)
           FROM bizpoints_transactions bt 
           WHERE bt.user_id = u.id
         ) as total_spent,

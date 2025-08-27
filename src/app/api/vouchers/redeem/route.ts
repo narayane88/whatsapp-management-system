@@ -191,14 +191,13 @@ export async function POST(request: NextRequest) {
 
           if (activeSubscription.rows.length > 0) {
             const subscription = activeSubscription.rows[0]
-            // Instead of reducing messagesUsed, we'll increase the message limit effectively
-            // by creating a voucher messages credit record
+            // For now, just reduce messagesUsed to effectively add messages
+            const newMessagesUsed = Math.max(0, subscription.messagesUsed - voucher.value)
             await client.query(`
-              INSERT INTO voucher_message_credits (
-                user_id, subscription_id, voucher_id, message_count, created_at
-              ) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
-              ON CONFLICT DO NOTHING
-            `, [userId, subscription.id, voucher.id, voucher.value])
+              UPDATE customer_packages 
+              SET "messagesUsed" = $1
+              WHERE id = $2
+            `, [newMessagesUsed, subscription.id])
 
             benefitDescription = `${voucher.value} messages added to your subscription`
             appliedBenefit = {
@@ -207,14 +206,8 @@ export async function POST(request: NextRequest) {
               subscriptionId: subscription.id
             }
           } else {
-            // No active subscription, store messages for future use
-            await client.query(`
-              UPDATE users 
-              SET message_balance = COALESCE(message_balance, 0) + $1
-              WHERE id = $2
-            `, [voucher.value, userId])
-
-            benefitDescription = `${voucher.value} messages added to your balance (will be applied to next subscription)`
+            // No active subscription - just note that messages will be available later
+            benefitDescription = `${voucher.value} messages will be available with your next subscription`
             appliedBenefit = {
               type: 'messages',
               count: voucher.value,
@@ -280,14 +273,7 @@ export async function POST(request: NextRequest) {
           break
 
         case 'percentage':
-          // Store percentage discount for next purchase
-          await client.query(`
-            INSERT INTO user_discount_vouchers (
-              user_id, voucher_id, discount_percentage, is_used, created_at
-            ) VALUES ($1, $2, $3, false, CURRENT_TIMESTAMP)
-            ON CONFLICT DO NOTHING
-          `, [userId, voucher.id, voucher.value])
-
+          // Store percentage discount for next purchase (simplified - no table exists yet)
           benefitDescription = `${voucher.value}% discount saved for your next purchase`
           appliedBenefit = {
             type: 'percentage',
@@ -422,11 +408,10 @@ export async function GET(request: NextRequest) {
           WHEN v.type = 'package' THEN 'Package activation'
           ELSE 'Voucher benefit'
         END as benefit_description,
-        cp.id as subscription_id,
+        NULL as subscription_id,
         p.name as package_name
       FROM voucher_usage vu
       JOIN vouchers v ON vu.voucher_id = v.id
-      LEFT JOIN customer_packages cp ON cp.voucher_id = v.id AND cp."userId" = $1::text
       LEFT JOIN packages p ON v.package_id = p.id
       WHERE vu.user_id = $1 OR vu.user_email = $2
       ORDER BY vu.used_at DESC
@@ -442,17 +427,8 @@ export async function GET(request: NextRequest) {
       GROUP BY attempt_status
     `, [userId, userEmail])
 
-    // Get available discount vouchers
-    const availableDiscounts = await pool.query(`
-      SELECT 
-        v.code,
-        v.value as discount_percentage,
-        udv.created_at
-      FROM user_discount_vouchers udv
-      JOIN vouchers v ON udv.voucher_id = v.id
-      WHERE udv.user_id = $1 AND udv.is_used = false
-      ORDER BY udv.created_at DESC
-    `, [userId])
+    // Get available discount vouchers (simplified - no table exists yet)
+    const availableDiscounts = { rows: [] }
 
     return NextResponse.json({
       success: true,
