@@ -9,71 +9,32 @@ import {
   TextInput,
   Flex,
   Card,
-  Badge,
-  SimpleGrid,
   Container,
+  Group,
+  Center,
+  Divider,
+  Paper,
+  Transition,
+  rem,
 } from '@mantine/core'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { notifications } from '@mantine/notifications'
 import { useTheme } from '@/hooks/useTheme'
+import { IconBrandWhatsapp, IconLock, IconMail, IconArrowRight } from '@tabler/icons-react'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const { currentTheme } = useTheme()
 
-  // Demo credentials based on database seed file
-  const demoCredentials = [
-    {
-      role: 'Owner',
-      email: 'owner@demo.com',
-      password: 'demo123',
-      color: 'red',
-      description: 'Full system access & control'
-    },
-    {
-      role: 'Admin',
-      email: 'admin@demo.com',
-      password: 'demo123',
-      color: 'violet',
-      description: 'Administrative access & management'
-    },
-    {
-      role: 'SubDealer', 
-      email: 'subdealer@demo.com',
-      password: 'demo123',
-      color: 'orange',
-      description: 'Manage customers & resell packages'
-    },
-    {
-      role: 'Employee',
-      email: 'employee@demo.com', 
-      password: 'demo123',
-      color: 'blue',
-      description: 'Support & daily operations'
-    },
-    {
-      role: 'Customer',
-      email: 'customer@demo.com',
-      password: 'demo123', 
-      color: 'green',
-      description: 'Basic WhatsApp management'
-    }
-  ]
-
-  const fillCredentials = (credential: typeof demoCredentials[0]) => {
-    setEmail(credential.email)
-    setPassword(credential.password)
-    notifications.show({
-      title: `${credential.role} credentials filled`,
-      message: `You can now sign in as ${credential.role}`,
-      color: 'green'
-    })
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -143,109 +104,204 @@ export default function SignInPage() {
   }
 
   return (
-    <Container fluid style={{ minHeight: '100vh', backgroundColor: 'var(--mantine-color-gray-1)' }}>
-      <Flex align="center" justify="center" style={{ minHeight: '100vh' }} p="xl">
-        <Box w="100%" maw={800}>
-          <Stack gap="xl">
-          {/* Main Login Card */}
-          <Card shadow="sm" padding="lg" radius="md" withBorder style={{ maxWidth: '400px', margin: '0 auto' }}>
-            <Stack gap="lg">
-                <Box ta="center">
-                  <Title order={2} c="green.6" mb="xs">
-                    WhatsApp Admin
-                  </Title>
-                  <Text c="dimmed">
-                    Sign in to access the admin panel
-                  </Text>
-                </Box>
-
-                <Stack gap="md">
-                  <TextInput
-                    label="Email Address"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                  />
-
-                  <TextInput
-                    label="Password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    required
-                  />
-
-                  <Button
-                    color="green"
-                    size="lg"
-                    fullWidth
-                    onClick={handleSignIn}
-                    loading={isLoading}
-                  >
-                    Sign In
-                  </Button>
-                </Stack>
-            </Stack>
-          </Card>
-
-          {/* Demo Credentials Card */}
-          <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Card.Section withBorder inheritPadding py="xs">
-              <Box ta="center">
-                <Title order={3} c="dark.7" mb="xs">
-                  Quick Login - Demo Credentials
-                </Title>
-                <Text size="sm" c="dimmed">
-                  Click any role below to auto-fill login credentials
-                </Text>
-              </Box>
-            </Card.Section>
-              <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} spacing="md" mt="md">
-                {demoCredentials.map((credential, index) => (
-                  <Card 
-                    key={index}
-                    shadow="xs"
-                    padding="md"
-                    radius="md"
-                    withBorder
-                    style={{ cursor: 'pointer', transition: 'all 0.2s' }}
-                    onClick={() => fillCredentials(credential)}
-                  >
-                    <Stack align="center" gap="sm">
-                        <Badge 
-                          color={credential.color} 
-                          variant="filled"
-                          size="md"
+    <Box
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #25D366 0%, #128C7E 50%, #075E54 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Animated background elements */}
+      <Box
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
+            radial-gradient(circle at 40% 60%, rgba(255,255,255,0.06) 0%, transparent 50%)
+          `,
+          animation: 'float 6s ease-in-out infinite',
+        }}
+      />
+      
+      <Container size="sm" style={{ position: 'relative', zIndex: 1 }}>
+        <Flex align="center" justify="center" style={{ minHeight: '100vh' }} p="xl">
+          <Transition
+            mounted={mounted}
+            transition="fade"
+            duration={800}
+            timingFunction="ease"
+          >
+            {(styles) => (
+              <Paper
+                style={{
+                  ...styles,
+                  width: '100%',
+                  maxWidth: rem(450),
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                }}
+                radius="xl"
+                p="xl"
+              >
+                <Stack gap="xl">
+                  {/* Header Section */}
+                  <Center>
+                    <Stack align="center" gap="md">
+                      <Box
+                        style={{
+                          background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                          borderRadius: '50%',
+                          padding: rem(16),
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 20px rgba(37, 211, 102, 0.3)',
+                        }}
+                      >
+                        <IconBrandWhatsapp size={32} color="white" />
+                      </Box>
+                      <Stack align="center" gap={4}>
+                        <Title
+                          order={1}
+                          size="h2"
+                          style={{
+                            background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                            backgroundClip: 'text',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontWeight: 700,
+                          }}
                         >
-                          {credential.role}
-                        </Badge>
-                        <Stack gap={2} align="center">
-                          <Text size="sm" fw={500} c="dark.7">
-                            {credential.email}
-                          </Text>
-                          <Text size="xs" c="dimmed" ta="center">
-                            {credential.description}
-                          </Text>
-                        </Stack>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          color={credential.color}
-                          fullWidth
-                        >
-                          Auto-fill
-                        </Button>
+                          WhatsApp Business
+                        </Title>
+                        <Text c="dimmed" size="sm" ta="center">
+                          Professional messaging solution for your business
+                        </Text>
+                      </Stack>
                     </Stack>
-                  </Card>
-                ))}
-              </SimpleGrid>
-          </Card>
-        </Stack>
-      </Box>
-    </Flex>
-  </Container>
+                  </Center>
+
+                  <Divider 
+                    style={{ 
+                      background: 'linear-gradient(90deg, transparent, #e9ecef, transparent)' 
+                    }} 
+                  />
+
+                  {/* Form Section */}
+                  <Stack gap="lg">
+                    <TextInput
+                      leftSection={<IconMail size={18} />}
+                      label="Email Address"
+                      placeholder="Enter your business email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      size="md"
+                      styles={{
+                        input: {
+                          borderRadius: rem(12),
+                          border: '2px solid #e9ecef',
+                          transition: 'all 0.2s ease',
+                          '&:focus': {
+                            borderColor: '#25D366',
+                            boxShadow: '0 0 0 3px rgba(37, 211, 102, 0.1)',
+                          },
+                        },
+                        label: { fontWeight: 600, color: '#495057' },
+                      }}
+                    />
+
+                    <TextInput
+                      leftSection={<IconLock size={18} />}
+                      label="Password"
+                      placeholder="Enter your secure password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      size="md"
+                      styles={{
+                        input: {
+                          borderRadius: rem(12),
+                          border: '2px solid #e9ecef',
+                          transition: 'all 0.2s ease',
+                          '&:focus': {
+                            borderColor: '#25D366',
+                            boxShadow: '0 0 0 3px rgba(37, 211, 102, 0.1)',
+                          },
+                        },
+                        label: { fontWeight: 600, color: '#495057' },
+                      }}
+                    />
+
+                    <Button
+                      size="lg"
+                      fullWidth
+                      onClick={handleSignIn}
+                      loading={isLoading}
+                      rightSection={<IconArrowRight size={18} />}
+                      style={{
+                        background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                        border: 'none',
+                        borderRadius: rem(12),
+                        height: rem(50),
+                        fontWeight: 600,
+                        fontSize: rem(16),
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)',
+                      }}
+                      styles={{
+                        root: {
+                          '&:hover': {
+                            transform: 'translateY(-1px)',
+                            boxShadow: '0 6px 20px rgba(37, 211, 102, 0.4)',
+                          },
+                        },
+                      }}
+                    >
+                      Access Dashboard
+                    </Button>
+                  </Stack>
+
+                  {/* Security Note */}
+                  <Box
+                    style={{
+                      background: 'rgba(37, 211, 102, 0.1)',
+                      borderRadius: rem(12),
+                      padding: rem(16),
+                      border: '1px solid rgba(37, 211, 102, 0.2)',
+                    }}
+                  >
+                    <Group gap="sm">
+                      <IconLock size={16} color="#25D366" />
+                      <Text size="sm" c="#25D366" fw={500}>
+                        Your connection is secured with enterprise-grade encryption
+                      </Text>
+                    </Group>
+                  </Box>
+                </Stack>
+              </Paper>
+            )}
+          </Transition>
+        </Flex>
+      </Container>
+      
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33% { transform: translateY(-10px) rotate(1deg); }
+          66% { transform: translateY(5px) rotate(-1deg); }
+        }
+      `}</style>
+    </Box>
   )
 }

@@ -80,13 +80,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - No filtering, see all users
       console.log('👑 Level 1 (SUPER USER) - Full user access')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full user access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered user access: self + assigned users only')
-        baseQuery += ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full user access')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Only their assigned customers + themselves
       console.log('🔒 Level 3 (SUBDEALER) - Filtered user access: self + assigned customers only')
@@ -110,13 +105,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - No filtering
       console.log('👑 Level 1 (SUPER USER) - Full user count')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full user count granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered user count')
-        countQuery += ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full user count')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Only assigned customers + themselves
       console.log('🔒 Level 3 (SUBDEALER) - Filtered user count')

@@ -61,13 +61,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - No filtering, see all customers
       console.log('👑 Level 1 (SUPER USER) - Full customer stats access')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full customer stats access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered customer stats: assigned customers only')
-        statsQuery += ` AND u."parentId" = ${currentUserId}`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full customer stats access')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Only their assigned customers
       console.log('🔒 Level 3 (SUBDEALER) - Filtered customer stats: assigned customers only')

@@ -459,13 +459,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - Full unrestricted access to everything
       console.log('👑 Level 1 (SUPER USER) - Full unrestricted access to all data')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access (full or filtered based on Level 1 grant)
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered access: self + assigned users only')
-        usersQuery += ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full access to all data')
     } else if (currentUserLevel === 3) {
       // Level 3 - Filtered access to own account + assigned customers
       console.log('🔒 Level 3 - Filtered access: self + assigned customers')
@@ -500,13 +495,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - Full unrestricted access to all transactions
       console.log('👑 Level 1 (SUPER USER) - Full access to all transactions')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full transaction access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered transactions: self + assigned users only')
-        transactionsQuery += ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full transaction access')
     } else if (currentUserLevel === 3) {
       // Level 3 - Own transactions + assigned customer transactions
       console.log('🔒 Level 3 - Filtered transactions: self + assigned customers')
@@ -543,13 +533,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - Global summary statistics
       console.log('👑 Level 1 (SUPER USER) - Global summary statistics')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable summary based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full summary access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered summary: self + assigned users only')
-        summaryQuery += ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full summary access')
     } else if (currentUserLevel === 3) {
       // Level 3 - Own summary + assigned customer summary
       console.log('🔒 Level 3 - Filtered summary: self + assigned customers')

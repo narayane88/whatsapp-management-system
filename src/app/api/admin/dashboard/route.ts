@@ -65,14 +65,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - Full access to all data
       console.log('👑 Level 1 (SUPER USER) - Full dashboard access')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full dashboard access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered dashboard access')
-        userFilterCondition = ` AND (u.id = ${currentUserId} OR u."parentId" = ${currentUserId})`
-        transactionFilterCondition = ` AND t."createdBy" = ${currentUserId}`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full dashboard access')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Own data + assigned customers only
       console.log('🔒 Level 3 (SUBDEALER) - Filtered dashboard access')

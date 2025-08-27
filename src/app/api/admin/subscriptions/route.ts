@@ -98,13 +98,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - No filtering, see all subscriptions
       console.log('👑 Level 1 (SUPER USER) - Full subscription access')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full subscription access granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered subscription access: assigned customers only')
-        baseQuery += ` AND u."parentId" = ${currentUserId}`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full subscription access')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Only their assigned customers
       console.log('🔒 Level 3 (SUBDEALER) - Filtered subscription access: assigned customers only')
@@ -132,13 +127,8 @@ export async function GET(request: NextRequest) {
       // Level 1 (SUPER USER) - No filtering
       console.log('👑 Level 1 (SUPER USER) - Full subscription count')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Configurable access
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full subscription count granted by Level 1')
-      } else {
-        console.log('🔒 Level 2 (ADMIN) - Filtered subscription count')
-        countQuery += ` AND u."parentId" = ${currentUserId}`
-      }
+      // Level 2 (ADMIN) - Full access, no filtering
+      console.log('🔐 Level 2 (ADMIN) - Full subscription count')
     } else if (currentUserLevel === 3) {
       // Level 3 (SUBDEALER) - Only assigned customers
       console.log('🔒 Level 3 (SUBDEALER) - Filtered subscription count')
@@ -275,32 +265,8 @@ export async function POST(request: NextRequest) {
       // Level 1 (SUPER USER) - Can create subscriptions for any user
       console.log('👑 Level 1 (SUPER USER) - Unrestricted subscription creation access')
     } else if (currentUserLevel === 2) {
-      // Level 2 (ADMIN) - Permission based on Level 1 grant
-      if (accessType === 'full') {
-        console.log('🔐 Level 2 (ADMIN) - Full subscription creation access granted by Level 1')
-      } else {
-        // Filtered access - can only create for assigned users
-        if (parseInt(userId) !== createdBy && targetUser.parentId !== createdBy) {
-          console.log('❌ [SUBSCRIPTIONS-POST] Permission denied: Level 2 admin with filtered access')
-          console.log(`🔑 [SUBSCRIPTIONS-POST] User Level: ${currentUserLevel} (${loggedInUser.role_name})`)
-          console.log(`🔑 [SUBSCRIPTIONS-POST] Access Type: ${accessType}`)
-          console.log(`🔑 [SUBSCRIPTIONS-POST] Target User ID: ${userId}, Creator ID: ${createdBy}, Target Parent ID: ${targetUser.parentId}`)
-          
-          return NextResponse.json({ 
-            error: `As ${loggedInUser.role_name} with filtered access, you can only create subscriptions for yourself or your assigned users`,
-            details: process.env.NODE_ENV === 'development' ? {
-              userLevel: currentUserLevel,
-              roleName: loggedInUser.role_name,
-              accessType: accessType,
-              targetUserId: parseInt(userId),
-              creatorId: createdBy,
-              targetParentId: targetUser.parentId,
-              message: 'Level 2 admin with filtered access can only create subscriptions for self or assigned users'
-            } : undefined
-          }, { status: 403 })
-        }
-        console.log('✅ Level 2 permission check passed: User is self or assigned')
-      }
+      // Level 2 (ADMIN) - Full access, can create subscriptions for any user
+      console.log('🔐 Level 2 (ADMIN) - Full subscription creation access')
     } else if (currentUserLevel === 3) {
       // Level 3 - Can create subscriptions for themselves or assigned customers
       if (parseInt(userId) !== createdBy && targetUser.parentId !== createdBy) {
