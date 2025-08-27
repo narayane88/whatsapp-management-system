@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
-import { AppShell, Burger, Group, Text, Avatar, Menu, ActionIcon, useMantineColorScheme, TextInput, Modal, Stack, Button, Card, Badge, Paper, ScrollArea, Image } from '@mantine/core'
+import { AppShell, Burger, Group, Text, Menu, ActionIcon, useMantineColorScheme, TextInput, Modal, Stack, Button, Card, Badge, Paper, ScrollArea, Image } from '@mantine/core'
 import { useDisclosure, useHotkeys } from '@mantine/hooks'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -17,7 +17,6 @@ interface CustomerLayoutProps {
     id: string
     name?: string | null
     email?: string | null
-    image?: string | null
   }
 }
 
@@ -368,14 +367,13 @@ export default function CustomerLayout({ children, user }: CustomerLayoutProps) 
             
             <Menu shadow="md" width={200}>
               <Menu.Target>
-                <Avatar
-                  src={user.image}
-                  alt={user.name || 'User'}
-                  radius="xl"
+                <ActionIcon
+                  variant="subtle"
+                  size="lg"
                   style={{ cursor: 'pointer' }}
                 >
-                  {user.name?.charAt(0).toUpperCase()}
-                </Avatar>
+                  <IconUser size={20} />
+                </ActionIcon>
               </Menu.Target>
 
               <Menu.Dropdown>
