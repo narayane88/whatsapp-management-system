@@ -173,46 +173,26 @@ export async function POST(request: NextRequest) {
           break
 
         case 'messages':
-          // Add messages to current active subscription
-          const activeSubscription = await client.query(`
-            SELECT 
-              cp.id,
-              cp."messagesUsed",
-              cp."packageId",
-              p."messageLimit"
-            FROM customer_packages cp
-            JOIN packages p ON cp."packageId" = p.id
-            WHERE cp."userId" = $1::text 
-              AND cp."isActive" = true
-              AND (cp."endDate" IS NULL OR cp."endDate" > CURRENT_TIMESTAMP)
-            ORDER BY cp."createdAt" DESC
-            LIMIT 1
+          // Add messages to user's message balance
+          const currentMessageBalance = await client.query(`
+            SELECT message_balance FROM users WHERE id = $1
           `, [userId])
+          
+          const oldBalance = currentMessageBalance.rows[0]?.message_balance || 0
+          const newMessageBalance = oldBalance + voucher.value
+          
+          await client.query(`
+            UPDATE users 
+            SET message_balance = $1
+            WHERE id = $2
+          `, [newMessageBalance, userId])
 
-          if (activeSubscription.rows.length > 0) {
-            const subscription = activeSubscription.rows[0]
-            // For now, just reduce messagesUsed to effectively add messages
-            const newMessagesUsed = Math.max(0, subscription.messagesUsed - voucher.value)
-            await client.query(`
-              UPDATE customer_packages 
-              SET "messagesUsed" = $1
-              WHERE id = $2
-            `, [newMessagesUsed, subscription.id])
-
-            benefitDescription = `${voucher.value} messages added to your subscription`
-            appliedBenefit = {
-              type: 'messages',
-              count: voucher.value,
-              subscriptionId: subscription.id
-            }
-          } else {
-            // No active subscription - just note that messages will be available later
-            benefitDescription = `${voucher.value} messages will be available with your next subscription`
-            appliedBenefit = {
-              type: 'messages',
-              count: voucher.value,
-              stored: true
-            }
+          benefitDescription = `${voucher.value} messages added to your account balance`
+          appliedBenefit = {
+            type: 'messages',
+            count: voucher.value,
+            previousBalance: oldBalance,
+            newBalance: newMessageBalance
           }
           break
 
@@ -313,8 +293,8 @@ export async function POST(request: NextRequest) {
       // 8. Log successful redemption
       await client.query(`
         INSERT INTO voucher_redemption_attempts (
-          voucher_id, user_id, user_email, attempt_status, ip_address, user_agent, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+          voucher_id, user_id, user_email, attempt_status, ip_address, user_agent
+        ) VALUES ($1, $2, $3, $4, $5, $6)
       `, [voucher.id, userId, userEmail, 'success', clientIp, userAgent])
 
       await client.query('COMMIT')
@@ -348,8 +328,8 @@ export async function POST(request: NextRequest) {
         await pool.query(`
           INSERT INTO voucher_redemption_attempts (
             voucher_id, user_id, user_email, attempt_status, failure_reason, 
-            ip_address, user_agent, created_at
-          ) VALUES (NULL, NULL, $1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+            ip_address, user_agent
+          ) VALUES (NULL, NULL, $1, $2, $3, $4, $5)
         `, [userEmail, 'error', error instanceof Error ? error.message : 'Unknown error', clientIp, userAgent])
       } catch (logError) {
         console.error('Failed to log error attempt:', logError)
