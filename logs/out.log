@@ -1522,3 +1522,1462 @@
 2025-08-23 23:26:32 +05:30: ❌ Permission denied: 'company.profile.read' for user 'customer@demo.com' (Level 5 - CUSTOMER)
 2025-08-23 23:26:32 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: customer@demo.com
 2025-08-23 23:26:32 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-27 12:25:31 +05:30:    ▲ Next.js 15.4.6
+2025-08-27 12:25:31 +05:30:    - Local:        http://localhost:3100
+2025-08-27 12:25:31 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-27 12:25:31 +05:30: 
+2025-08-27 12:25:31 +05:30:  ✓ Starting...
+2025-08-27 12:25:32 +05:30:  ✓ Ready in 939ms
+2025-08-27 12:25:35 +05:30: 🚀 Starting subscription scheduler (checking every 1 minute(s))
+2025-08-27 12:25:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:25:35 +05:30: ✅ Subscription scheduler auto-started in production
+2025-08-27 12:25:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:25:38 +05:30: Auto-starting queue processor on server startup
+2025-08-27 12:25:38 +05:30: Starting queue processor with interval: 3s
+2025-08-27 12:26:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:26:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:27:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:27:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:28:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:28:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:29:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:29:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:30:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:30:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:31:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:31:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:32:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:32:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:33:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:33:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:34:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:34:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:35:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:35:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:36:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:36:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:37:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:37:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:38:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:38:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:39:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:39:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:40:35 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:40:35 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:42:47 +05:30:    ▲ Next.js 15.4.6
+2025-08-27 12:42:47 +05:30:    - Local:        http://localhost:3100
+2025-08-27 12:42:47 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-27 12:42:47 +05:30: 
+2025-08-27 12:42:47 +05:30:  ✓ Starting...
+2025-08-27 12:42:48 +05:30:  ✓ Ready in 1096ms
+2025-08-27 12:42:51 +05:30: 🚀 Starting subscription scheduler (checking every 1 minute(s))
+2025-08-27 12:42:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:42:51 +05:30: ✅ Subscription scheduler auto-started in production
+2025-08-27 12:42:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:42:54 +05:30: Auto-starting queue processor on server startup
+2025-08-27 12:42:54 +05:30: Starting queue processor with interval: 3s
+2025-08-27 12:43:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:43:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:44:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:44:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:45:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:45:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:46:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:46:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:47:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:47:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:48:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:48:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:49:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:49:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:50:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:50:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:51:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:51:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:52:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:52:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:53:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:53:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:54:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:54:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:55:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:55:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:56:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:56:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:57:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:57:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:58:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:58:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 12:59:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 12:59:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:00:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:00:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:01:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:01:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:02:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:02:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:03:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:03:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:04:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:04:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:05:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:05:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:06:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:06:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:07:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:07:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:08:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:08:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:09:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:09:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:10:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:10:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:11:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:11:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:12:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:12:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:13:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:13:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:14:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:14:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:15:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:15:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:16:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:16:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:17:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:17:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:18:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:18:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:19:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:19:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:20:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:20:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:21:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:21:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:22:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:22:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:23:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:23:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:24:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:24:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:25:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:25:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:26:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:26:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:27:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:27:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:28:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:28:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:29:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:29:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:30:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:30:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:31:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:31:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:32:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:32:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:33:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:33:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:34:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:34:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:35:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:35:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:36:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:36:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:37:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:37:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:38:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:38:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:39:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:39:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:40:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:40:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:41:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:41:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:42:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:42:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:43:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:43:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:44:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:44:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:45:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:45:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:46:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:46:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:47:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:47:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:48:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:48:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:49:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:49:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:50:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:50:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:51:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:51:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:52:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:52:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:53:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:53:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:54:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:54:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:55:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:55:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:56:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:56:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:57:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:57:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:58:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:58:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 13:59:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 13:59:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:00:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:00:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:01:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:01:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:02:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:02:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:03:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:03:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:04:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:04:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:05:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:05:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:06:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:06:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:07:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:07:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:08:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:08:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:09:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:09:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:10:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:10:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:11:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:11:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:12:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:12:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:13:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:13:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:14:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:14:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:15:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:15:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:16:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:16:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:17:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:17:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:18:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:18:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:19:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:19:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:20:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:20:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:21:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:21:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:22:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:22:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:23:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:23:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:24:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:24:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:25:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:25:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:26:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:26:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:27:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:27:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:28:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:28:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:29:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:29:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:30:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:30:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:31:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:31:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:32:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:32:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:33:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:33:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:34:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:34:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:35:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:35:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:36:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:36:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:37:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:37:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:38:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:38:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:39:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:39:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:40:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:40:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:41:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:41:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:42:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:42:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:43:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:43:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:44:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:44:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:45:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:45:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:46:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:46:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:47:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:47:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:48:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:48:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:49:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:49:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:50:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:50:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:51:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:51:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:52:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:52:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:53:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:53:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:54:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:54:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:55:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:55:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:56:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:56:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:57:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:57:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:58:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:58:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 14:59:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 14:59:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:00:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:00:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:01:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:01:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:02:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:02:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:03:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:03:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:04:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:04:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:05:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:05:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:06:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:06:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:07:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:07:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:08:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:08:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:09:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:09:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:10:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:10:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:11:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:11:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:12:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:12:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:13:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:13:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:14:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:14:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:15:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:15:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:16:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:16:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:17:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:17:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:18:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:18:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:19:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:19:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:20:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:20:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:21:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:21:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:22:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:22:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:23:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:23:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:24:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:24:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:25:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:25:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:26:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:26:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:27:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:27:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:28:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:28:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:29:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:29:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:30:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:30:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:31:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:31:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:32:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:32:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:33:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:33:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:34:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:34:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:35:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:35:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:36:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:36:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:37:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:37:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:38:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:38:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:39:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:39:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:40:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:40:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:41:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:41:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:42:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:42:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:43:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:43:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:44:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:44:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:45:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:45:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:46:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:46:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:47:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:47:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:48:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:48:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:49:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:49:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:50:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:50:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:51:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:51:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:52:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:52:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:53:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:53:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:54:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:54:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:55:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:55:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:56:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:56:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:57:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:57:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:58:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:58:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 15:59:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 15:59:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:00:21 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:00:21 +05:30: 🔍 Testing database connection...
+2025-08-27 16:00:21 +05:30: ✅ Database connection successful
+2025-08-27 16:00:21 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:00:21 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:00:21 +05:30: 🔍 Verifying password...
+2025-08-27 16:00:21 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:00:21 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-27 16:00:21 +05:30: ✅ Database connection established
+2025-08-27 16:00:21 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:22 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:00:22 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:00:22 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:00:22 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:00:36 +05:30: ✅ Database connection established
+2025-08-27 16:00:36 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-27 16:00:36 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-27 16:00:36 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-27 16:00:36 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-27 16:00:36 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-27 16:00:36 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:37 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:38 +05:30: ✅ Permission granted: 'packages.read' for user 'owner@demo.com'
+2025-08-27 16:00:38 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:38 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:00:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:00:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'system.settings.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'system.logs.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'system.settings.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:01:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:01:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:01:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:02:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:02:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:02:47 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:02:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:02:47 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:02:47 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:02:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:02:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:02:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:03:21 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:03:21 +05:30: 🔍 Testing database connection...
+2025-08-27 16:03:21 +05:30: ✅ Database connection successful
+2025-08-27 16:03:21 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:03:21 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:03:21 +05:30: 🔍 Verifying password...
+2025-08-27 16:03:21 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:03:28 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:03:28 +05:30: 🔍 Testing database connection...
+2025-08-27 16:03:28 +05:30: ✅ Database connection successful
+2025-08-27 16:03:28 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:03:28 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:03:28 +05:30: 🔍 Verifying password...
+2025-08-27 16:03:28 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:03:36 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:03:36 +05:30: 🔍 Testing database connection...
+2025-08-27 16:03:36 +05:30: ✅ Database connection successful
+2025-08-27 16:03:36 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:03:36 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:03:36 +05:30: 🔍 Verifying password...
+2025-08-27 16:03:36 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:03:42 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:03:42 +05:30: 🔍 Testing database connection...
+2025-08-27 16:03:42 +05:30: ✅ Database connection successful
+2025-08-27 16:03:42 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:03:42 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:03:42 +05:30: 🔍 Verifying password...
+2025-08-27 16:03:42 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:03:51 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:03:51 +05:30: 🔍 Testing database connection...
+2025-08-27 16:03:51 +05:30: ✅ Database connection successful
+2025-08-27 16:03:51 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:03:51 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:03:51 +05:30: 🔍 Verifying password...
+2025-08-27 16:03:51 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:03:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:03:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:04:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:04:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:05:38 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:05:38 +05:30: 🔍 Testing database connection...
+2025-08-27 16:05:38 +05:30: ✅ Database connection successful
+2025-08-27 16:05:38 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:05:38 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:05:38 +05:30: 🔍 Verifying password...
+2025-08-27 16:05:38 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:05:38 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-27 16:05:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:05:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:05:39 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:05:39 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:05:39 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:05:39 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:05:39 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:05:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:05:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:06:03 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:06:03 +05:30: 🔍 Testing database connection...
+2025-08-27 16:06:03 +05:30: ✅ Database connection successful
+2025-08-27 16:06:03 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:06:03 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:06:03 +05:30: 🔍 Verifying password...
+2025-08-27 16:06:03 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:06:03 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-27 16:06:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:06:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:06:03 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:06:03 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:06:03 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:06:03 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:06:03 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:06:34 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:06:34 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:06:34 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:06:35 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:06:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:06:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:07:06 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:07:06 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:07:06 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:07:06 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:07:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:07:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:08:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:08:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:09:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:09:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:10:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:10:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:11:51 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:11:51 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:12:05 +05:30:    ▲ Next.js 15.4.6
+2025-08-27 16:12:05 +05:30:    - Local:        http://localhost:3100
+2025-08-27 16:12:05 +05:30:    - Network:      http://147.79.66.210:3100
+2025-08-27 16:12:05 +05:30: 
+2025-08-27 16:12:05 +05:30:  ✓ Starting...
+2025-08-27 16:12:06 +05:30:  ✓ Ready in 1146ms
+2025-08-27 16:12:09 +05:30: 🚀 Starting subscription scheduler (checking every 1 minute(s))
+2025-08-27 16:12:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:12:09 +05:30: ✅ Subscription scheduler auto-started in production
+2025-08-27 16:12:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:12:11 +05:30: Auto-starting queue processor on server startup
+2025-08-27 16:12:11 +05:30: Starting queue processor with interval: 3s
+2025-08-27 16:12:53 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:12:53 +05:30: 🔍 Testing database connection...
+2025-08-27 16:12:53 +05:30: ✅ Database connection successful
+2025-08-27 16:12:53 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:12:53 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:12:53 +05:30: 🔍 Verifying password...
+2025-08-27 16:12:53 +05:30: ❌ Invalid password for: owner@demo.com
+2025-08-27 16:13:05 +05:30: 🔐 NextAuth authorize called with email: admin@demo.com
+2025-08-27 16:13:05 +05:30: 🔍 Testing database connection...
+2025-08-27 16:13:05 +05:30: ✅ Database connection successful
+2025-08-27 16:13:05 +05:30: 🔍 Looking up user: admin@demo.com
+2025-08-27 16:13:05 +05:30: ✅ User found: { id: 2, email: 'admin@demo.com', role: 'ADMIN' }
+2025-08-27 16:13:05 +05:30: 🔍 Verifying password...
+2025-08-27 16:13:05 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:13:05 +05:30: ✅ Authentication successful for: admin@demo.com Role: ADMIN
+2025-08-27 16:13:05 +05:30: ✅ Database connection established
+2025-08-27 16:13:05 +05:30: ❌ Permission denied: 'company.profile.read' for user 'admin@demo.com' (Level 2 - ADMIN)
+2025-08-27 16:13:05 +05:30: ❌ [COMPANY-PROFILE-GET] Permission denied for user: admin@demo.com
+2025-08-27 16:13:05 +05:30: 🔑 [COMPANY-PROFILE-GET] Required permission: company.profile.read
+2025-08-27 16:13:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:13:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:13:27 +05:30: 🔐 NextAuth authorize called with email: owner@demo.com
+2025-08-27 16:13:27 +05:30: 🔍 Testing database connection...
+2025-08-27 16:13:27 +05:30: ✅ Database connection successful
+2025-08-27 16:13:27 +05:30: 🔍 Looking up user: owner@demo.com
+2025-08-27 16:13:27 +05:30: ✅ User found: { id: 1, email: 'owner@demo.com', role: 'OWNER' }
+2025-08-27 16:13:27 +05:30: 🔍 Verifying password...
+2025-08-27 16:13:27 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:13:27 +05:30: ✅ Authentication successful for: owner@demo.com Role: OWNER
+2025-08-27 16:13:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:13:28 +05:30: ✅ Database connection established
+2025-08-27 16:13:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:13:28 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:13:28 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'owner@demo.com'
+2025-08-27 16:13:28 +05:30: 📊 [DASHBOARD] User owner@demo.com (Level 1) requesting dashboard data
+2025-08-27 16:13:28 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:13:28 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user owner@demo.com
+2025-08-27 16:13:41 +05:30: ✅ Permission granted: 'customers.read' for user 'owner@demo.com'
+2025-08-27 16:13:41 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats access
+2025-08-27 16:13:41 +05:30: 👑 Level 1 (SUPER USER) - Full customer access
+2025-08-27 16:13:41 +05:30: 👑 Level 1 (SUPER USER) - Full customer stats
+2025-08-27 16:13:41 +05:30: 👑 Level 1 (SUPER USER) - Full customer count
+2025-08-27 16:13:41 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:13:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:07 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-27 16:14:07 +05:30: 👑 Level 1 (SUPER USER) - Full user access
+2025-08-27 16:14:07 +05:30: 👑 Level 1 (SUPER USER) - Full user count
+2025-08-27 16:14:07 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-27 16:14:07 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:14:07 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:14:07 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:14:07 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:14:07 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:14:07 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:14:07 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:07 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:14:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:14:10 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-27 16:14:10 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'owner@demo.com'
+2025-08-27 16:14:10 +05:30: ✅ Authenticated user: owner@demo.com
+2025-08-27 16:14:10 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-27 16:14:10 +05:30: 👤 Current user: { id: 1, level: 1, role: 'OWNER', accessType: 'filtered' }
+2025-08-27 16:14:10 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-27 16:14:10 +05:30: 👑 Level 1 (SUPER USER) - Full unrestricted access to all data
+2025-08-27 16:14:10 +05:30: 📊 Found 7 users
+2025-08-27 16:14:10 +05:30: 🔍 Fetching recent transactions...
+2025-08-27 16:14:10 +05:30: 👑 Level 1 (SUPER USER) - Full access to all transactions
+2025-08-27 16:14:10 +05:30: 📊 Found 11 transactions
+2025-08-27 16:14:10 +05:30: 🔍 Calculating summary statistics...
+2025-08-27 16:14:10 +05:30: 👑 Level 1 (SUPER USER) - Global summary statistics
+2025-08-27 16:14:10 +05:30: 📈 Summary calculated: {
+  total_biz_points: '69970.00',
+  users_with_points: '11',
+  total_transactions: '11',
+  total_commissions: '370.00',
+  total_settlements: '4000.00'
+}
+2025-08-27 16:14:10 +05:30: ✅ Returning data: { usersCount: 7, transactionsCount: 11, totalBizPoints: undefined }
+2025-08-27 16:14:11 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:11 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Database connection established
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:13 +05:30: ✅ Database connection established
+2025-08-27 16:14:13 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:42 +05:30: ✅ Permission granted: 'system.settings.read' for user 'owner@demo.com'
+2025-08-27 16:14:42 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:42 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-27 16:14:42 +05:30: ✅ Permission granted: 'system.logs.read' for user 'owner@demo.com'
+2025-08-27 16:14:42 +05:30: ✅ Permission granted: 'system.settings.read' for user 'owner@demo.com'
+2025-08-27 16:14:43 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:43 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'roles.read' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'users.read' for user 'owner@demo.com'
+2025-08-27 16:14:58 +05:30: ✅ Permission granted: 'users.page.access' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'company.profile.read' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:14:59 +05:30: ✅ Permission granted: 'permissions.view' for user 'owner@demo.com'
+2025-08-27 16:15:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:15:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:15:39 +05:30: ✅ Permission granted: 'users.update' for user 'owner@demo.com'
+2025-08-27 16:15:39 +05:30: 🔒 Permission check failed: User not found for 'owner@demo.com'
+2025-08-27 16:16:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:16:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:16:19 +05:30: 🔒 Permission check failed: User not found for 'owner@demo.com'
+2025-08-27 16:17:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:17:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:18:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:18:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:19:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:19:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:19:53 +05:30: 🔐 NextAuth authorize called with email: narayane88@gmail.com
+2025-08-27 16:19:53 +05:30: 🔍 Testing database connection...
+2025-08-27 16:19:53 +05:30: ✅ Database connection successful
+2025-08-27 16:19:53 +05:30: 🔍 Looking up user: narayane88@gmail.com
+2025-08-27 16:19:53 +05:30: ✅ User found: { id: 1, email: 'narayane88@gmail.com', role: 'OWNER' }
+2025-08-27 16:19:53 +05:30: 🔍 Verifying password...
+2025-08-27 16:19:53 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:19:53 +05:30: ✅ Authentication successful for: narayane88@gmail.com Role: OWNER
+2025-08-27 16:19:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:19:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:19:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:19:54 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:19:54 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:19:54 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:19:54 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:20:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:20:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:20:24 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:20:24 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:20:24 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:20:24 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:20:54 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:20:54 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:20:54 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:20:54 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:21:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:21:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:21:24 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:21:24 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:21:24 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:21:24 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:21:54 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:21:54 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:21:54 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:21:54 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:22:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:22:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:22:11 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:11 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:49 +05:30: ✅ Permission granted: 'users.update' for user 'narayane88@gmail.com'
+2025-08-27 16:22:49 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:50 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:22:54 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:23:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:23:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:23:11 +05:30: 🔐 NextAuth authorize called with email: narayane88@gmail.com
+2025-08-27 16:23:11 +05:30: 🔍 Testing database connection...
+2025-08-27 16:23:11 +05:30: ✅ Database connection successful
+2025-08-27 16:23:11 +05:30: 🔍 Looking up user: narayane88@gmail.com
+2025-08-27 16:23:11 +05:30: ✅ User found: { id: 1, email: 'narayane88@gmail.com', role: 'OWNER' }
+2025-08-27 16:23:11 +05:30: 🔍 Verifying password...
+2025-08-27 16:23:11 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:23:11 +05:30: ✅ Authentication successful for: narayane88@gmail.com Role: OWNER
+2025-08-27 16:23:11 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:23:12 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:23:12 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:23:12 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:23:12 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:23:12 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:23:12 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:23:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:23:42 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:23:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:23:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:24:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:24:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:24:12 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:24:12 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:24:12 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:24:12 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:24:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:24:42 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:24:42 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:24:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:25:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:25:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'system.settings.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'system.logs.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'system.settings.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:10 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:14 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:25:39 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:25:40 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:26:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'users.create' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:26:15 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:27:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:27:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:28:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:28:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:29:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:29:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:30:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:30:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:30:30 +05:30: ✅ Permission granted: 'permissions.create' for user 'narayane88@gmail.com'
+2025-08-27 16:30:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:41 +05:30: ✅ Permission granted: 'permissions.assign' for user 'narayane88@gmail.com'
+2025-08-27 16:30:41 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Database connection established
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:30:46 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:31:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:48 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:31:59 +05:30: 🔐 NextAuth authorize called with email: Nagesh_shree@hotmail.com
+2025-08-27 16:31:59 +05:30: 🔍 Testing database connection...
+2025-08-27 16:31:59 +05:30: ✅ Database connection successful
+2025-08-27 16:31:59 +05:30: 🔍 Looking up user: Nagesh_shree@hotmail.com
+2025-08-27 16:31:59 +05:30: ✅ User found: { id: 8, email: 'Nagesh_shree@hotmail.com', role: 'ADMIN' }
+2025-08-27 16:31:59 +05:30: 🔍 Verifying password...
+2025-08-27 16:31:59 +05:30: ❌ Invalid password for: Nagesh_shree@hotmail.com
+2025-08-27 16:32:05 +05:30: 🔐 NextAuth authorize called with email: Nagesh_shree@hotmail.com
+2025-08-27 16:32:05 +05:30: 🔍 Testing database connection...
+2025-08-27 16:32:05 +05:30: ✅ Database connection successful
+2025-08-27 16:32:05 +05:30: 🔍 Looking up user: Nagesh_shree@hotmail.com
+2025-08-27 16:32:05 +05:30: ✅ User found: { id: 8, email: 'Nagesh_shree@hotmail.com', role: 'ADMIN' }
+2025-08-27 16:32:05 +05:30: 🔍 Verifying password...
+2025-08-27 16:32:05 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:32:05 +05:30: ✅ Authentication successful for: Nagesh_shree@hotmail.com Role: ADMIN
+2025-08-27 16:32:06 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:06 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:06 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:06 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:06 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:32:06 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:32:06 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:32:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:32:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:32:22 +05:30: ✅ Permission granted: 'customers.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:22 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer access: assigned customers only
+2025-08-27 16:32:22 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats: assigned customers only
+2025-08-27 16:32:22 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats
+2025-08-27 16:32:22 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer count
+2025-08-27 16:32:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:32:22 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:33:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:33:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:13 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:13 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:13 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:33:13 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:33:13 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:33:43 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:43 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:33:43 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:33:43 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:33:57 +05:30: ✅ Permission granted: 'customers.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:57 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats: assigned customers only
+2025-08-27 16:33:57 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer access: assigned customers only
+2025-08-27 16:33:57 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats
+2025-08-27 16:33:57 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer count
+2025-08-27 16:33:57 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:33:57 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:01 +05:30: 🐛 DEBUG: Getting current user info without auth...
+2025-08-27 16:34:01 +05:30: ✅ DEBUG: Returning mock SUBDEALER user: {
+  id: 6,
+  name: 'SAGAR NARAYANE',
+  email: 'narayanesagar@gmail.com',
+  phone: '+91-9876543210',
+  dealer_code: 'WA-SNW4-0000',
+  role: 'Shree Delaler',
+  dealer_type: 'dealer',
+  isActive: true,
+  level: 3,
+  created_at: '2025-08-27T11:04:01.848Z'
+}
+2025-08-27 16:34:01 +05:30: ✅ Permission granted: 'users.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:02 +05:30: ✅ Permission granted: 'packages.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:34:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:34:36 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:36 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:36 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:36 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:34:36 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:34:36 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:34:36 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:35:07 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:35:07 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:35:07 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:35:07 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:35:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:35:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:35:38 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:35:38 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:35:38 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:35:38 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:36:08 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:36:08 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:36:08 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:36:08 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:36:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:36:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:36:39 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:36:39 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:36:39 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:36:39 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:36:57 +05:30: 🔐 NextAuth authorize called with email: narayane88@gmail.com
+2025-08-27 16:36:57 +05:30: 🔍 Testing database connection...
+2025-08-27 16:36:57 +05:30: ✅ Database connection successful
+2025-08-27 16:36:57 +05:30: 🔍 Looking up user: narayane88@gmail.com
+2025-08-27 16:36:57 +05:30: ✅ User found: { id: 1, email: 'narayane88@gmail.com', role: 'OWNER' }
+2025-08-27 16:36:57 +05:30: 🔍 Verifying password...
+2025-08-27 16:36:57 +05:30: ✅ Password verified, updating last login...
+2025-08-27 16:36:57 +05:30: ✅ Authentication successful for: narayane88@gmail.com Role: OWNER
+2025-08-27 16:36:57 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:36:58 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'narayane88@gmail.com'
+2025-08-27 16:36:58 +05:30: 📊 [DASHBOARD] User narayane88@gmail.com (Level 1) requesting dashboard data
+2025-08-27 16:36:58 +05:30: 👑 Level 1 (SUPER USER) - Full dashboard access
+2025-08-27 16:36:58 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user narayane88@gmail.com
+2025-08-27 16:36:58 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:36:58 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:37:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:37:10 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:37:10 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:37:10 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:37:10 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:12 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:37:41 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:37:41 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:37:41 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:37:41 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:38:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:38:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:38:12 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:12 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:38:12 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:38:12 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:38:13 +05:30: ✅ Permission granted: 'permissions.edit' for user 'narayane88@gmail.com'
+2025-08-27 16:38:13 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:23 +05:30: ✅ Permission granted: 'permissions.assign' for user 'narayane88@gmail.com'
+2025-08-27 16:38:23 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'company.profile.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'roles.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'users.read' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'users.page.access' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: 👑 Level 1 (SUPER USER) - Full user stats access
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:30 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:31 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:31 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:31 +05:30: ✅ Permission granted: 'permissions.view' for user 'narayane88@gmail.com'
+2025-08-27 16:38:42 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:42 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:38:42 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:38:42 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:38:48 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:48 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:51 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:51 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:51 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:51 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:51 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:38:51 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:38:51 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:38:52 +05:30: 🚀 BizPoints GET API - FAIL-SAFE VERSION Started
+2025-08-27 16:38:52 +05:30: ✅ Permission granted: 'bizpoints.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:52 +05:30: ✅ Authenticated user: Nagesh_shree@hotmail.com
+2025-08-27 16:38:52 +05:30: 🔍 Getting current user role level and permissions...
+2025-08-27 16:38:52 +05:30: 👤 Current user: { id: 8, level: 2, role: 'ADMIN', accessType: 'filtered' }
+2025-08-27 16:38:52 +05:30: 🔍 Fetching users with BizPoints...
+2025-08-27 16:38:52 +05:30: 🔒 Level 2 (ADMIN) - Filtered access: self + assigned users only
+2025-08-27 16:38:52 +05:30: 📊 Found 1 users
+2025-08-27 16:38:52 +05:30: 🔍 Fetching recent transactions...
+2025-08-27 16:38:52 +05:30: 🔒 Level 2 (ADMIN) - Filtered transactions: self + assigned users only
+2025-08-27 16:38:52 +05:30: 📊 Found 0 transactions
+2025-08-27 16:38:52 +05:30: 🔍 Calculating summary statistics...
+2025-08-27 16:38:52 +05:30: 🔒 Level 2 (ADMIN) - Filtered summary: self + assigned users only
+2025-08-27 16:38:52 +05:30: 📈 Summary calculated: {
+  total_biz_points: '0.00',
+  users_with_points: '0',
+  total_transactions: '0',
+  total_commissions: '0',
+  total_settlements: '0'
+}
+2025-08-27 16:38:52 +05:30: ✅ Returning data: { usersCount: 1, transactionsCount: 0, totalBizPoints: undefined }
+2025-08-27 16:38:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:53 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'packages.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: prisma:query SELECT "public"."packages"."id", "public"."packages"."name", "public"."packages"."description", "public"."packages"."price", "public"."packages"."duration", "public"."packages"."messageLimit", "public"."packages"."instanceLimit", "public"."packages"."features", "public"."packages"."isActive", "public"."packages"."createdAt", "public"."packages"."updatedAt", "public"."packages"."mobile_accounts_limit", "public"."packages"."contact_limit", "public"."packages"."api_key_limit", "public"."packages"."receive_msg_limit", "public"."packages"."webhook_limit", "public"."packages"."footmark_enabled", "public"."packages"."footmark_text", "public"."packages"."package_color", "public"."packages"."offer_price", "public"."packages"."offer_enabled" FROM "public"."packages" WHERE 1=1 ORDER BY "public"."packages"."createdAt" DESC LIMIT $1 OFFSET $2
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'users.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: prisma:query SELECT COUNT(*) AS "_count._all" FROM (SELECT "public"."packages"."id" FROM "public"."packages" WHERE 1=1 OFFSET $1) AS "sub"
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered subscription access: assigned customers only
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered subscription count
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered user access: self + assigned users only
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered user count
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'subscriptions.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered subscription access: assigned customers only
+2025-08-27 16:38:54 +05:30: 🔒 Level 2 (ADMIN) - Filtered subscription count
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:54 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:55 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-27 16:38:55 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:38:55 +05:30: ✅ Permission granted: 'users.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:55 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:38:55 +05:30: 🔒 Level 2 (ADMIN) - Filtered user access: self + assigned users only
+2025-08-27 16:38:55 +05:30: 🔒 Level 2 (ADMIN) - Filtered user count
+2025-08-27 16:38:55 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:38:55 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:38:55 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:38:55 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:38:55 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:55 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:56 +05:30: ✅ Permission granted: 'vouchers.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:56 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:38:56 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:02 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:39:02 +05:30: prisma:query 
+      SELECT u.id, u.name, u.email, r.name as role_name,
+             CASE 
+               WHEN r.name = 'OWNER' THEN 'Owner (Level 1)'
+               WHEN r.name = 'ADMIN' THEN 'Admin (Level 2)' 
+               WHEN r.name = 'SUBDEALER' THEN 'SubDealer (Level 3)'
+               WHEN r.name = 'EMPLOYEE' THEN 'Employee (Level 4)'
+               ELSE 'Customer (Level 5+)'
+             END as user_level
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE r.name IN ('OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE')  -- Only Level 4 and below
+      ORDER BY 
+        CASE 
+          WHEN r.name = 'OWNER' THEN 1
+          WHEN r.name = 'ADMIN' THEN 2
+          WHEN r.name = 'SUBDEALER' THEN 3
+          WHEN r.name = 'EMPLOYEE' THEN 4
+        END,
+        u.name
+    
+2025-08-27 16:39:02 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:39:02 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:39:02 +05:30: ✅ Permission granted: 'users.page.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:02 +05:30: 🔒 Level 2 (ADMIN) - Filtered user access: self + assigned users only
+2025-08-27 16:39:02 +05:30: 🔒 Level 2 (ADMIN) - Filtered user count
+2025-08-27 16:39:02 +05:30: prisma:query 
+      SELECT u.id as user_id, u.email, r.level, r.name as role_name
+      FROM users u
+      JOIN user_roles ur ON u.id = ur.user_id
+      JOIN roles r ON ur.role_id = r.id
+      WHERE LOWER(u.email) = LOWER($1) AND ur.is_primary = true
+      LIMIT 1
+    
+2025-08-27 16:39:02 +05:30: prisma:query 
+          SELECT 
+            t.id, t."userId", t."createdBy", t.type::text, t.method::text, t.amount, t.currency, 
+            t.status::text, t.description, t.reference, t."createdAt", t."updatedAt",
+            u.name as user_name, u.email as user_email,
+            c.name as creator_name, c.email as creator_email, cr.name as creator_role
+          FROM transactions t
+          LEFT JOIN users u ON (
+            CASE 
+              WHEN t."userId" ~ '^[0-9]+$' THEN u.id = CAST(t."userId" AS INTEGER)
+              ELSE CAST(u.id AS TEXT) = t."userId"
+            END
+          )
+          LEFT JOIN users c ON t."createdBy" = c.id
+          LEFT JOIN user_roles cur ON c.id = cur.user_id
+          LEFT JOIN roles cr ON cur.role_id = cr.id
+          ORDER BY t."createdAt" DESC
+          LIMIT $1 OFFSET $2
+        
+2025-08-27 16:39:02 +05:30: prisma:query 
+          SELECT COUNT(*)::integer as count FROM transactions
+        
+2025-08-27 16:39:02 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:02 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:39:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:39:09 +05:30: ✅ Permission granted: 'customers.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:09 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer access: assigned customers only
+2025-08-27 16:39:09 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats: assigned customers only
+2025-08-27 16:39:09 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer stats
+2025-08-27 16:39:09 +05:30: 🔒 Level 2 (ADMIN) - Filtered customer count
+2025-08-27 16:39:09 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:09 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:17 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:17 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:17 +05:30: ✅ Permission granted: 'company.profile.read' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:17 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:17 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:39:17 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:39:17 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:39:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:39:47 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:39:47 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:39:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:40:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:40:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:40:17 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:40:17 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:40:17 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:40:17 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:40:47 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:40:47 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:40:47 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:40:47 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:41:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:41:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:41:18 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:41:18 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:41:18 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:41:18 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:41:48 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:41:48 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:41:48 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:41:48 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:42:09 +05:30: 🕒 Starting scheduled subscription activation check...
+2025-08-27 16:42:09 +05:30: ✅ No scheduled subscriptions to activate
+2025-08-27 16:42:18 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:42:18 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:42:18 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:42:18 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com
+2025-08-27 16:42:48 +05:30: ✅ Permission granted: 'dashboard.admin.access' for user 'nagesh_shree@hotmail.com'
+2025-08-27 16:42:48 +05:30: 📊 [DASHBOARD] User Nagesh_shree@hotmail.com (Level 2) requesting dashboard data
+2025-08-27 16:42:48 +05:30: 🔒 Level 2 (ADMIN) - Filtered dashboard access
+2025-08-27 16:42:48 +05:30: ✅ [DASHBOARD] Successfully generated dashboard data for user Nagesh_shree@hotmail.com

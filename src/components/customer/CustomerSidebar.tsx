@@ -19,7 +19,8 @@ import {
   IconCoins,
   IconCreditCard,
   IconPackage,
-  IconCrown
+  IconCrown,
+  IconGift
 } from '@tabler/icons-react'
 
 interface CustomerSidebarProps {
@@ -127,6 +128,11 @@ export default function CustomerSidebar({ collapsed = false }: CustomerSidebarPr
           href: '/customer/bizcoins/purchase',
         },
       ],
+    },
+    {
+      icon: IconGift,
+      label: 'Vouchers',
+      href: '/customer/vouchers',
     },
   ]
 

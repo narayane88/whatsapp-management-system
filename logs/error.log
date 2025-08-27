@@ -320,3 +320,96 @@
   line: '3337',
   routine: 'errorMissingColumn'
 }
+2025-08-27 16:01:47 +05:30: Security settings GET error: error: relation "system_settings" does not exist
+    at async l (.next/server/app/api/admin/security/settings/route.js:34:1626)
+    at async k (.next/server/app/api/admin/security/settings/route.js:60:7496)
+    at async g (.next/server/app/api/admin/security/settings/route.js:60:8499)
+    at async x (.next/server/app/api/admin/security/settings/route.js:60:9621) {
+  length: 114,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '68',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1180',
+  routine: 'parserOpenTable'
+}
+2025-08-27 16:01:47 +05:30: Error reading template product_launch_announcement.json: SyntaxError: Unexpected token '\', ..."{
+  "id": \"template"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at n (.next/server/app/api/admin/email/templates/route.js:11:9051)
+    at async q (.next/server/app/api/admin/email/templates/route.js:11:9614)
+    at async k (.next/server/app/api/admin/email/templates/route.js:11:5366)
+    at async g (.next/server/app/api/admin/email/templates/route.js:11:6369)
+    at async x (.next/server/app/api/admin/email/templates/route.js:11:7491)
+2025-08-27 16:14:42 +05:30: Security settings GET error: error: relation "system_settings" does not exist
+    at async l (.next/server/app/api/admin/security/settings/route.js:34:1626)
+    at async k (.next/server/app/api/admin/security/settings/route.js:60:7496)
+    at async g (.next/server/app/api/admin/security/settings/route.js:60:8499)
+    at async x (.next/server/app/api/admin/security/settings/route.js:60:9621) {
+  length: 114,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '68',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1180',
+  routine: 'parserOpenTable'
+}
+2025-08-27 16:14:42 +05:30: Error reading template product_launch_announcement.json: SyntaxError: Unexpected token '\', ..."{
+  "id": \"template"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at n (.next/server/app/api/admin/email/templates/route.js:11:9051)
+    at async q (.next/server/app/api/admin/email/templates/route.js:11:9614)
+    at async k (.next/server/app/api/admin/email/templates/route.js:11:5366)
+    at async g (.next/server/app/api/admin/email/templates/route.js:11:6369)
+    at async x (.next/server/app/api/admin/email/templates/route.js:11:7491)
+2025-08-27 16:25:10 +05:30: Security settings GET error: error: relation "system_settings" does not exist
+    at async l (.next/server/app/api/admin/security/settings/route.js:34:1626)
+    at async k (.next/server/app/api/admin/security/settings/route.js:60:7496)
+    at async g (.next/server/app/api/admin/security/settings/route.js:60:8499)
+    at async x (.next/server/app/api/admin/security/settings/route.js:60:9621) {
+  length: 114,
+  severity: 'ERROR',
+  code: '42P01',
+  detail: undefined,
+  hint: undefined,
+  position: '68',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '1180',
+  routine: 'parserOpenTable'
+}
+2025-08-27 16:25:10 +05:30: Error reading template product_launch_announcement.json: SyntaxError: Unexpected token '\', ..."{
+  "id": \"template"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at n (.next/server/app/api/admin/email/templates/route.js:11:9051)
+    at async q (.next/server/app/api/admin/email/templates/route.js:11:9614)
+    at async k (.next/server/app/api/admin/email/templates/route.js:11:5366)
+    at async g (.next/server/app/api/admin/email/templates/route.js:11:6369)
+    at async x (.next/server/app/api/admin/email/templates/route.js:11:7491)
