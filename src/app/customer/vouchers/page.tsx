@@ -78,17 +78,19 @@ export default function CustomerVouchersPage() {
 
         history.forEach((redemption: any) => {
           if (redemption.type === 'credit') {
-            stats.bizcoinsEarned += redemption.value
-            stats.totalSavings += redemption.value
+            const creditValue = parseFloat(redemption.value) || 0
+            stats.bizcoinsEarned += creditValue
+            stats.totalSavings += creditValue
           } else if (redemption.type === 'messages') {
-            stats.messagesEarned += redemption.value
+            const messageValue = parseInt(parseFloat(redemption.value) || 0)
+            stats.messagesEarned += messageValue
             // Assuming 0.1 rupee per message for savings calculation
-            stats.totalSavings += redemption.value * 0.1
+            stats.totalSavings += messageValue * 0.1
           } else if (redemption.type === 'percentage') {
             // Percentage discounts would need actual purchase amount
-            stats.totalSavings += redemption.discount_amount || 0
+            stats.totalSavings += parseFloat(redemption.discount_amount) || 0
           } else if (redemption.type === 'package') {
-            stats.totalSavings += redemption.value || 0
+            stats.totalSavings += parseFloat(redemption.value) || 0
           }
         })
 

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import CustomerSidebar from './CustomerSidebar'
 import CustomerHeader from './CustomerHeader'
 import CustomerNotificationProvider from './CustomerNotificationProvider'
-import { useCompanyProfile, useCompanyLogo } from '@/hooks/useCompanyProfile'
+import { usePublicCompanyProfile, usePublicCompanyLogo } from '@/hooks/usePublicCompanyProfile'
 import { IconSun, IconMoon, IconSearch, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconDeviceMobile, IconMail, IconList, IconCreditCard, IconKey, IconFileText, IconSettings, IconUser, IconBell } from '@tabler/icons-react'
 
 interface CustomerLayoutProps {
@@ -28,8 +28,8 @@ export default function CustomerLayout({ children, user }: CustomerLayoutProps) 
   const [searchFocused, setSearchFocused] = useState(false)
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
   const router = useRouter()
-  const { profile } = useCompanyProfile()
-  const logoUrl = useCompanyLogo(colorScheme === 'dark' ? 'dark' : 'light')
+  const { profile } = usePublicCompanyProfile()
+  const logoUrl = usePublicCompanyLogo(colorScheme === 'dark' ? 'dark' : 'light')
 
   // Mega search data
   const searchActions = [
@@ -401,6 +401,18 @@ export default function CustomerLayout({ children, user }: CustomerLayoutProps) 
         <CustomerNotificationProvider>
           {children}
         </CustomerNotificationProvider>
+        
+        {/* Footer */}
+        <div style={{ 
+          marginTop: 'auto',
+          padding: '16px 0',
+          borderTop: `1px solid ${colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+          textAlign: 'center'
+        }}>
+          <Text size="xs" c="dimmed">
+            Powered by bizflash.in
+          </Text>
+        </div>
       </AppShell.Main>
     </AppShell>
     </>

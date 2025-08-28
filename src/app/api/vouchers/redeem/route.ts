@@ -143,7 +143,8 @@ export async function POST(request: NextRequest) {
       switch (voucher.type) {
         case 'credit':
           // Add bizcoins to user account
-          const newBizBalance = parseFloat(user.biz_points) + voucher.value
+          const creditValue = parseFloat(voucher.value.toString()) || 0
+          const newBizBalance = parseFloat(user.biz_points) + creditValue
           await client.query(`
             UPDATE users 
             SET biz_points = $1
@@ -153,21 +154,21 @@ export async function POST(request: NextRequest) {
           // Record bizcoin transaction
           await client.query(`
             INSERT INTO bizpoints_transactions (
-              user_id, type, amount, balance, description, reference
-            ) VALUES ($1, $2, $3, $4, $5, $6)
+              id, user_id, type, amount, balance, description, reference
+            ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6)
           `, [
             userId,
-            'CREDIT',
-            voucher.value,
+            'EARNED',
+            creditValue,
             newBizBalance,
             `Voucher redemption: ${voucher.code}`,
             `VOUCHER_${voucher.id}_${Date.now()}`
           ])
 
-          benefitDescription = `₹${voucher.value} bizcoins added to your account`
+          benefitDescription = `₹${creditValue} bizcoins added to your account`
           appliedBenefit = {
             type: 'credit',
-            amount: voucher.value,
+            amount: creditValue,
             newBalance: newBizBalance
           }
           break
@@ -179,7 +180,8 @@ export async function POST(request: NextRequest) {
           `, [userId])
           
           const oldBalance = currentMessageBalance.rows[0]?.message_balance || 0
-          const newMessageBalance = oldBalance + voucher.value
+          const messageValue = parseInt(parseFloat(voucher.value.toString()) || 0)
+          const newMessageBalance = oldBalance + messageValue
           
           await client.query(`
             UPDATE users 
@@ -187,10 +189,10 @@ export async function POST(request: NextRequest) {
             WHERE id = $2
           `, [newMessageBalance, userId])
 
-          benefitDescription = `${voucher.value} messages added to your account balance`
+          benefitDescription = `${messageValue} messages added to your account balance`
           appliedBenefit = {
             type: 'messages',
-            count: voucher.value,
+            count: messageValue,
             previousBalance: oldBalance,
             newBalance: newMessageBalance
           }
@@ -213,22 +215,50 @@ export async function POST(request: NextRequest) {
 
           const pkg = packageResult.rows[0]
           
-          // Create subscription
+          // Check for existing active subscription
+          const existingSubscriptionResult = await client.query(`
+            SELECT cp.id, cp."endDate", p.name as package_name, p.price as package_price,
+                   EXTRACT(DAYS FROM (cp."endDate" - NOW())) as days_remaining
+            FROM customer_packages cp
+            JOIN packages p ON cp."packageId" = p.id
+            WHERE cp."userId" = $1::text AND cp."isActive" = true AND cp."endDate" > NOW()
+            ORDER BY cp."createdAt" DESC
+            LIMIT 1
+          `, [userId])
+
+          let replacedSubscription = null
+          if (existingSubscriptionResult.rows.length > 0) {
+            const existingSub = existingSubscriptionResult.rows[0]
+            replacedSubscription = {
+              packageName: existingSub.package_name,
+              packagePrice: existingSub.package_price,
+              daysRemaining: Math.floor(existingSub.days_remaining)
+            }
+            
+            // Deactivate existing subscription
+            await client.query(`
+              UPDATE customer_packages 
+              SET "isActive" = false, "updatedAt" = CURRENT_TIMESTAMP 
+              WHERE id = $1
+            `, [existingSub.id])
+          }
+          
+          // Create new subscription
           const startDate = new Date()
           const endDate = new Date()
           endDate.setDate(endDate.getDate() + pkg.duration)
 
           const subscriptionResult = await client.query(`
             INSERT INTO customer_packages (
-              "userId", "packageId", "createdBy", "paymentMethod",
+              id, "userId", "packageId", "createdBy", "paymentMethod",
               "startDate", "endDate", "isActive", "messagesUsed",
-              "createdAt", "updatedAt", status, "purchaseType",
-              voucher_id
+              "createdAt", "updatedAt", status, "purchaseType"
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
             RETURNING id
           `, [
+            `cs_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`,
             userId.toString(),
-            pkg.id,
+            pkg.id.toString(),
             userId,
             'VOUCHER',
             startDate,
@@ -238,17 +268,22 @@ export async function POST(request: NextRequest) {
             new Date(),
             new Date(),
             'ACTIVE',
-            'voucher_redemption',
-            voucher.id
+            'voucher_redemption'
           ])
 
-          benefitDescription = `${pkg.name} package activated for ${pkg.duration} days`
+          benefitDescription = replacedSubscription 
+            ? `${pkg.name} package activated for ${pkg.duration} days (${pkg.messageLimit.toLocaleString()} messages). Previous ${replacedSubscription.packageName} subscription has been discontinued.`
+            : `${pkg.name} package activated for ${pkg.duration} days (${pkg.messageLimit.toLocaleString()} messages)`
+            
           appliedBenefit = {
             type: 'package',
             packageId: pkg.id,
             packageName: pkg.name,
             duration: pkg.duration,
-            subscriptionId: subscriptionResult.rows[0].id
+            messageLimit: pkg.messageLimit,
+            price: pkg.price,
+            subscriptionId: subscriptionResult.rows[0].id,
+            replacedSubscription: replacedSubscription
           }
           break
 
@@ -299,6 +334,12 @@ export async function POST(request: NextRequest) {
 
       await client.query('COMMIT')
 
+      // Prepare warnings array
+      const warnings = []
+      if (appliedBenefit.type === 'package' && appliedBenefit.replacedSubscription) {
+        warnings.push(`⚠️ Your previous ${appliedBenefit.replacedSubscription.packageName} subscription (${appliedBenefit.replacedSubscription.daysRemaining} days remaining) has been replaced by this voucher.`)
+      }
+
       // Return success response
       return NextResponse.json({
         success: true,
@@ -317,7 +358,8 @@ export async function POST(request: NextRequest) {
           redeemedAt: new Date().toISOString(),
           userId,
           userEmail
-        }
+        },
+        warnings: warnings
       }, { status: 200 })
 
     } catch (error) {
@@ -385,11 +427,15 @@ export async function GET(request: NextRequest) {
           WHEN v.type = 'credit' THEN CONCAT('₹', v.value, ' bizcoins')
           WHEN v.type = 'messages' THEN CONCAT(v.value, ' messages')
           WHEN v.type = 'percentage' THEN CONCAT(v.value, '% discount')
+          WHEN v.type = 'package' AND p.name IS NOT NULL THEN CONCAT(p.name, ' package (', p.duration, ' days, ', p."messageLimit", ' messages)')
           WHEN v.type = 'package' THEN 'Package activation'
           ELSE 'Voucher benefit'
         END as benefit_description,
         NULL as subscription_id,
-        p.name as package_name
+        p.name as package_name,
+        p.duration as package_duration,
+        p."messageLimit" as package_message_limit,
+        p.price as package_price
       FROM voucher_usage vu
       JOIN vouchers v ON vu.voucher_id = v.id
       LEFT JOIN packages p ON v.package_id = p.id

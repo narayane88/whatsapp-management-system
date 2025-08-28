@@ -25,10 +25,10 @@ export const predefinedThemes: CustomTheme[] = [
     description: 'Official WhatsApp brand theme with green accents',
     primaryColor: 'whatsapp',
     colors: {
-      whatsapp: mantineColors.whatsapp,
-      success: mantineColors.success,
-      warning: mantineColors.warning,
-      error: mantineColors.error
+      whatsapp: mantineColors.whatsapp as unknown as string[],
+      success: mantineColors.success as unknown as string[],
+      warning: mantineColors.warning as unknown as string[],
+      error: mantineColors.error as unknown as string[]
     },
     components: {
       Button: {
@@ -104,10 +104,10 @@ export const predefinedThemes: CustomTheme[] = [
     description: 'Modern dark theme for reduced eye strain',
     primaryColor: 'whatsapp',
     colors: {
-      whatsapp: mantineColors.whatsapp,
-      success: mantineColors.success,
-      warning: mantineColors.warning,
-      error: mantineColors.error
+      whatsapp: mantineColors.whatsapp as unknown as string[],
+      success: mantineColors.success as unknown as string[],
+      warning: mantineColors.warning as unknown as string[],
+      error: mantineColors.error as unknown as string[]
     },
     components: {
       Button: {

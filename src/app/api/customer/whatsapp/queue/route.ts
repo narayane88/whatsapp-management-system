@@ -584,7 +584,7 @@ async function processDbMessage(dbMessage: any) {
           messageObject = {
             document: {
               url: parsedMessage.document.url,
-              filename: parsedMessage.document.filename || 'document',
+              ...(parsedMessage.document.filename && { filename: parsedMessage.document.filename }),
               caption: parsedMessage.document.caption || undefined
             }
           }

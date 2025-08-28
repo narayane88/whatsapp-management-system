@@ -13,29 +13,23 @@ import {
   Box,
   ThemeIcon,
   Center,
-  Anchor,
-  Image,
-  BackgroundImage,
-  Overlay,
   Divider,
-  Timeline,
   Paper,
   Grid,
   List,
   ActionIcon,
-  Modal,
-  NumberInput,
-  Select
+  Transition,
+  BackgroundImage,
+  Avatar,
+  Spotlight,
+  Timeline
 } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
 import {
-  IconWhatsapp,
   IconRocket,
   IconUsers,
   IconMessageCircle,
   IconDashboard,
   IconCoins,
-  IconCreditCard,
   IconCheck,
   IconStar,
   IconTrendingUp,
@@ -44,34 +38,34 @@ import {
   IconCloud,
   IconDeviceMobile,
   IconApi,
-  IconWebhook,
   IconChartLine,
-  IconGift,
   IconTarget,
   IconArrowRight,
-  IconPlaylist,
-  IconBrandWhatsapp,
   IconPhone,
   IconMail,
   IconMapPin,
-  IconArrowUp,
-  IconShoppingCart,
-  IconUser,
-  IconBrandWindows,
-  IconDatabase,
-  IconPlugConnected,
   IconGlobe,
-  IconChevronLeft,
-  IconChevronRight,
+  IconBuildingSkyscraper,
+  IconTrophy,
+  IconAward,
+  IconCertificate,
+  IconHeadset,
+  IconClockHour24,
+  IconDatabase,
+  IconBrandTwitter,
+  IconBrandLinkedin,
+  IconBrandFacebook,
   IconPlayerPlayFilled,
-  IconPlayerPauseFilled
+  IconZoomCheck,
+  IconCrown,
+  IconDiamond,
+  IconMessage2
 } from '@tabler/icons-react'
-import { useState, useEffect, useCallback } from 'react'
-import { useDisclosure } from '@mantine/hooks'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import BizCoinIcon from '@/components/icons/BizCoinIcon'
+import { usePublicCompanyProfile } from '@/hooks/usePublicCompanyProfile'
 
 interface Package {
   id: string
@@ -90,80 +84,82 @@ interface Package {
   webhook_limit?: number
   package_color?: string
   popular?: boolean
-  features?: string[] | any
+  features?: string[]
 }
 
-interface BizCoinPackage {
-  id: string
-  name: string
-  coins: number
-  price: number
-  bonus: number
-  popular?: boolean
-  savings: string
-}
-
-export default function HomePage() {
+export default function ProfessionalLandingPage() {
   const router = useRouter()
   const { data: session } = useSession()
+  const { profile } = usePublicCompanyProfile()
+  const [mounted, setMounted] = useState(false)
   const [packages, setPackages] = useState<Package[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
-  const [packageModalOpened, { open: openPackageModal, close: closePackageModal }] = useDisclosure(false)
-  const [bizCoinModalOpened, { open: openBizCoinModal, close: closeBizCoinModal }] = useDisclosure(false)
-  const [autoPlay, setAutoPlay] = useState(true)
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [emblaApi, setEmblaApi] = useState<any>(null)
-  const [isHovered, setIsHovered] = useState(false)
+  const [packagesLoading, setPackagesLoading] = useState(true)
+  const [currentPackageIndex, setCurrentPackageIndex] = useState(0)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // Keyboard navigation
-  const handleKeyPress = useCallback((event: KeyboardEvent) => {
-    if (emblaApi) {
-      switch (event.key) {
-        case 'ArrowLeft':
-          emblaApi.scrollPrev()
-          break
-        case 'ArrowRight':
-          emblaApi.scrollNext()
-          break
-        case ' ':
-          event.preventDefault()
-          setAutoPlay(prev => !prev)
-          break
+  // Fetch packages on component mount
+  useEffect(() => {
+    setMounted(true)
+    fetchPackages()
+  }, [])
+
+  const fetchPackages = async () => {
+    try {
+      setPackagesLoading(true)
+      const response = await fetch('/api/public/packages')
+      const data = await response.json()
+      
+      if (data.success && data.packages) {
+        setPackages(data.packages)
+        // Set the middle package as current if available
+        if (data.packages.length > 1) {
+          setCurrentPackageIndex(Math.floor(data.packages.length / 2))
+        }
       }
+    } catch (error) {
+      console.error('Error fetching packages:', error)
+    } finally {
+      setPackagesLoading(false)
     }
-  }, [emblaApi])
+  }
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress)
-    return () => {
-      document.removeEventListener('keydown', handleKeyPress)
+  // Scroll functions
+  const scrollToPrevious = () => {
+    const newIndex = currentPackageIndex > 0 ? currentPackageIndex - 1 : packages.length - 1
+    setCurrentPackageIndex(newIndex)
+    scrollToPackage(newIndex)
+  }
+
+  const scrollToNext = () => {
+    const newIndex = currentPackageIndex < packages.length - 1 ? currentPackageIndex + 1 : 0
+    setCurrentPackageIndex(newIndex)
+    scrollToPackage(newIndex)
+  }
+
+  const scrollToPackage = (index: number) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const cardWidth = 350 // approximate card width + gap
+      const scrollPosition = index * cardWidth - (container.offsetWidth / 2) + (cardWidth / 2)
+      container.scrollTo({
+        left: Math.max(0, scrollPosition),
+        behavior: 'smooth'
+      })
     }
-  }, [handleKeyPress])
+  }
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (autoPlay && emblaApi && !isHovered) {
-      const autoplayInterval = setInterval(() => {
-        emblaApi.scrollNext()
-      }, 4000)
-
-      return () => clearInterval(autoplayInterval)
+  const getPackageColor = (color?: string) => {
+    const colorMap: Record<string, any> = {
+      blue: { gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)', color: 'blue' },
+      emerald: { gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', color: 'emerald' },
+      green: { gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)', color: 'green' },
+      purple: { gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', color: 'violet' },
+      violet: { gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)', color: 'violet' },
+      orange: { gradient: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)', color: 'orange' },
+      red: { gradient: 'linear-gradient(135deg, #f87171 0%, #ef4444 100%)', color: 'red' }
     }
-  }, [autoPlay, emblaApi, isHovered])
-
-  // Navigation functions
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
-
-  const scrollTo = useCallback((index: number) => {
-    if (emblaApi) emblaApi.scrollTo(index)
-  }, [emblaApi])
+    return colorMap[color || 'blue'] || colorMap.blue
+  }
 
   const handleLogin = () => {
     router.push('/auth/signin')
@@ -171,238 +167,54 @@ export default function HomePage() {
 
   const handleDashboard = () => {
     const userRole = session?.user?.role
-    
-    // Route users to their appropriate portal
     if (userRole === 'CUSTOMER') {
       router.push('/customer')
     } else if (['OWNER', 'ADMIN', 'SUBDEALER', 'EMPLOYEE'].includes(userRole)) {
       router.push('/admin')
     } else {
-      // For users without proper roles, stay on home page
       router.push('/')
     }
   }
 
-  // Fetch real packages from API
-  const fetchPackages = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/public/packages')
-      const data = await response.json()
-      
-      if (data.success && data.packages) {
-        setPackages(data.packages)
-      } else {
-        console.error('Failed to fetch packages:', data.error)
-        // Fallback to sample data
-        setPackages(getSamplePackages())
-      }
-    } catch (error) {
-      console.error('Error fetching packages:', error)
-      // Fallback to sample data
-      setPackages(getSamplePackages())
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Fallback sample packages
-  const getSamplePackages = (): Package[] => [
-    {
-      id: 'basic',
-      name: 'Starter Plan',
-      description: 'Perfect for small businesses getting started',
-      price: 999,
-      offer_price: 799,
-      offer_enabled: true,
-      duration: 30,
-      messageLimit: 5000,
-      instanceLimit: 2,
-      mobile_accounts_limit: 2,
-      contact_limit: 1000,
-      api_key_limit: 1,
-      receive_msg_limit: 1000,
-      webhook_limit: 1,
-      package_color: 'blue',
-      features: [
-        '5,000 messages per month',
-        '2 WhatsApp instances',
-        '1,000 contacts storage',
-        'Basic automation',
-        'Email support'
-      ]
-    },
-    {
-      id: 'professional',
-      name: 'Business Pro',
-      description: 'Most popular for growing businesses',
-      price: 2999,
-      offer_price: 2399,
-      offer_enabled: true,
-      duration: 30,
-      messageLimit: 25000,
-      instanceLimit: 10,
-      mobile_accounts_limit: 10,
-      contact_limit: 10000,
-      api_key_limit: 5,
-      receive_msg_limit: 10000,
-      webhook_limit: 3,
-      package_color: 'emerald',
-      popular: true,
-      features: [
-        '25,000 messages per month',
-        '10 WhatsApp instances',
-        '10,000 contacts storage',
-        'Advanced automation',
-        'Bulk messaging',
-        'Analytics dashboard',
-        'Priority support',
-        'API access'
-      ]
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      description: 'Unlimited power for large organizations',
-      price: 9999,
-      offer_price: 7999,
-      offer_enabled: true,
-      duration: 30,
-      messageLimit: 100000,
-      instanceLimit: 50,
-      mobile_accounts_limit: 50,
-      contact_limit: 100000,
-      api_key_limit: 20,
-      receive_msg_limit: 50000,
-      webhook_limit: 10,
-      package_color: 'purple',
-      features: [
-        '100,000 messages per month',
-        '50 WhatsApp instances',
-        '100,000 contacts storage',
-        'AI-powered automation',
-        'Multi-user dashboard',
-        'Custom integrations',
-        'Dedicated support',
-        'White-label solution'
-      ]
-    }
-  ]
-
-  const bizCoinPackages: BizCoinPackage[] = [
-    {
-      id: 'starter',
-      name: 'Starter Pack',
-      coins: 1000,
-      price: 100,
-      bonus: 50,
-      savings: 'Best for beginners'
-    },
-    {
-      id: 'popular',
-      name: 'Popular Pack',
-      coins: 5000,
-      price: 450,
-      bonus: 500,
-      popular: true,
-      savings: 'Save ₹50 + 500 bonus coins'
-    },
-    {
-      id: 'business',
-      name: 'Business Pack',
-      coins: 10000,
-      price: 850,
-      bonus: 1500,
-      savings: 'Save ₹150 + 1500 bonus coins'
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise Pack',
-      coins: 25000,
-      price: 2000,
-      bonus: 5000,
-      savings: 'Save ₹500 + 5000 bonus coins'
-    }
-  ]
-
-  useEffect(() => {
-    fetchPackages()
-  }, [])
-
-  const getPackageColor = (color?: string) => {
-    const colorMap: Record<string, any> = {
-      blue: {
-        gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-        bg: 'blue.0',
-        color: 'blue.7'
-      },
-      emerald: {
-        gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)',
-        bg: 'emerald.0',
-        color: 'emerald.7'
-      },
-      green: {
-        gradient: 'linear-gradient(135deg, #34d399 0%, #10b981 100%)',
-        bg: 'emerald.0',
-        color: 'emerald.7'
-      },
-      purple: {
-        gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
-        bg: 'violet.0',
-        color: 'violet.7'
-      },
-      violet: {
-        gradient: 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
-        bg: 'violet.0',
-        color: 'violet.7'
-      },
-      orange: {
-        gradient: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
-        bg: 'orange.0',
-        color: 'orange.7'
-      },
-      red: {
-        gradient: 'linear-gradient(135deg, #f87171 0%, #ef4444 100%)',
-        bg: 'red.0',
-        color: 'red.7'
-      }
-    }
-    return colorMap[color || 'blue'] || colorMap.blue
-  }
-
-  // Show existing dashboard for logged-in users
+  // Show dashboard redirect for logged-in users
   if (session) {
     return (
-      <Box py={50}>
-        <Container size="xl">
-          <Stack gap="xl" align="center">
-            <Group gap="lg">
-              <Image
-                src="/bizflash-logo-light.png"
-                alt="Bizflash Logo"
-                height={60}
-                width="auto"
-              />
-              <Stack gap="xs">
-                <Group gap="xs">
-                  <Title size="2rem">Welcome back, {session.user?.name}!</Title>
-                  <Badge color="orange" variant="light">Bizflash.in</Badge>
-                </Group>
-                <Text c="gray.6">Access your Bizflash WhatsApp Management Dashboard</Text>
+      <Box 
+        style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Container size="sm">
+          <Card shadow="xl" padding="xl" radius="xl" withBorder>
+            <Stack align="center" gap="xl">
+              <ThemeIcon size={80} radius="xl" variant="gradient" gradient={{ from: 'violet', to: 'purple' }}>
+                <IconDashboard size={40} />
+              </ThemeIcon>
+              
+              <Stack align="center" gap="md">
+                <Title order={2} ta="center">Welcome back, {session.user?.name}!</Title>
+                <Text c="dimmed" ta="center" size="lg">
+                  Access your {profile.company_name} BizsApp Management System
+                </Text>
               </Stack>
-            </Group>
-
-            <Button
-              size="xl"
-              radius="xl"
-              variant="gradient"
-              gradient={{ from: 'violet', to: 'purple' }}
-              leftSection={<IconDashboard size={20} />}
-              onClick={handleDashboard}
-            >
-              {session.user?.role === 'CUSTOMER' ? 'Go to Customer Portal' : 'Go to Admin Dashboard'}
-            </Button>
-          </Stack>
+              
+              <Button
+                size="xl"
+                radius="xl"
+                variant="gradient"
+                gradient={{ from: 'violet', to: 'purple' }}
+                leftSection={<IconDashboard size={20} />}
+                onClick={handleDashboard}
+                fullWidth
+              >
+                {session.user?.role === 'CUSTOMER' ? 'Go to Customer Portal' : 'Go to Admin Dashboard'}
+              </Button>
+            </Stack>
+          </Card>
         </Container>
       </Box>
     )
@@ -410,1019 +222,628 @@ export default function HomePage() {
 
   return (
     <Box>
-      {/* Hero Section */}
+      {/* Hero Section - Premium Design */}
       <Box
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: `
+            linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(31, 41, 55, 0.95) 100%),
+            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.05'%3E%3Cpath d='m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+          `,
           minHeight: '100vh',
           position: 'relative',
           overflow: 'hidden'
         }}
       >
-        {/* Floating Elements */}
+        {/* Floating elements */}
         <Box
           style={{
             position: 'absolute',
-            top: '10%',
+            top: '15%',
             right: '10%',
-            width: '200px',
-            height: '200px',
-            background: 'rgba(255, 255, 255, 0.1)',
+            width: '300px',
+            height: '300px',
+            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(40px)',
-            animation: 'float 6s ease-in-out infinite'
+            animation: 'float 8s ease-in-out infinite'
           }}
         />
+        
+        {/* Login Button in Corner */}
         <Box
           style={{
             position: 'absolute',
-            bottom: '20%',
-            left: '5%',
-            width: '150px',
-            height: '150px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '50%',
-            filter: 'blur(30px)',
-            animation: 'float 4s ease-in-out infinite reverse'
+            top: '2rem',
+            right: '2rem',
+            zIndex: 10
           }}
-        />
-
+        >
+          <Button
+            variant="light"
+            color="white"
+            radius="xl"
+            leftSection={<IconDashboard size={16} />}
+            onClick={handleLogin}
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: 'white'
+            }}
+          >
+            Login / Sign In
+          </Button>
+        </Box>
+        
         <Container size="xl" style={{ position: 'relative', zIndex: 2 }}>
-          <Stack align="center" justify="center" style={{ minHeight: '100vh' }} gap="xl">
-            {/* Logo & Brand */}
-            <Group gap="lg" className="logo-isolated">
-              <Image
-                src="/bizflash-logo-light.png"
-                alt="Bizflash Logo"
-                height={80}
-                width="auto"
-                className="landing-header-logo"
-              />
-              <Stack gap={0}>
-                <Group gap="xs" align="center">
-                  <Title size="2.5rem" c="dark" fw={800} className="logo-text-enhance">Bizflash</Title>
-                  <Badge size="lg" color="orange" variant="filled" style={{ fontSize: '0.7rem' }}>
-                    .in
-                  </Badge>
-                </Group>
-                <Text size="xl" c="gray.8" opacity={0.8}>WhatsApp Business Automation Platform</Text>
-              </Stack>
-            </Group>
-
-            {/* Hero Title */}
-            <Stack align="center" gap="md">
+          <Stack justify="center" style={{ minHeight: '100vh' }} gap={50}>
+            
+            {/* Company Branding */}
+            <Stack align="center" gap="lg">
               <Badge
                 size="xl"
                 variant="gradient"
-                gradient={{ from: 'orange', to: 'red' }}
-                style={{ fontSize: '1rem', padding: '8px 16px' }}
+                gradient={{ from: 'indigo', to: 'cyan' }}
+                style={{ fontSize: '0.9rem', padding: '12px 24px' }}
               >
-                🚀 Trusted by 10,000+ Businesses | Bizflash.in
+                🏢 Enterprise BizsApp Solutions
               </Badge>
-              <Title
-                size="3.5rem"
-                c="white"
-                ta="center"
-                fw={900}
-                style={{ maxWidth: '800px', lineHeight: 1.1 }}
-              >
-                The Future of WhatsApp Business Automation
-              </Title>
-              <Text size="xl" c="white" ta="center" opacity={0.9} style={{ maxWidth: '600px' }}>
-                <strong>Bizflash.in</strong> empowers businesses with intelligent WhatsApp automation, seamless CRM integrations, and powerful analytics to boost sales and customer engagement.
-              </Text>
+              
+              <Stack align="center" gap="md">
+                <Title
+                  size="4rem"
+                  fw={900}
+                  ta="center"
+                  c="white"
+                  style={{ 
+                    lineHeight: 1.1,
+                    textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                    background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
+                  {profile.company_name}
+                </Title>
+                <Text size="xl" c="gray.3" ta="center" fw={500}>
+                  {profile.description}
+                </Text>
+              </Stack>
             </Stack>
 
-            {/* Key Features */}
-            <SimpleGrid cols={{ base: 2, md: 4 }} spacing="lg" w="100%">
+            {/* Value Proposition */}
+            <Stack align="center" gap="xl">
+              <Stack align="center" gap="md" style={{ maxWidth: 800 }}>
+                <Title
+                  size="3rem"
+                  ta="center"
+                  c="white"
+                  fw={700}
+                  style={{ lineHeight: 1.2 }}
+                >
+                  Enterprise-Grade BizsApp Business Automation
+                </Title>
+                <Text size="xl" c="gray.3" ta="center" style={{ lineHeight: 1.6 }}>
+                  Transform your business communication with our advanced BizsApp management platform. 
+                  Built for enterprises, trusted by industry leaders, proven at scale.
+                </Text>
+              </Stack>
+
+              {/* Key Metrics */}
+              <SimpleGrid cols={{ base: 2, md: 4 }} spacing="xl" w="100%">
+                {[
+                  { number: '99.9%', label: 'Uptime SLA', icon: IconShield },
+                  { number: '10M+', label: 'Messages/Month', icon: IconMessageCircle },
+                  { number: '500+', label: 'Enterprise Clients', icon: IconBuildingSkyscraper },
+                  { number: '24/7', label: 'Expert Support', icon: IconHeadset }
+                ].map((metric, index) => (
+                  <Paper key={index} p="lg" radius="xl" style={{ background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
+                    <Stack align="center" gap="sm">
+                      <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }}>
+                        <metric.icon size={25} />
+                      </ThemeIcon>
+                      <Title order={2} c="white" fw={900}>{metric.number}</Title>
+                      <Text c="gray.3" size="sm" ta="center">{metric.label}</Text>
+                    </Stack>
+                  </Paper>
+                ))}
+              </SimpleGrid>
+
+              {/* CTA Buttons */}
+              <Group gap="lg" mt="xl">
+                <Button
+                  size="xl"
+                  radius="xl"
+                  variant="gradient"
+                  gradient={{ from: 'indigo', to: 'cyan' }}
+                  leftSection={<IconRocket size={24} />}
+                  onClick={handleLogin}
+                  style={{ 
+                    fontSize: '1.1rem', 
+                    padding: '16px 40px',
+                    boxShadow: '0 8px 32px rgba(99, 102, 241, 0.4)'
+                  }}
+                >
+                  Start Enterprise Trial
+                </Button>
+                <Button
+                  size="xl"
+                  radius="xl"
+                  variant="outline"
+                  c="white"
+                  style={{ 
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                    fontSize: '1.1rem', 
+                    padding: '16px 40px',
+                    backdropFilter: 'blur(10px)'
+                  }}
+                  leftSection={<IconPhone size={20} />}
+                >
+                  Schedule Demo
+                </Button>
+              </Group>
+
+              {/* Trust Indicators */}
+              <Stack align="center" gap="md" mt="xl">
+                <Text c="gray.4" size="sm">Trusted by industry leaders</Text>
+                <Group gap="xl">
+                  {['Fortune 500', 'ISO 27001', 'SOC 2 Certified', 'GDPR Compliant'].map((cert, index) => (
+                    <Badge key={index} variant="outline" color="gray" size="lg" style={{ borderColor: 'rgba(255, 255, 255, 0.2)' }}>
+                      {cert}
+                    </Badge>
+                  ))}
+                </Group>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* Enterprise Features Section */}
+      <Box py={120} style={{ background: '#ffffff' }}>
+        <Container size="xl">
+          <Stack gap={80}>
+            
+            {/* Section Header */}
+            <Stack align="center" gap="xl">
+              <Badge size="xl" variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }}>
+                Enterprise Platform
+              </Badge>
+              <Stack align="center" gap="md">
+                <Title size="2.5rem" ta="center" c="dark.8" fw={700}>
+                  Built for Enterprise Scale & Security
+                </Title>
+                <Text size="xl" c="gray.6" ta="center" maw={700}>
+                  Comprehensive BizsApp business automation with enterprise-grade security, 
+                  scalability, and compliance features designed for large organizations.
+                </Text>
+              </Stack>
+            </Stack>
+
+            {/* Feature Grid */}
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="xl">
               {[
-                { icon: IconUsers, label: 'Multi-Account', desc: 'Manage 50+ instances' },
-                { icon: IconMessageCircle, label: 'Bulk Messaging', desc: '100K+ messages/month' },
-                { icon: IconCoins, label: 'BizCoins System', desc: 'Earn & spend rewards' },
-                { icon: IconChartLine, label: 'Analytics', desc: 'Real-time insights' }
+                {
+                  icon: IconShield,
+                  title: 'Enterprise Security',
+                  description: 'Bank-level encryption, SSO integration, role-based access control, and comprehensive audit trails.',
+                  color: 'red',
+                  features: ['256-bit AES encryption', 'SSO/SAML integration', 'Multi-factor authentication', 'Compliance reporting']
+                },
+                {
+                  icon: IconCloud,
+                  title: 'Scalable Infrastructure',
+                  description: 'Auto-scaling cloud infrastructure handling millions of messages with guaranteed 99.9% uptime.',
+                  color: 'blue',
+                  features: ['Auto-scaling capability', '99.9% uptime SLA', 'Global CDN', 'Load balancing']
+                },
+                {
+                  icon: IconApi,
+                  title: 'Advanced API Suite',
+                  description: 'Comprehensive REST APIs with GraphQL support, webhooks, and real-time WebSocket connections.',
+                  color: 'violet',
+                  features: ['REST & GraphQL APIs', 'Real-time webhooks', 'SDK libraries', 'API rate limiting']
+                },
+                {
+                  icon: IconChartLine,
+                  title: 'Business Intelligence',
+                  description: 'Advanced analytics, custom dashboards, real-time reporting, and data export capabilities.',
+                  color: 'green',
+                  features: ['Custom dashboards', 'Real-time analytics', 'Data export (CSV/Excel)', 'Custom reports']
+                },
+                {
+                  icon: IconUsers,
+                  title: 'Team Management',
+                  description: 'Multi-tenant architecture with granular permissions, team hierarchies, and collaboration tools.',
+                  color: 'orange',
+                  features: ['Role-based access', 'Team hierarchies', 'Permission management', 'Activity tracking']
+                },
+                {
+                  icon: IconBolt,
+                  title: 'Automation Engine',
+                  description: 'Sophisticated workflow automation, AI-powered responses, and intelligent message routing.',
+                  color: 'yellow',
+                  features: ['Workflow automation', 'AI-powered responses', 'Smart routing', 'Event triggers']
+                }
               ].map((feature, index) => (
-                <Card key={index} padding="lg" radius="xl" style={{ background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-                  <Stack align="center" gap="sm">
-                    <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'white', to: 'gray.1' }}>
-                      <feature.icon size={25} style={{ color: '#667eea' }} />
-                    </ThemeIcon>
-                    <Text fw={600} c="white" ta="center">{feature.label}</Text>
-                    <Text size="sm" c="white" opacity={0.8} ta="center">{feature.desc}</Text>
+                <Card key={index} shadow="lg" padding="xl" radius="xl" withBorder h="100%" style={{ transition: 'transform 0.2s' }}>
+                  <Stack gap="lg" h="100%">
+                    <Group gap="md">
+                      <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: feature.color, to: `${feature.color}.7` }}>
+                        <feature.icon size={30} />
+                      </ThemeIcon>
+                      <Title order={3} fw={600}>{feature.title}</Title>
+                    </Group>
+                    
+                    <Text c="gray.7" style={{ flex: 1 }}>
+                      {feature.description}
+                    </Text>
+                    
+                    <List size="sm" spacing="xs" icon={<IconCheck size={14} style={{ color: '#10b981' }} />}>
+                      {feature.features.map((item, i) => (
+                        <List.Item key={i}>{item}</List.Item>
+                      ))}
+                    </List>
                   </Stack>
                 </Card>
               ))}
             </SimpleGrid>
-
-            {/* CTA Buttons */}
-            <Group gap="lg">
-              <Button
-                size="xl"
-                radius="xl"
-                variant="white"
-                color="violet"
-                leftSection={<IconRocket size={20} />}
-                onClick={handleLogin}
-                style={{ fontSize: '1.1rem', padding: '12px 32px' }}
-              >
-                Start Free Trial
-              </Button>
-              <Button
-                size="xl"
-                radius="xl"
-                variant="outline"
-                c="white"
-                style={{ borderColor: 'white', fontSize: '1.1rem', padding: '12px 32px' }}
-                onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                View Packages
-              </Button>
-              <Button
-                size="xl"
-                radius="xl"
-                variant="light"
-                color="gray"
-                leftSection={<IconUser size={20} />}
-                onClick={handleLogin}
-                style={{ fontSize: '1.1rem', padding: '12px 32px', background: 'rgba(255, 255, 255, 0.9)', color: '#1a1b23' }}
-              >
-                Login
-              </Button>
-            </Group>
-
-            {/* Trust Indicators */}
-            <Group gap="xl" mt="xl">
-              <Stack align="center" gap="xs">
-                <Text size="2rem" fw={900} c="white">10K+</Text>
-                <Text c="white" opacity={0.9}>Active Users</Text>
-              </Stack>
-              <Stack align="center" gap="xs">
-                <Text size="2rem" fw={900} c="white">1M+</Text>
-                <Text c="white" opacity={0.9}>Messages Sent</Text>
-              </Stack>
-              <Stack align="center" gap="xs">
-                <Text size="2rem" fw={900} c="white">99.9%</Text>
-                <Text c="white" opacity={0.9}>Uptime</Text>
-              </Stack>
-            </Group>
           </Stack>
         </Container>
       </Box>
 
-      {/* BizCoins Section */}
-      <Box py={100} style={{ background: 'linear-gradient(135deg, #f8f9fe 0%, #f0f4f8 100%)' }}>
+      {/* Pricing Section - Enterprise Focus */}
+      <Box py={120} style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
         <Container size="xl">
-          <Stack align="center" gap="xl">
+          <Stack gap={60}>
             <Stack align="center" gap="md">
-              <Group gap="lg">
-                <BizCoinIcon size={60} />
-                <Title size="2.5rem" c="violet.8">Introducing BizCoins</Title>
-              </Group>
-              <Text size="xl" c="gray.7" ta="center" maw={600}>
-                Our revolutionary reward system that lets you earn commissions, purchase packages, and unlock premium features.
+              <Title size="2.5rem" ta="center" c="dark.8" fw={700}>Enterprise Pricing Plans</Title>
+              <Text size="xl" c="gray.6" ta="center" maw={600}>
+                Flexible pricing designed to scale with your organization. All plans include our full feature suite.
               </Text>
             </Stack>
 
-            <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" w="100%">
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" c="white" style={{ background: 'rgba(255,255,255,0.2)' }}>
-                    <IconCoins size={30} />
-                  </ThemeIcon>
-                  <Title order={3} ta="center">Earn BizCoins</Title>
-                  <Text ta="center" opacity={0.9}>
-                    Get rewarded for every referral, subscription purchase, and business milestone. Build your coin balance effortlessly.
-                  </Text>
-                  <Badge size="lg" color="white" c="pink.6">Up to 30% Commission</Badge>
+            {packagesLoading ? (
+              <Center>
+                <Stack align="center" gap="xl">
+                  <Title order={3} c="gray.6">Loading Enterprise Plans...</Title>
+                  <SimpleGrid cols={{ base: 1, md: 3 }} spacing={30}>
+                    {[1, 2, 3].map((i) => (
+                      <Paper key={i} p="xl" radius="xl" withBorder style={{ minWidth: 380, height: 700 }}>
+                        <Stack gap="lg">
+                          <div style={{ height: 40, background: 'linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)', borderRadius: 8, animation: 'shimmer 2s infinite' }} />
+                          <div style={{ height: 20, background: 'linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)', borderRadius: 4, width: '70%', animation: 'shimmer 2s infinite' }} />
+                          <div style={{ height: 60, background: 'linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)', borderRadius: 8, animation: 'shimmer 2s infinite' }} />
+                          <div style={{ height: 200, background: 'linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)', borderRadius: 12, animation: 'shimmer 2s infinite' }} />
+                          <div style={{ height: 50, background: 'linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%)', borderRadius: 25, animation: 'shimmer 2s infinite' }} />
+                        </Stack>
+                      </Paper>
+                    ))}
+                  </SimpleGrid>
                 </Stack>
-              </Card>
-
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" c="white" style={{ background: 'rgba(255,255,255,0.2)' }}>
-                    <IconShoppingCart size={30} />
-                  </ThemeIcon>
-                  <Title order={3} ta="center">Spend Coins</Title>
-                  <Text ta="center" opacity={0.9}>
-                    Use BizCoins to purchase subscription packages, unlock premium features, and access exclusive tools.
-                  </Text>
-                  <Badge size="lg" color="white" c="blue.6">1 Coin = ₹1</Badge>
-                </Stack>
-              </Card>
-
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', color: 'white' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" c="white" style={{ background: 'rgba(255,255,255,0.2)' }}>
-                    <IconGift size={30} />
-                  </ThemeIcon>
-                  <Title order={3} ta="center">Bonus Rewards</Title>
-                  <Text ta="center" opacity={0.9}>
-                    Enjoy bonus coins on bulk purchases, loyalty rewards, and special promotional offers throughout the year.
-                  </Text>
-                  <Badge size="lg" color="white" c="green.6">Up to 25% Bonus</Badge>
-                </Stack>
-              </Card>
-            </SimpleGrid>
-
-            <Button
-              size="xl"
-              radius="xl"
-              variant="gradient"
-              gradient={{ from: 'violet', to: 'purple' }}
-              leftSection={<BizCoinIcon size={20} />}
-              onClick={openBizCoinModal}
-            >
-              Buy BizCoins Now
-            </Button>
-          </Stack>
-        </Container>
-      </Box>
-
-      {/* Bizflash.in Brand Promotion */}
-      <Box py={80} style={{ background: 'linear-gradient(135deg, #1a1b23 0%, #2a2b33 100%)', position: 'relative', overflow: 'hidden' }}>
-        {/* Background Pattern */}
-        <Box
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f97316' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            opacity: 0.3
-          }}
-        />
-        
-        <Container size="xl" style={{ position: 'relative', zIndex: 2 }}>
-          <Stack align="center" gap="xl">
-            <Group gap="lg" align="center">
-              <Image
-                src="/bizflash-logo-light.png"
-                alt="Bizflash Logo"
-                height={60}
-                width="auto"
-              />
-              <Stack gap="xs" align="center">
-                <Group gap="xs" align="baseline">
-                  <Title size="3rem" c="white" fw={900}>Bizflash</Title>
-                  <Title size="2rem" c="orange.4" fw={900}>.in</Title>
-                </Group>
-                <Text size="lg" c="gray.4" ta="center">Your Trusted WhatsApp Business Partner</Text>
-              </Stack>
-            </Group>
-
-            <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl" w="100%">
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'rgba(249, 115, 22, 0.1)', border: '1px solid rgba(249, 115, 22, 0.3)' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'orange', to: 'red' }}>
-                    <IconTrendingUp size={30} />
-                  </ThemeIcon>
-                  <Title order={3} c="white" ta="center">Bizflash.in Success</Title>
-                  <Text c="gray.3" ta="center">
-                    Over <strong style={{ color: '#f97316' }}>500% ROI increase</strong> for businesses using Bizflash.in WhatsApp automation platform.
-                  </Text>
-                  <Badge size="lg" variant="gradient" gradient={{ from: 'orange', to: 'red' }}>
-                    Proven Results
-                  </Badge>
-                </Stack>
-              </Card>
-
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'green', to: 'lime' }}>
-                    <IconUsers size={30} />
-                  </ThemeIcon>
-                  <Title order={3} c="white" ta="center">Bizflash.in Community</Title>
-                  <Text c="gray.3" ta="center">
-                    Join our thriving community of <strong style={{ color: '#22c55e' }}>10,000+ businesses</strong> growing with Bizflash.in.
-                  </Text>
-                  <Badge size="lg" variant="gradient" gradient={{ from: 'green', to: 'lime' }}>
-                    Growing Fast
-                  </Badge>
-                </Stack>
-              </Card>
-
-              <Card shadow="lg" padding="xl" radius="xl" style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
-                <Stack align="center" gap="lg">
-                  <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                    <IconRocket size={30} />
-                  </ThemeIcon>
-                  <Title order={3} c="white" ta="center">Bizflash.in Innovation</Title>
-                  <Text c="gray.3" ta="center">
-                    Cutting-edge AI and automation technology powering the <strong style={{ color: '#3b82f6' }}>next generation</strong> of business communication.
-                  </Text>
-                  <Badge size="lg" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                    AI-Powered
-                  </Badge>
-                </Stack>
-              </Card>
-            </SimpleGrid>
-
-            <Group gap="lg">
-              <Button
-                size="xl"
-                radius="xl"
-                variant="gradient"
-                gradient={{ from: 'orange', to: 'red' }}
-                leftSection={<IconGlobe size={20} />}
-                component="a"
-                href="https://bizflash.in"
-                target="_blank"
-              >
-                Visit Bizflash.in
-              </Button>
-              <Button
-                size="xl"
-                radius="xl"
-                variant="outline"
-                c="orange"
-                style={{ borderColor: '#f97316' }}
-                leftSection={<IconPhone size={20} />}
-              >
-                Contact Bizflash Team
-              </Button>
-            </Group>
-
-            <Text size="sm" c="gray.5" ta="center">
-              🌟 Bizflash.in - Where Business Meets Innovation | Est. 2024
-            </Text>
-          </Stack>
-        </Container>
-      </Box>
-
-      {/* Packages Section */}
-      <Box id="packages" py={100} style={{ background: '#ffffff' }}>
-        <Container size="xl">
-          <Stack gap="xl">
-            <Stack align="center" gap="md">
-              <Title size="2.5rem" ta="center" c="dark.8">Choose Your Perfect Plan</Title>
-              <Text size="xl" c="gray.6" ta="center" maw={700}>
-                Flexible pricing plans designed to scale with your business needs. All plans include our comprehensive WhatsApp management suite.
-              </Text>
-            </Stack>
-
-            {/* Carousel Controls */}
-            <div className="carousel-controls">
-              <button
-                className="carousel-nav-btn"
-                onClick={scrollPrev}
-                title="Previous (←)"
-              >
-                <IconChevronLeft size={20} />
-              </button>
-              
-              <button
-                className={`carousel-nav-btn carousel-play-btn ${!autoPlay ? 'paused' : ''}`}
-                onClick={() => setAutoPlay(!autoPlay)}
-                title={autoPlay ? 'Pause (Space)' : 'Play (Space)'}
-              >
-                {autoPlay ? <IconPlayerPauseFilled size={20} /> : <IconPlayerPlayFilled size={20} />}
-              </button>
-              
-              <button
-                className="carousel-nav-btn"
-                onClick={scrollNext}
-                title="Next (→)"
-              >
-                <IconChevronRight size={20} />
-              </button>
-            </div>
-
-            {loading ? (
-              <div 
-                className="pricing-carousel"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <Carousel
-                  slideSize={{ base: '100%', md: '33.333333%' }}
-                  slideGap="xl"
-                  align="start"
-                  withIndicators
-                  height={600}
+              </Center>
+            ) : packages.length > 0 ? (
+              <Stack gap={50}>
+                {/* Professional Grid Layout - No Scroll for Better UX */}
+                <SimpleGrid 
+                  cols={{ base: 1, md: 2, lg: packages.length >= 3 ? 3 : packages.length }} 
+                  spacing={30}
                 >
-                {[1, 2, 3].map((i) => (
-                  <Carousel.Slide key={i}>
-                    <Card shadow="xl" padding="xl" radius="xl" withBorder h="100%">
-                      <Stack gap="lg">
-                        <div style={{ height: '100px', background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)', borderRadius: '12px' }} />
-                        <div style={{ height: '20px', background: '#e2e8f0', borderRadius: '4px', width: '70%' }} />
-                        <div style={{ height: '40px', background: '#e2e8f0', borderRadius: '4px', width: '50%' }} />
-                        <div style={{ height: '80px', background: '#e2e8f0', borderRadius: '4px' }} />
-                        <div style={{ height: '45px', background: '#e2e8f0', borderRadius: '20px' }} />
-                      </Stack>
-                    </Card>
-                  </Carousel.Slide>
-                ))}
-                </Carousel>
-              </div>
-            ) : (
-              <div 
-                className="pricing-carousel"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <Carousel
-                  slideSize={{ base: '100%', md: '33.333333%' }}
-                  slideGap="xl"
-                  align="start"
-                  withIndicators
-                  height={600}
-                  loop
-                  getEmblaApi={(embla) => {
-                    setEmblaApi(embla)
-                    if (embla) {
-                      embla.on('select', () => {
-                        setCurrentSlide(embla.selectedScrollSnap())
-                      })
-                    }
-                  }}
-                >
-                {packages.map((pkg) => (
-                  <Carousel.Slide key={pkg.id}>
-                    <Card 
-                      shadow="xl" 
-                      padding={0} 
-                      radius="xl" 
-                      withBorder 
-                      h="100%"
-                      className={`pricing-card ${pkg.popular ? 'popular' : ''}`}
-                      style={{ 
-                        overflow: 'hidden',
-                        border: pkg.popular ? '3px solid #10b981' : undefined
-                      }}
-                    >
-                      {/* Header */}
-                      <Box style={{ background: getPackageColor(pkg.package_color).gradient, padding: '2rem', color: 'white', position: 'relative' }}>
-                        {pkg.popular && (
-                          <Badge
-                            size="lg"
-                            color="yellow"
-                            variant="filled"
+                  {packages.map((pkg, index) => {
+                    const isPopular = pkg.popular || index === Math.floor(packages.length / 2)
+                    const packageColor = getPackageColor(pkg.package_color)
+                    
+                    return (
+                      <Paper
+                        key={pkg.id}
+                        shadow="xl"
+                        radius="xl"
+                        style={{
+                          background: isPopular 
+                            ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, rgba(139, 92, 246, 0.01) 100%)'
+                            : '#ffffff',
+                          border: isPopular ? '2px solid #8b5cf6' : '1px solid #e5e7eb',
+                          position: 'relative',
+                          height: '100%',
+                          minHeight: 700,
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-8px)'
+                          e.currentTarget.style.boxShadow = '0 24px 48px rgba(0,0,0,0.15)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)'
+                          e.currentTarget.style.boxShadow = ''
+                        }}
+                      >
+                        {/* Popular Badge */}
+                        {isPopular && (
+                          <Box
                             style={{
                               position: 'absolute',
-                              top: '1rem',
-                              right: '1rem',
-                              fontWeight: 700
+                              top: -15,
+                              left: '50%',
+                              transform: 'translateX(-50%)',
+                              zIndex: 2
                             }}
                           >
-                            Most Popular
-                          </Badge>
+                            <Badge
+                              size="xl"
+                              variant="gradient"
+                              gradient={{ from: 'violet', to: 'grape' }}
+                              style={{ 
+                                padding: '8px 24px',
+                                fontWeight: 700,
+                                letterSpacing: '0.5px',
+                                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                              }}
+                            >
+                              ⭐ MOST POPULAR
+                            </Badge>
+                          </Box>
                         )}
-                        
-                        <Stack gap="sm">
-                          <Title order={2} c="white">{pkg.name}</Title>
-                          <Text opacity={0.9} size="sm">{pkg.description || 'Perfect for your business needs'}</Text>
-                          
-                          <Group gap="xs" mt="md">
-                            {pkg.offer_enabled && pkg.offer_price ? (
-                              <>
-                                <Text size="2.5rem" fw={900} c="white">₹{pkg.offer_price}</Text>
-                                <Stack gap={0}>
-                                  <Text size="lg" td="line-through" opacity={0.7}>₹{pkg.price}</Text>
-                                  <Badge color="yellow" size="sm">
-                                    Save ₹{pkg.price - pkg.offer_price}
-                                  </Badge>
-                                </Stack>
-                              </>
-                            ) : (
-                              <Text size="2.5rem" fw={900} c="white">₹{pkg.price}</Text>
+
+                        {/* Card Header with Gradient */}
+                        <Box
+                          style={{
+                            background: packageColor.gradient,
+                            padding: '2rem',
+                            borderRadius: '16px 16px 0 0',
+                            marginBottom: '1.5rem'
+                          }}
+                        >
+                          <Stack gap="md">
+                            <Title order={2} c="white" fw={800} ta="center">
+                              {pkg.name}
+                            </Title>
+                            {pkg.description && (
+                              <Text c="white" opacity={0.9} ta="center" size="sm">
+                                {pkg.description}
+                              </Text>
                             )}
-                            <Text c="white" opacity={0.8}>/ month</Text>
-                          </Group>
-                        </Stack>
-                      </Box>
+                          </Stack>
+                        </Box>
 
-                      {/* Features */}
-                      <Box p="xl">
-                        <Stack gap="lg">
-                          <Grid>
-                            <Grid.Col span={6}>
-                              <Stack align="center" gap="xs">
-                                <ThemeIcon size={40} color={pkg.package_color || 'blue'} variant="light">
-                                  <IconMessageCircle size={20} />
-                                </ThemeIcon>
-                                <Text fw={600} size="sm">{pkg.messageLimit.toLocaleString()}</Text>
-                                <Text size="xs" c="gray.6" ta="center">Messages</Text>
+                        <Box px="xl" pb="xl">
+                          <Stack gap="xl">
+                            {/* Pricing Section */}
+                            <Box ta="center">
+                              {pkg.offer_enabled && pkg.offer_price ? (
+                                <Stack gap="xs" align="center">
+                                  <Group gap="xs" justify="center" align="baseline">
+                                    <Text c="gray.5" td="line-through" size="xl">
+                                      ₹{pkg.price.toLocaleString('en-IN')}
+                                    </Text>
+                                    <Badge color="green" size="lg" variant="light">
+                                      {Math.round(((pkg.price - pkg.offer_price) / pkg.price) * 100)}% OFF
+                                    </Badge>
+                                  </Group>
+                                  <Group gap="xs" justify="center" align="baseline">
+                                    <Title order={1} fw={900} c={packageColor.color} size="3rem">
+                                      ₹{pkg.offer_price.toLocaleString('en-IN')}
+                                    </Title>
+                                    <Text c="gray.6" size="lg">/{pkg.duration} days</Text>
+                                  </Group>
+                                  <Text c="green.6" fw={600} size="sm">
+                                    You save ₹{(pkg.price - pkg.offer_price).toLocaleString('en-IN')}
+                                  </Text>
+                                </Stack>
+                              ) : (
+                                <Group gap="xs" justify="center" align="baseline">
+                                  <Title order={1} fw={900} c={packageColor.color} size="3rem">
+                                    ₹{pkg.price.toLocaleString('en-IN')}
+                                  </Title>
+                                  <Text c="gray.6" size="lg">/{pkg.duration} days</Text>
+                                </Group>
+                              )}
+                            </Box>
+
+                            <Divider />
+
+                            {/* Key Features Grid */}
+                            <SimpleGrid cols={2} spacing="md">
+                              <Paper p="md" radius="lg" style={{ background: '#f8f9fa' }}>
+                                <Stack align="center" gap="xs">
+                                  <ThemeIcon size={40} color={packageColor.color} variant="light">
+                                    <IconMessage2 size={20} />
+                                  </ThemeIcon>
+                                  <Text fw={700} size="lg">{pkg.messageLimit.toLocaleString('en-IN')}</Text>
+                                  <Text size="xs" c="gray.6">Messages/Month</Text>
+                                </Stack>
+                              </Paper>
+                              
+                              <Paper p="md" radius="lg" style={{ background: '#f8f9fa' }}>
+                                <Stack align="center" gap="xs">
+                                  <ThemeIcon size={40} color={packageColor.color} variant="light">
+                                    <IconDeviceMobile size={20} />
+                                  </ThemeIcon>
+                                  <Text fw={700} size="lg">{pkg.instanceLimit}</Text>
+                                  <Text size="xs" c="gray.6">BizsApp Instances</Text>
+                                </Stack>
+                              </Paper>
+                              
+                              <Paper p="md" radius="lg" style={{ background: '#f8f9fa' }}>
+                                <Stack align="center" gap="xs">
+                                  <ThemeIcon size={40} color={packageColor.color} variant="light">
+                                    <IconUsers size={20} />
+                                  </ThemeIcon>
+                                  <Text fw={700} size="lg">
+                                    {pkg.contact_limit ? pkg.contact_limit.toLocaleString('en-IN') : 'Unlimited'}
+                                  </Text>
+                                  <Text size="xs" c="gray.6">Contacts</Text>
+                                </Stack>
+                              </Paper>
+                              
+                              <Paper p="md" radius="lg" style={{ background: '#f8f9fa' }}>
+                                <Stack align="center" gap="xs">
+                                  <ThemeIcon size={40} color={packageColor.color} variant="light">
+                                    <IconApi size={20} />
+                                  </ThemeIcon>
+                                  <Text fw={700} size="lg">{pkg.api_key_limit || 'Unlimited'}</Text>
+                                  <Text size="xs" c="gray.6">API Keys</Text>
+                                </Stack>
+                              </Paper>
+                            </SimpleGrid>
+
+                            {/* Feature List */}
+                            <Stack gap="sm">
+                              <Text fw={600} c="gray.7" size="sm">INCLUDED FEATURES:</Text>
+                              <Stack gap="xs">
+                                {(pkg.features || []).slice(0, 8).map((feature, i) => (
+                                  <Group key={i} gap="sm" align="flex-start">
+                                    <ThemeIcon size={18} color="green" variant="light" radius="xl" style={{ marginTop: '2px', minWidth: '18px' }}>
+                                      <IconCheck size={10} />
+                                    </ThemeIcon>
+                                    <Text size="sm" c="gray.7" style={{ lineHeight: 1.4 }}>
+                                      {feature}
+                                    </Text>
+                                  </Group>
+                                ))}
+                                
+                                {/* Show more indicator if there are additional features */}
+                                {pkg.features && pkg.features.length > 8 && (
+                                  <Group gap="sm">
+                                    <ThemeIcon size={18} color="violet" variant="light" radius="xl">
+                                      <Text size="xs" fw={600}>+</Text>
+                                    </ThemeIcon>
+                                    <Text size="xs" c="violet.6" fw={600}>
+                                      +{pkg.features.length - 8} more premium features included
+                                    </Text>
+                                  </Group>
+                                )}
                               </Stack>
-                            </Grid.Col>
-                            <Grid.Col span={6}>
-                              <Stack align="center" gap="xs">
-                                <ThemeIcon size={40} color={pkg.package_color || 'blue'} variant="light">
-                                  <IconDeviceMobile size={20} />
-                                </ThemeIcon>
-                                <Text fw={600} size="sm">{pkg.instanceLimit}</Text>
-                                <Text size="xs" c="gray.6" ta="center">Instances</Text>
-                              </Stack>
-                            </Grid.Col>
-                            <Grid.Col span={6}>
-                              <Stack align="center" gap="xs">
-                                <ThemeIcon size={40} color={pkg.package_color || 'blue'} variant="light">
-                                  <IconUsers size={20} />
-                                </ThemeIcon>
-                                <Text fw={600} size="sm">{pkg.contact_limit.toLocaleString()}</Text>
-                                <Text size="xs" c="gray.6" ta="center">Contacts</Text>
-                              </Stack>
-                            </Grid.Col>
-                            <Grid.Col span={6}>
-                              <Stack align="center" gap="xs">
-                                <ThemeIcon size={40} color={pkg.package_color || 'blue'} variant="light">
-                                  <IconApi size={20} />
-                                </ThemeIcon>
-                                <Text fw={600} size="sm">{pkg.api_key_limit}</Text>
-                                <Text size="xs" c="gray.6" ta="center">API Keys</Text>
-                              </Stack>
-                            </Grid.Col>
-                          </Grid>
+                            </Stack>
 
-                          <Divider />
+                            {/* CTA Button */}
+                            <Button
+                              size="xl"
+                              radius="xl"
+                              fullWidth
+                              variant={isPopular ? 'gradient' : 'outline'}
+                              gradient={isPopular ? { from: 'violet', to: 'grape' } : undefined}
+                              color={isPopular ? undefined : packageColor.color}
+                              onClick={handleLogin}
+                              style={{
+                                height: 56,
+                                fontSize: '1.1rem',
+                                fontWeight: 700,
+                                letterSpacing: '0.5px',
+                                marginTop: 'auto'
+                              }}
+                            >
+                              {isPopular ? '🚀 Get Started Now' : 'Choose This Plan'}
+                            </Button>
+                          </Stack>
+                        </Box>
+                      </Paper>
+                    )
+                  })}
+                </SimpleGrid>
 
-                          <List
-                            spacing="sm"
-                            size="sm"
-                            center
-                            icon={<IconCheck size={16} style={{ color: '#10b981' }} />}
-                          >
-                            {(Array.isArray(pkg.features) ? pkg.features : []).map((feature, index) => (
-                              <List.Item key={index}>{feature}</List.Item>
-                            ))}
-                          </List>
-
-                          <Button
-                            size="lg"
-                            radius="xl"
-                            variant={pkg.popular ? 'gradient' : 'outline'}
-                            gradient={pkg.popular ? { from: getPackageColor(pkg.package_color).color, to: 'green' } : undefined}
-                            color={pkg.package_color || 'blue'}
-                            fullWidth
-                            onClick={() => {
-                              setSelectedPackage(pkg)
-                              openPackageModal()
-                            }}
-                            rightSection={<IconArrowRight size={16} />}
-                          >
-                            {pkg.popular ? 'Get Started Now' : 'Choose Plan'}
-                          </Button>
-
-                          <Text size="xs" c="gray.5" ta="center">
-                            * All prices are in INR and billed monthly
+                {/* Enterprise Custom Plan */}
+                <Card
+                  shadow="md"
+                  radius="xl"
+                  padding="xl"
+                  style={{
+                    background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+                    border: '2px solid #475569'
+                  }}
+                >
+                  <Group justify="space-between" align="center">
+                    <Stack gap="sm">
+                      <Group gap="md">
+                        <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'gold', to: 'orange' }}>
+                          <IconCrown size={26} />
+                        </ThemeIcon>
+                        <div>
+                          <Title order={2} c="white">Need a Custom Enterprise Solution?</Title>
+                          <Text c="gray.3" size="lg" mt="xs">
+                            Get unlimited everything with dedicated support, custom integrations, and SLA guarantees
                           </Text>
-                        </Stack>
-                      </Box>
-                    </Card>
-                  </Carousel.Slide>
-                ))}
-                </Carousel>
-              </div>
+                        </div>
+                      </Group>
+                    </Stack>
+                    <Button
+                      size="lg"
+                      radius="xl"
+                      variant="white"
+                      color="dark"
+                      leftSection={<IconPhone size={20} />}
+                      onClick={handleLogin}
+                      style={{ minWidth: 200 }}
+                    >
+                      Contact Sales Team
+                    </Button>
+                  </Group>
+                </Card>
+              </Stack>
+            ) : (
+              <Center>
+                <Stack align="center" gap="xl" py={60}>
+                  <ThemeIcon size={80} radius="xl" variant="light" color="gray">
+                    <IconMessage2 size={40} />
+                  </ThemeIcon>
+                  <Title order={3} c="gray.6">No Pricing Plans Available</Title>
+                  <Text c="gray.5" ta="center" maw={400}>
+                    We're currently updating our pricing structure. Please contact us for custom enterprise solutions.
+                  </Text>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    leftSection={<IconPhone size={20} />}
+                    onClick={handleLogin}
+                  >
+                    Get Custom Quote
+                  </Button>
+                </Stack>
+              </Center>
             )}
 
-            {/* Navigation Dots */}
-            <div className="nav-dots">
-              {packages.map((_, index) => (
-                <div
-                  key={index}
-                  className={`nav-dot ${currentSlide === index ? 'active' : ''}`}
-                  onClick={() => scrollTo(index)}
-                  title={`Go to plan ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            {/* Keyboard Navigation Hint */}
-            <Text size="sm" c="gray.6" ta="center" mt="md">
-              💡 Use arrow keys ← → to navigate and spacebar to play/pause
-            </Text>
-          </Stack>
-        </Container>
-      </Box>
-
-      {/* Integrations Section */}
-      <Box py={100} style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
-        <Container size="xl">
-          <Stack gap="xl">
-            <Stack align="center" gap="md">
-              <Title size="2.5rem" ta="center" c="dark.8">Easy Integration with Your Business Tools</Title>
-              <Text size="xl" c="gray.6" ta="center" maw={700}>
-                Connect seamlessly with popular accounting software, CRM systems, and business applications for a unified workflow.
-              </Text>
-            </Stack>
-
-            {/* Integration Categories */}
-            <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl">
-              {/* Accounting Software */}
-              <Card shadow="lg" padding="xl" radius="xl" withBorder style={{ height: '100%' }}>
-                <Stack gap="lg" h="100%">
-                  <Group gap="md">
-                    <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                      <IconDatabase size={25} />
-                    </ThemeIcon>
-                    <Title order={3} c="blue.8">Accounting Software</Title>
-                  </Group>
-                  
-                  <Stack gap="md" style={{ flex: 1 }}>
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          T
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Tally Prime</Text>
-                          <Text size="xs" c="dimmed">Complete ERP Solution</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          QB
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">QuickBooks</Text>
-                          <Text size="xs" c="dimmed">Small Business Accounting</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          Z
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Zoho Books</Text>
-                          <Text size="xs" c="dimmed">Online Accounting</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                  </Stack>
-                </Stack>
-              </Card>
-
-              {/* CRM Systems */}
-              <Card shadow="lg" padding="xl" radius="xl" withBorder style={{ height: '100%' }}>
-                <Stack gap="lg" h="100%">
-                  <Group gap="md">
-                    <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'violet', to: 'purple' }}>
-                      <IconUsers size={25} />
-                    </ThemeIcon>
-                    <Title order={3} c="violet.8">CRM Systems</Title>
-                  </Group>
-                  
-                  <Stack gap="md" style={{ flex: 1 }}>
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          PX
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Perfex CRM</Text>
-                          <Text size="xs" c="dimmed">Complete CRM Solution</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #ea580c 0%, #f97316 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          HS
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">HubSpot</Text>
-                          <Text size="xs" c="dimmed">Inbound Marketing CRM</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          SF
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Salesforce</Text>
-                          <Text size="xs" c="dimmed">Enterprise CRM</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                  </Stack>
-                </Stack>
-              </Card>
-
-              {/* E-commerce & Others */}
-              <Card shadow="lg" padding="xl" radius="xl" withBorder style={{ height: '100%' }}>
-                <Stack gap="lg" h="100%">
-                  <Group gap="md">
-                    <ThemeIcon size={50} radius="xl" variant="gradient" gradient={{ from: 'orange', to: 'red' }}>
-                      <IconPlugConnected size={25} />
-                    </ThemeIcon>
-                    <Title order={3} c="orange.8">E-commerce & More</Title>
-                  </Group>
-                  
-                  <Stack gap="md" style={{ flex: 1 }}>
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          SH
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Shopify</Text>
-                          <Text size="xs" c="dimmed">E-commerce Platform</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #9333ea 0%, #a855f7 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          WC
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">WooCommerce</Text>
-                          <Text size="xs" c="dimmed">WordPress E-commerce</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="green" variant="light" size="sm">✓ Supported</Badge>
-                    </Group>
-                    
-                    <Group justify="space-between" align="center">
-                      <Group gap="sm">
-                        <Box
-                          style={{
-                            width: 40,
-                            height: 40,
-                            background: 'linear-gradient(135deg, #dc2626 0%, #f87171 100%)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            fontSize: '12px'
-                          }}
-                        >
-                          +
-                        </Box>
-                        <Stack gap={0}>
-                          <Text fw={600} size="sm">Custom API</Text>
-                          <Text size="xs" c="dimmed">Any REST API Integration</Text>
-                        </Stack>
-                      </Group>
-                      <Badge color="blue" variant="light" size="sm">✓ Available</Badge>
-                    </Group>
-                  </Stack>
-                </Stack>
-              </Card>
-            </SimpleGrid>
-
-            {/* Integration Benefits */}
-            <Card shadow="lg" padding="xl" radius="xl" withBorder style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)' }}>
-              <Stack gap="lg">
-                <Title order={3} ta="center" c="blue.8">Why Our Integrations Matter</Title>
-                
-                <SimpleGrid cols={{ base: 1, md: 4 }} spacing="lg">
-                  <Stack align="center" gap="md">
-                    <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                      <IconBolt size={30} />
-                    </ThemeIcon>
-                    <Title order={4} ta="center">Real-time Sync</Title>
-                    <Text size="sm" ta="center" c="gray.7">
-                      Customer data, orders, and invoices sync instantly between platforms
-                    </Text>
-                  </Stack>
-                  
-                  <Stack align="center" gap="md">
-                    <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'green', to: 'lime' }}>
-                      <IconShield size={30} />
-                    </ThemeIcon>
-                    <Title order={4} ta="center">Secure Connection</Title>
-                    <Text size="sm" ta="center" c="gray.7">
-                      Bank-level encryption ensures your business data stays protected
-                    </Text>
-                  </Stack>
-                  
-                  <Stack align="center" gap="md">
-                    <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'violet', to: 'purple' }}>
-                      <IconTarget size={30} />
-                    </ThemeIcon>
-                    <Title order={4} ta="center">Smart Automation</Title>
-                    <Text size="sm" ta="center" c="gray.7">
-                      Trigger WhatsApp messages based on CRM events and transactions
-                    </Text>
-                  </Stack>
-                  
-                  <Stack align="center" gap="md">
-                    <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: 'orange', to: 'red' }}>
-                      <IconRocket size={30} />
-                    </ThemeIcon>
-                    <Title order={4} ta="center">Easy Setup</Title>
-                    <Text size="sm" ta="center" c="gray.7">
-                      One-click integration with guided setup and full documentation
-                    </Text>
-                  </Stack>
-                </SimpleGrid>
-              </Stack>
-            </Card>
-
             <Center>
-              <Button
-                size="xl"
-                radius="xl"
-                variant="gradient"
-                gradient={{ from: 'blue', to: 'cyan' }}
-                leftSection={<IconPlugConnected size={20} />}
-                onClick={handleLogin}
-              >
-                Explore All Integrations
-              </Button>
+              <Stack align="center" gap="md">
+                <Text c="gray.6" size="sm">All plans include 14-day free trial • No setup fees • Cancel anytime</Text>
+                <Button variant="subtle" size="sm" leftSection={<IconPhone size={16} />}>
+                  Need custom pricing? Contact our sales team
+                </Button>
+              </Stack>
             </Center>
           </Stack>
         </Container>
       </Box>
 
-      {/* Features Section */}
-      <Box py={100} style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+      {/* Why Choose Us Section */}
+      <Box py={120} style={{ background: '#ffffff' }}>
         <Container size="xl">
-          <Stack gap="xl">
+          <Stack gap={80}>
             <Stack align="center" gap="md">
-              <Title size="2.5rem" ta="center" c="white">Powerful Features for Business Growth</Title>
-              <Text size="xl" c="white" ta="center" opacity={0.9} maw={700}>
-                Everything you need to manage, automate, and scale your WhatsApp business communication.
+              <Title size="2.5rem" ta="center" c="dark.8" fw={700}>
+                Why Fortune 500 Companies Choose {profile.company_name}
+              </Title>
+              <Text size="xl" c="gray.6" ta="center" maw={700}>
+                Industry-leading platform trusted by enterprises worldwide for mission-critical communication.
               </Text>
             </Stack>
 
             <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} spacing="xl">
               {[
-                {
-                  icon: IconBrandWhatsapp,
-                  title: 'Multi-Instance Management',
-                  description: 'Manage multiple WhatsApp accounts from a single dashboard with seamless switching and unified messaging.',
-                  color: 'green'
-                },
-                {
-                  icon: IconBolt,
-                  title: 'Automation & Scheduling',
-                  description: 'Automate responses, schedule messages, and create smart workflows to engage customers 24/7.',
-                  color: 'yellow'
-                },
-                {
-                  icon: IconChartLine,
-                  title: 'Advanced Analytics',
-                  description: 'Track message delivery rates, customer engagement, response times, and business performance metrics.',
-                  color: 'blue'
-                },
-                {
-                  icon: IconUsers,
-                  title: 'Team Collaboration',
-                  description: 'Add team members, assign roles, manage permissions, and collaborate effectively on customer communications.',
-                  color: 'violet'
-                },
-                {
-                  icon: IconApi,
-                  title: 'Powerful APIs',
-                  description: 'Integrate with your existing systems using our comprehensive REST API and webhook support.',
-                  color: 'orange'
-                },
-                {
-                  icon: IconShield,
-                  title: 'Enterprise Security',
-                  description: 'Bank-level encryption, secure authentication, and compliance with data protection regulations.',
-                  color: 'red'
-                },
-                {
-                  icon: IconCloud,
-                  title: 'Cloud Infrastructure',
-                  description: 'Reliable cloud hosting with 99.9% uptime, automatic backups, and global CDN delivery.',
-                  color: 'cyan'
-                },
-                {
-                  icon: IconTarget,
-                  title: 'Smart Targeting',
-                  description: 'Segment contacts, create targeted campaigns, and personalize messages for better engagement.',
-                  color: 'pink'
-                }
-              ].map((feature, index) => (
-                <Card key={index} shadow="lg" padding="xl" radius="xl" style={{ background: 'rgba(255, 255, 255, 0.95)', height: '100%' }}>
-                  <Stack gap="md" h="100%">
-                    <ThemeIcon size={60} radius="xl" variant="gradient" gradient={{ from: feature.color, to: `${feature.color}.7` }}>
-                      <feature.icon size={30} />
-                    </ThemeIcon>
-                    <Title order={4}>{feature.title}</Title>
-                    <Text size="sm" c="gray.7" style={{ flex: 1 }}>
-                      {feature.description}
-                    </Text>
+                { icon: IconAward, title: 'Industry Leader', desc: 'Recognized as a leader in business communication platforms' },
+                { icon: IconCertificate, title: 'Certified Secure', desc: 'ISO 27001, SOC 2, and GDPR compliant infrastructure' },
+                { icon: IconTrophy, title: '99.9% Uptime', desc: 'Enterprise SLA with guaranteed uptime and performance' },
+                { icon: IconHeadset, title: '24/7 Support', desc: 'Dedicated support team with enterprise-level response times' }
+              ].map((item, index) => (
+                <Stack key={index} align="center" gap="lg">
+                  <ThemeIcon size={70} radius="xl" variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }}>
+                    <item.icon size={35} />
+                  </ThemeIcon>
+                  <Stack align="center" gap="sm">
+                    <Title order={4} ta="center">{item.title}</Title>
+                    <Text c="gray.6" ta="center" size="sm">{item.desc}</Text>
                   </Stack>
-                </Card>
+                </Stack>
               ))}
             </SimpleGrid>
           </Stack>
@@ -1430,13 +851,16 @@ export default function HomePage() {
       </Box>
 
       {/* CTA Section */}
-      <Box py={100} style={{ background: '#1a1b23' }}>
+      <Box py={120} style={{ background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)' }}>
         <Container size="xl">
           <Stack align="center" gap="xl">
             <Stack align="center" gap="md">
-              <Title size="2.5rem" ta="center" c="white">Ready to Transform Your Business?</Title>
-              <Text size="xl" c="gray.4" ta="center" maw={600}>
-                Join thousands of businesses already using Bizflash.in to streamline their customer communication and boost sales through intelligent WhatsApp automation.
+              <Title size="2.5rem" ta="center" c="white" fw={700}>
+                Ready to Transform Your Business Communication?
+              </Title>
+              <Text size="xl" c="gray.3" ta="center" maw={600}>
+                Join thousands of enterprises already using {profile.company_name} to streamline 
+                their BizsApp business communication at scale.
               </Text>
             </Stack>
 
@@ -1445,95 +869,100 @@ export default function HomePage() {
                 size="xl"
                 radius="xl"
                 variant="gradient"
-                gradient={{ from: 'violet', to: 'purple' }}
-                leftSection={<IconRocket size={20} />}
+                gradient={{ from: 'indigo', to: 'cyan' }}
+                leftSection={<IconRocket size={24} />}
                 onClick={handleLogin}
+                style={{ fontSize: '1.1rem', padding: '16px 40px' }}
               >
-                Start Your Free Trial
+                Start Free Enterprise Trial
               </Button>
               <Button
                 size="xl"
                 radius="xl"
                 variant="outline"
                 c="white"
-                style={{ borderColor: 'white' }}
+                style={{ borderColor: 'rgba(255, 255, 255, 0.3)', fontSize: '1.1rem', padding: '16px 40px' }}
                 leftSection={<IconPhone size={20} />}
               >
-                Schedule Demo
+                Schedule Demo Call
               </Button>
             </Group>
 
-            <Text size="sm" c="gray.5" ta="center">
-              No credit card required • 14-day free trial • Cancel anytime
+            <Text c="gray.4" size="sm" ta="center">
+              ✓ No credit card required ✓ 14-day free trial ✓ Enterprise support included
             </Text>
           </Stack>
         </Container>
       </Box>
 
       {/* Footer */}
-      <Box py={50} style={{ background: '#0f1017' }}>
+      <Box py={60} style={{ background: '#0f172a' }}>
         <Container size="xl">
           <Stack gap="xl">
             <Group justify="space-between" align="flex-start">
-              <Stack gap="md">
-                <Group gap="md">
-                  <Image
-                    src="/bizflash-logo-light.png"
-                    alt="Bizflash Logo"
-                    height={50}
-                    width="auto"
-                  />
-                  <Stack gap={0}>
-                    <Group gap="xs">
-                      <Title order={3} c="white">Bizflash</Title>
-                      <Text c="orange.4" fw={600}>.in</Text>
-                    </Group>
-                    <Text c="gray.5">WhatsApp Business Automation Platform</Text>
-                  </Stack>
-                </Group>
-                <Text c="gray.5" maw={300}>
-                  Empowering businesses with intelligent WhatsApp automation, seamless integrations, and powerful analytics since 2024.
+              <Stack gap="md" style={{ maxWidth: 300 }}>
+                <Title order={3} c="white">{profile.company_name}</Title>
+                <Text c="gray.4" size="sm">
+                  {profile.description}
                 </Text>
+                <Group gap="md">
+                  <ActionIcon size="lg" variant="subtle" c="gray.5">
+                    <IconPhone size={18} />
+                  </ActionIcon>
+                  <Text c="gray.5" size="sm">{profile.mobile_number}</Text>
+                </Group>
+                <Group gap="md">
+                  <ActionIcon size="lg" variant="subtle" c="gray.5">
+                    <IconMail size={18} />
+                  </ActionIcon>
+                  <Text c="gray.5" size="sm">{profile.email}</Text>
+                </Group>
+                <Group gap="md">
+                  <ActionIcon size="lg" variant="subtle" c="gray.5">
+                    <IconMapPin size={18} />
+                  </ActionIcon>
+                  <Text c="gray.5" size="sm">{profile.city}, {profile.state}, {profile.country}</Text>
+                </Group>
               </Stack>
 
               <SimpleGrid cols={{ base: 2, md: 4 }} spacing="xl">
                 <Stack gap="md">
-                  <Title order={5} c="white">Product</Title>
+                  <Title order={5} c="white">Platform</Title>
                   <Stack gap="xs">
-                    <Anchor c="gray.5" size="sm">Features</Anchor>
-                    <Anchor c="gray.5" size="sm">Pricing</Anchor>
-                    <Anchor c="gray.5" size="sm">API Docs</Anchor>
-                    <Anchor c="gray.5" size="sm">Integrations</Anchor>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Features</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Integrations</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>API Documentation</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Security</Text>
+                  </Stack>
+                </Stack>
+
+                <Stack gap="md">
+                  <Title order={5} c="white">Solutions</Title>
+                  <Stack gap="xs">
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Enterprise</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Small Business</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Developers</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Partners</Text>
+                  </Stack>
+                </Stack>
+
+                <Stack gap="md">
+                  <Title order={5} c="white">Resources</Title>
+                  <Stack gap="xs">
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Documentation</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Help Center</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Status Page</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Blog</Text>
                   </Stack>
                 </Stack>
 
                 <Stack gap="md">
                   <Title order={5} c="white">Company</Title>
                   <Stack gap="xs">
-                    <Anchor c="gray.5" size="sm">About Us</Anchor>
-                    <Anchor c="gray.5" size="sm">Blog</Anchor>
-                    <Anchor c="gray.5" size="sm">Careers</Anchor>
-                    <Anchor c="gray.5" size="sm">Press</Anchor>
-                  </Stack>
-                </Stack>
-
-                <Stack gap="md">
-                  <Title order={5} c="white">Support</Title>
-                  <Stack gap="xs">
-                    <Anchor c="gray.5" size="sm">Help Center</Anchor>
-                    <Anchor c="gray.5" size="sm">Contact Us</Anchor>
-                    <Anchor c="gray.5" size="sm">Status</Anchor>
-                    <Anchor c="gray.5" size="sm">Community</Anchor>
-                  </Stack>
-                </Stack>
-
-                <Stack gap="md">
-                  <Title order={5} c="white">Legal</Title>
-                  <Stack gap="xs">
-                    <Anchor c="gray.5" size="sm">Privacy</Anchor>
-                    <Anchor c="gray.5" size="sm">Terms</Anchor>
-                    <Anchor c="gray.5" size="sm">Security</Anchor>
-                    <Anchor c="gray.5" size="sm">Compliance</Anchor>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>About Us</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Careers</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Privacy Policy</Text>
+                    <Text c="gray.5" size="sm" style={{ cursor: 'pointer' }}>Terms of Service</Text>
                   </Stack>
                 </Stack>
               </SimpleGrid>
@@ -1543,168 +972,43 @@ export default function HomePage() {
 
             <Group justify="space-between">
               <Text c="gray.5" size="sm">
-                © 2024 Bizflash.in. All rights reserved. | Powered by Bizflash Technologies
+                © {new Date().getFullYear()} {profile.company_name}. All rights reserved.
               </Text>
-              <Group gap="lg">
-                <ActionIcon size="lg" variant="subtle" c="gray.5">
-                  <IconBrandWhatsapp size={20} />
-                </ActionIcon>
-                <ActionIcon size="lg" variant="subtle" c="gray.5">
-                  <IconMail size={20} />
-                </ActionIcon>
-                <ActionIcon size="lg" variant="subtle" c="gray.5">
-                  <IconPhone size={20} />
-                </ActionIcon>
-              </Group>
+              <Text c="gray.5" size="xs">
+                Powered by bizflash.in
+              </Text>
             </Group>
           </Stack>
         </Container>
       </Box>
 
-      {/* Package Purchase Modal */}
-      <Modal 
-        opened={packageModalOpened} 
-        onClose={closePackageModal}
-        title="Purchase Package" 
-        size="lg"
-        centered
-      >
-        {selectedPackage && (
-          <Stack gap="lg">
-            <Card withBorder radius="lg" p="lg">
-              <Stack gap="md">
-                <Group justify="space-between">
-                  <Title order={3}>{selectedPackage.name}</Title>
-                  <Badge size="lg" color={selectedPackage.package_color || 'blue'}>
-                    {selectedPackage.duration} Days
-                  </Badge>
-                </Group>
-                
-                <Text c="gray.6">{selectedPackage.description || 'Perfect for your business needs'}</Text>
-                
-                <Group>
-                  {selectedPackage.offer_enabled && selectedPackage.offer_price ? (
-                    <>
-                      <Text size="2rem" fw={900}>₹{selectedPackage.offer_price}</Text>
-                      <Text size="lg" td="line-through" c="gray.5">₹{selectedPackage.price}</Text>
-                    </>
-                  ) : (
-                    <Text size="2rem" fw={900}>₹{selectedPackage.price}</Text>
-                  )}
-                  <Text c="gray.6">/ month</Text>
-                </Group>
-              </Stack>
-            </Card>
-
-            <Stack gap="md">
-              <Title order={4}>Choose Payment Method</Title>
-              <SimpleGrid cols={2} spacing="md">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  leftSection={<IconCreditCard size={20} />}
-                  onClick={handleLogin}
-                >
-                  Pay with Card
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  leftSection={<BizCoinIcon size={20} />}
-                  onClick={handleLogin}
-                >
-                  Pay with BizCoins
-                </Button>
-              </SimpleGrid>
-            </Stack>
-          </Stack>
-        )}
-      </Modal>
-
-      {/* BizCoin Purchase Modal */}
-      <Modal 
-        opened={bizCoinModalOpened} 
-        onClose={closeBizCoinModal}
-        title={
-          <Group gap="md">
-            <BizCoinIcon size={30} />
-            <Title order={3}>Purchase BizCoins</Title>
-          </Group>
-        } 
-        size="xl"
-        centered
-      >
-        <Stack gap="lg">
-          <Text c="gray.6">
-            Choose from our BizCoin packages to unlock premium features and earn rewards.
-          </Text>
-
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="lg">
-            {bizCoinPackages.map((pkg) => (
-              <Card 
-                key={pkg.id} 
-                withBorder 
-                radius="lg" 
-                p="lg"
-                style={{ 
-                  border: pkg.popular ? '2px solid #10b981' : undefined,
-                  position: 'relative'
-                }}
-              >
-                {pkg.popular && (
-                  <Badge
-                    color="green"
-                    variant="filled"
-                    style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)' }}
-                  >
-                    Most Popular
-                  </Badge>
-                )}
-                
-                <Stack gap="md">
-                  <Group justify="space-between" align="flex-start">
-                    <Stack gap="xs">
-                      <Title order={4}>{pkg.name}</Title>
-                      <Group gap="xs">
-                        <BizCoinIcon size={20} />
-                        <Text fw={600}>{pkg.coins.toLocaleString()} Coins</Text>
-                        {pkg.bonus > 0 && (
-                          <Badge size="sm" color="yellow">
-                            +{pkg.bonus} Bonus
-                          </Badge>
-                        )}
-                      </Group>
-                    </Stack>
-                    <Stack gap={0} align="flex-end">
-                      <Text size="xl" fw={900}>₹{pkg.price}</Text>
-                      <Text size="xs" c="green.6">{pkg.savings}</Text>
-                    </Stack>
-                  </Group>
-
-                  <Button
-                    variant={pkg.popular ? 'gradient' : 'outline'}
-                    gradient={pkg.popular ? { from: 'green', to: 'lime' } : undefined}
-                    color="green"
-                    fullWidth
-                    onClick={handleLogin}
-                  >
-                    Buy Now
-                  </Button>
-                </Stack>
-              </Card>
-            ))}
-          </SimpleGrid>
-        </Stack>
-      </Modal>
-
       <style jsx global>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
+          50% { transform: translateY(-30px) rotate(180deg); }
+        }
+        
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
         }
         
         html {
           scroll-behavior: smooth;
+        }
+        
+        .mantine-Card-root:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-scroll-container {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        
+        .pricing-scroll-container::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </Box>

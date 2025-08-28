@@ -234,32 +234,60 @@ export async function POST(request: NextRequest) {
 
     const device = deviceResult.rows[0]
 
-    // Check subscription limits
+    // Check subscription limits and voucher balance
     const packageResult = await pool.query(`
-      SELECT cp.id, cp."messagesUsed", cp."endDate", p."messageLimit"
+      SELECT cp.id, cp."messagesUsed", cp."endDate", p."messageLimit", u.message_balance
       FROM customer_packages cp
       JOIN packages p ON cp."packageId" = p.id
+      JOIN users u ON cp."userId" = u.id::text
       WHERE cp."userId" = $1::text AND cp."isActive" = true AND cp."endDate" > NOW()
       ORDER BY cp."createdAt" DESC
       LIMIT 1
     `, [auth.userId])
 
-    if (packageResult.rows.length === 0) {
-      return NextResponse.json({
-        success: false,
-        error: 'No active subscription package found'
-      }, { status: 403 })
-    }
+    let totalAvailable = 0
+    let subscription = null
+    let voucherBalance = 0
 
-    const subscription = packageResult.rows[0]
-    const remainingMessages = subscription.messageLimit - subscription.messagesUsed
+    if (packageResult.rows.length === 0) {
+      // No active subscription, check voucher balance only
+      const userResult = await pool.query(`
+        SELECT message_balance FROM users WHERE id = $1
+      `, [auth.userId])
+      
+      if (userResult.rows.length === 0) {
+        return NextResponse.json({
+          success: false,
+          error: 'User not found'
+        }, { status: 404 })
+      }
+
+      voucherBalance = userResult.rows[0].message_balance || 0
+      totalAvailable = voucherBalance
+
+      if (totalAvailable === 0) {
+        return NextResponse.json({
+          success: false,
+          error: 'No active subscription package found and no voucher messages available'
+        }, { status: 403 })
+      }
+    } else {
+      subscription = packageResult.rows[0]
+      const subscriptionRemaining = Math.max(0, subscription.messageLimit - subscription.messagesUsed)
+      voucherBalance = subscription.message_balance || 0
+      totalAvailable = subscriptionRemaining + voucherBalance
+    }
     
-    if (remainingMessages < messages.length) {
+    if (totalAvailable < messages.length) {
       return NextResponse.json({
         success: false,
         error: 'Insufficient message credits',
-        available: remainingMessages,
-        requested: messages.length
+        available: totalAvailable,
+        requested: messages.length,
+        breakdown: {
+          subscriptionRemaining: subscription ? Math.max(0, subscription.messageLimit - subscription.messagesUsed) : 0,
+          voucherBalance: voucherBalance
+        }
       }, { status: 403 })
     }
 
@@ -324,14 +352,54 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Update subscription message count
+      // Update message count - deduct from voucher messages first, then from subscription
       if (queuedCount > 0) {
-        await client.query(`
-          UPDATE customer_packages 
-          SET "messagesUsed" = "messagesUsed" + $1,
-              "updatedAt" = CURRENT_TIMESTAMP
-          WHERE id = $2
-        `, [queuedCount, subscription.id])
+        // Get current voucher balance
+        const currentVoucherResult = await client.query(`
+          SELECT message_balance FROM users WHERE id = $1
+        `, [auth.userId])
+        
+        const currentVoucherBalance = currentVoucherResult.rows[0]?.message_balance || 0
+        
+        if (currentVoucherBalance >= queuedCount) {
+          // Deduct all from voucher messages
+          await client.query(`
+            UPDATE users 
+            SET message_balance = message_balance - $1
+            WHERE id = $2
+          `, [queuedCount, auth.userId])
+          console.log(`Deducted ${queuedCount} messages from voucher balance for bulk send`)
+        } else if (currentVoucherBalance > 0) {
+          // Deduct partially from voucher, rest from subscription
+          const remainingToDeduct = queuedCount - currentVoucherBalance
+          
+          await client.query(`
+            UPDATE users 
+            SET message_balance = 0
+            WHERE id = $1
+          `, [auth.userId])
+          
+          if (subscription) {
+            await client.query(`
+              UPDATE customer_packages 
+              SET "messagesUsed" = "messagesUsed" + $1,
+                  "updatedAt" = CURRENT_TIMESTAMP
+              WHERE id = $2
+            `, [remainingToDeduct, subscription.id])
+          }
+          console.log(`Deducted ${currentVoucherBalance} from voucher and ${remainingToDeduct} from subscription for bulk send`)
+        } else {
+          // Deduct all from subscription
+          if (subscription) {
+            await client.query(`
+              UPDATE customer_packages 
+              SET "messagesUsed" = "messagesUsed" + $1,
+                  "updatedAt" = CURRENT_TIMESTAMP
+              WHERE id = $2
+            `, [queuedCount, subscription.id])
+            console.log(`Deducted ${queuedCount} messages from subscription for bulk send`)
+          }
+        }
       }
 
       await client.query('COMMIT')
@@ -366,7 +434,7 @@ export async function POST(request: NextRequest) {
         deviceName,
         deviceStatus: device.status,
         estimatedCompletionTime: estimatedCompletion.toISOString(),
-        remainingCredits: remainingMessages - queuedCount,
+        remainingCredits: totalAvailable - queuedCount,
         results: process.env.NODE_ENV === 'development' ? queueResults : undefined
       },
       message: `Bulk message batch queued: ${queuedCount} queued, ${failedCount} failed`

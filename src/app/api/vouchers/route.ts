@@ -157,16 +157,20 @@ export async function POST(request: NextRequest) {
       description,
       type,
       value,
+      packageId,
       usage_limit,
       expires_at,
       package_id,
       min_purchase_amount,
       max_discount_amount
     } = body
+    
+    // Use packageId if provided (from frontend), otherwise use package_id
+    const finalPackageId = packageId || package_id
 
-    if (!code || !type || !value) {
+    if (!code || !type) {
       return NextResponse.json({
-        error: 'Missing required fields: code, type, value'
+        error: 'Missing required fields: code, type'
       }, { status: 400 })
     }
 
@@ -177,9 +181,26 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Validate numeric fields
-    if (value <= 0) {
-      return NextResponse.json({ error: 'Value must be greater than 0' }, { status: 400 })
+    // Type-specific validation
+    if (type === 'package') {
+      if (!finalPackageId) {
+        return NextResponse.json({ error: 'Package selection is required for package vouchers' }, { status: 400 })
+      }
+      
+      // Verify package exists and is active
+      const packageExists = await pool.query(
+        'SELECT id, name, price FROM packages WHERE id = $1 AND "isActive" = true',
+        [finalPackageId]
+      )
+      
+      if (packageExists.rows.length === 0) {
+        return NextResponse.json({ error: 'Selected package not found or inactive' }, { status: 400 })
+      }
+    } else {
+      // For non-package vouchers, value is required
+      if (!value || value <= 0) {
+        return NextResponse.json({ error: 'Value must be greater than 0' }, { status: 400 })
+      }
     }
 
     if (usage_limit && usage_limit <= 0) {
@@ -210,10 +231,10 @@ export async function POST(request: NextRequest) {
       code.toUpperCase(),
       description || null,
       type,
-      value,
+      value || 0,
       usage_limit || null,
       expires_at ? new Date(expires_at) : null,
-      package_id || null,
+      finalPackageId || null,
       min_purchase_amount || null,
       max_discount_amount || null,
       session.user.name || session.user.email

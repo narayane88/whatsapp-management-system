@@ -51,10 +51,10 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
         {/* Comprehensive Favicon Package */}
-        <link rel="icon" href="/images/company/favicon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/images/company/favicons/favicon-32x32.svg" sizes="32x32" type="image/svg+xml" />
-        <link rel="icon" href="/images/company/favicons/favicon-16x16.svg" sizes="16x16" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/images/company/favicons/apple-touch-icon.svg" sizes="180x180" />
+        <link rel="icon" href="/images/company/favicon.png" type="image/png" />
+        <link rel="icon" href="/images/company/favicons/favicon-32x32.png" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/images/company/favicons/favicon-16x16.png" sizes="16x16" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/company/favicons/apple-touch-icon.png" sizes="180x180" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="theme-color" content="#10B981" />

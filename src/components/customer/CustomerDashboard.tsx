@@ -41,6 +41,7 @@ interface DashboardStats {
     duration: number
     messageLimit: number | null
     messagesUsed: number
+    messageBalance: number
     remainingMessages: number | null
     startDate: string
     expiryDate: string
@@ -256,9 +257,16 @@ export default function CustomerDashboard() {
                   }} />
                 </div>
                 <Group justify="space-between" mt="xs">
-                  <Text size="xs" c="dimmed">
-                    {stats.activePackage.remainingMessages?.toLocaleString() || 0} messages remaining
-                  </Text>
+                  <div>
+                    <Text size="xs" fw={500}>
+                      {stats.activePackage.remainingMessages?.toLocaleString() || 0} messages remaining
+                    </Text>
+                    {stats.activePackage.messageBalance > 0 && (
+                      <Text size="xs" c="orange.7">
+                        + {stats.activePackage.messageBalance.toLocaleString()} from vouchers
+                      </Text>
+                    )}
+                  </div>
                   <Text size="xs" c="dimmed">
                     {stats.activePackage.usagePercentage || 0}% used
                   </Text>

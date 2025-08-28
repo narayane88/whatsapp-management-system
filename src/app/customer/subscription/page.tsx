@@ -85,6 +85,8 @@ interface CurrentSubscription {
   isActive: boolean
   messagesUsed: number
   messageLimit: number
+  messageBalance: number
+  totalAvailableMessages: number
   contactsUsed: number
   contactLimit: number
   apiKeysUsed: number
@@ -619,13 +621,25 @@ export default function SubscriptionPage() {
               <Group justify="space-between">
                 <div>
                   <Text fw={600}>{data.currentSubscription.packageName}</Text>
-                  <Text size="sm" c="dimmed">
-                    {data.currentSubscription.daysRemaining} days remaining • 
-                    {data.currentSubscription.messagesUsed}/{data.currentSubscription.messageLimit} messages • 
-                    {data.currentSubscription.contactsUsed}/{data.currentSubscription.contactLimit === 0 ? '∞' : data.currentSubscription.contactLimit} contacts • 
-                    {data.currentSubscription.apiKeysUsed}/{data.currentSubscription.apiKeyLimit === 0 ? '∞' : data.currentSubscription.apiKeyLimit} API keys • 
-                    {data.currentSubscription.devicesUsed}/{data.currentSubscription.instanceLimit === 0 ? '∞' : data.currentSubscription.instanceLimit} devices
-                  </Text>
+                  <Stack gap="xs">
+                    <Text size="sm" c="dimmed">
+                      {data.currentSubscription.daysRemaining} days remaining • 
+                      {data.currentSubscription.messagesUsed}/{data.currentSubscription.messageLimit} messages • 
+                      {data.currentSubscription.contactsUsed}/{data.currentSubscription.contactLimit === 0 ? '∞' : data.currentSubscription.contactLimit} contacts • 
+                      {data.currentSubscription.apiKeysUsed}/{data.currentSubscription.apiKeyLimit === 0 ? '∞' : data.currentSubscription.apiKeyLimit} API keys • 
+                      {data.currentSubscription.devicesUsed}/{data.currentSubscription.instanceLimit === 0 ? '∞' : data.currentSubscription.instanceLimit} devices
+                    </Text>
+                    {data.currentSubscription.messageBalance > 0 && (
+                      <Text size="xs" c="orange.7" fw={500}>
+                        + {data.currentSubscription.messageBalance.toLocaleString()} bonus messages from vouchers
+                      </Text>
+                    )}
+                    {data.currentSubscription.totalAvailableMessages && (
+                      <Text size="xs" c="green.7" fw={600}>
+                        Total available: {data.currentSubscription.totalAvailableMessages.toLocaleString()} messages
+                      </Text>
+                    )}
+                  </Stack>
                 </div>
                 <Button 
                   variant="light" 
@@ -659,6 +673,16 @@ export default function SubscriptionPage() {
                            (data.currentSubscription.messagesUsed / data.currentSubscription.messageLimit) > 0.6 ? 'yellow' : 'green'}
                     size="sm"
                   />
+                  {data.currentSubscription.messageBalance > 0 && (
+                    <Text size="xs" c="orange.7" mt="xs">
+                      + {data.currentSubscription.messageBalance.toLocaleString()} from vouchers
+                    </Text>
+                  )}
+                  {data.currentSubscription.totalAvailableMessages && (
+                    <Text size="xs" c="green.7" fw={600} mt="xs">
+                      Total: {data.currentSubscription.totalAvailableMessages.toLocaleString()} available
+                    </Text>
+                  )}
                 </div>
 
                 {/* Contacts Usage */}

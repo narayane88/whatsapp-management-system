@@ -337,7 +337,7 @@ export const componentTypography = {
     error: {
       fontSize: typographyScale.sizes.sm,
       fontWeight: typographyScale.weights.normal,
-      color: designSystem.colors.error[600]
+      color: designSystem.colors.status.error
     },
     help: {
       fontSize: typographyScale.sizes.sm,

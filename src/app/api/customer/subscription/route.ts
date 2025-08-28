@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       ORDER BY price ASC
     `)
 
-    // Get user's current active subscription
+    // Get user's current active subscription including message balance
     const currentSubscriptionResult = await pool.query(`
       SELECT 
         cp.id,
@@ -77,6 +77,7 @@ export async function GET(request: NextRequest) {
         p.price,
         p."messageLimit",
         p."instanceLimit",
+        u.message_balance,
         CASE 
           WHEN cp.status = 'SCHEDULED' THEN 'SCHEDULED'
           WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
@@ -86,6 +87,7 @@ export async function GET(request: NextRequest) {
         END as status
       FROM customer_packages cp
       JOIN packages p ON cp."packageId" = p.id
+      JOIN users u ON cp."userId" = u.id::text
       WHERE cp."userId" = $1::text 
         AND (
           (cp."isActive" = true AND cp."endDate" > CURRENT_TIMESTAMP) OR
@@ -199,6 +201,11 @@ export async function GET(request: NextRequest) {
       isActive: currentSubscriptionResult.rows[0].isActive,
       messagesUsed: currentSubscriptionResult.rows[0].messagesUsed,
       messageLimit: currentSubscriptionResult.rows[0].messageLimit,
+      messageBalance: parseInt(currentSubscriptionResult.rows[0].message_balance || '0'),
+      totalAvailableMessages: currentSubscriptionResult.rows[0].messageLimit ? 
+        Math.max(0, currentSubscriptionResult.rows[0].messageLimit - currentSubscriptionResult.rows[0].messagesUsed) + 
+        parseInt(currentSubscriptionResult.rows[0].message_balance || '0') : 
+        parseInt(currentSubscriptionResult.rows[0].message_balance || '0'),
       contactsUsed: contactsUsed,
       contactLimit: contactLimit,
       apiKeysUsed: apiKeysUsed,

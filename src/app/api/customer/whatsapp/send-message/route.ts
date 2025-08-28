@@ -81,9 +81,9 @@ export async function POST(request: NextRequest) {
       console.log(`🎭 Admin user sending message for customer ID: ${userId}`)
     }
 
-    // Check subscription limits before allowing message sending
+    // Check subscription limits and voucher balance before allowing message sending
     try {
-      // Get user's current subscription and message limits
+      // Get user's current subscription, message limits, and voucher balance
       const subscriptionResult = await pool.query(`
         SELECT 
           cp.id,
@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
           cp."packageId",
           cp."messagesUsed",
           p."messageLimit",
+          u.message_balance,
           CASE 
             WHEN cp."endDate" <= NOW() THEN 'EXPIRED'
             WHEN cp."isActive" = true AND cp."endDate" > NOW() THEN 'ACTIVE'
@@ -99,6 +100,7 @@ export async function POST(request: NextRequest) {
           END as status
         FROM customer_packages cp
         JOIN packages p ON cp."packageId" = p.id
+        JOIN users u ON cp."userId" = u.id::text
         WHERE cp."userId" = $1::text 
           AND cp."isActive" = true 
           AND cp."endDate" > CURRENT_TIMESTAMP
@@ -106,41 +108,56 @@ export async function POST(request: NextRequest) {
         LIMIT 1
       `, [userId])
 
+      // If no active subscription, check if user has voucher messages
       if (subscriptionResult.rows.length === 0) {
-        return NextResponse.json({ 
-          error: 'No active subscription found',
-          message: 'Please purchase a subscription plan to send messages.',
-          code: 'NO_SUBSCRIPTION'
-        }, { status: 402 })
+        const userResult = await pool.query(`
+          SELECT message_balance FROM users WHERE id = $1
+        `, [userId])
+        
+        if (userResult.rows.length === 0 || (userResult.rows[0].message_balance || 0) === 0) {
+          return NextResponse.json({ 
+            error: 'No active subscription found',
+            message: 'Please purchase a subscription plan or redeem message vouchers to send messages.',
+            code: 'NO_SUBSCRIPTION'
+          }, { status: 402 })
+        }
+
+        // User has voucher messages but no subscription
+        console.log(`✅ Message check passed: User has ${userResult.rows[0].message_balance} voucher messages`)
+      } else {
+        const subscription = subscriptionResult.rows[0]
+        
+        if (subscription.status !== 'ACTIVE') {
+          return NextResponse.json({ 
+            error: 'Subscription expired',
+            message: 'Your subscription has expired. Please renew your plan to continue sending messages.',
+            code: 'SUBSCRIPTION_EXPIRED'
+          }, { status: 402 })
+        }
+
+        const messagesUsed = subscription.messagesUsed || 0
+        const messageLimit = subscription.messageLimit
+        const voucherBalance = subscription.message_balance || 0
+        const subscriptionRemaining = Math.max(0, messageLimit - messagesUsed)
+        const totalAvailable = subscriptionRemaining + voucherBalance
+
+        if (totalAvailable <= 0) {
+          return NextResponse.json({ 
+            error: 'Message limit reached',
+            message: `You have reached the maximum limit. Please upgrade your subscription or redeem vouchers to send more messages.`,
+            code: 'MESSAGE_LIMIT_EXCEEDED',
+            details: {
+              messagesUsed,
+              messageLimit,
+              voucherBalance,
+              totalAvailable,
+              subscriptionPlan: subscription.packageId
+            }
+          }, { status: 402 })
+        }
+
+        console.log(`✅ Message subscription check passed: ${totalAvailable} total messages available (${subscriptionRemaining} from subscription + ${voucherBalance} from vouchers)`)
       }
-
-      const subscription = subscriptionResult.rows[0]
-      
-      if (subscription.status !== 'ACTIVE') {
-        return NextResponse.json({ 
-          error: 'Subscription expired',
-          message: 'Your subscription has expired. Please renew your plan to continue sending messages.',
-          code: 'SUBSCRIPTION_EXPIRED'
-        }, { status: 402 })
-      }
-
-      const messagesUsed = subscription.messagesUsed || 0
-      const messageLimit = subscription.messageLimit
-
-      if (messageLimit > 0 && messagesUsed >= messageLimit) {
-        return NextResponse.json({ 
-          error: 'Message limit reached',
-          message: `You have reached the maximum limit of ${messageLimit} messages for your current plan. Please upgrade your subscription to send more messages.`,
-          code: 'MESSAGE_LIMIT_EXCEEDED',
-          details: {
-            messagesUsed,
-            messageLimit,
-            subscriptionPlan: subscription.packageId
-          }
-        }, { status: 402 })
-      }
-
-      console.log(`✅ Message subscription check passed: ${messagesUsed}/${messageLimit} messages used`)
       
     } catch (subscriptionError) {
       console.error('Error checking message subscription limits:', subscriptionError)
@@ -194,17 +211,47 @@ export async function POST(request: NextRequest) {
       }, { status: response.status })
     }
 
-    // Update subscription message count for direct sends
+    // Update message count - deduct from voucher messages first, then from subscription
     try {
-      await pool.query(`
-        UPDATE customer_packages 
-        SET "messagesUsed" = "messagesUsed" + 1,
-            "updatedAt" = CURRENT_TIMESTAMP
-        WHERE "userId" = $1::text AND "isActive" = true AND "endDate" > NOW()
-      `, [userId])
-      console.log(`Updated message count for direct send by user: ${userId}`)
+      const client = await pool.connect()
+      try {
+        await client.query('BEGIN')
+
+        // Check current voucher balance
+        const voucherResult = await client.query(`
+          SELECT message_balance FROM users WHERE id = $1
+        `, [userId])
+        
+        const voucherBalance = voucherResult.rows[0]?.message_balance || 0
+        
+        if (voucherBalance > 0) {
+          // Deduct from voucher messages first
+          await client.query(`
+            UPDATE users 
+            SET message_balance = message_balance - 1
+            WHERE id = $1
+          `, [userId])
+          console.log(`Deducted 1 message from voucher balance for user: ${userId}`)
+        } else {
+          // Deduct from subscription messages
+          await client.query(`
+            UPDATE customer_packages 
+            SET "messagesUsed" = "messagesUsed" + 1,
+                "updatedAt" = CURRENT_TIMESTAMP
+            WHERE "userId" = $1::text AND "isActive" = true AND "endDate" > NOW()
+          `, [userId])
+          console.log(`Deducted 1 message from subscription for user: ${userId}`)
+        }
+
+        await client.query('COMMIT')
+      } catch (error) {
+        await client.query('ROLLBACK')
+        throw error
+      } finally {
+        client.release()
+      }
     } catch (subscriptionError) {
-      console.warn('Failed to update subscription message count:', subscriptionError)
+      console.warn('Failed to update message count:', subscriptionError)
     }
 
     // Store message in database for tracking

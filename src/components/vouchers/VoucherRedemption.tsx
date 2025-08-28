@@ -48,9 +48,16 @@ interface RedemptionHistory {
 
 interface VoucherBenefit {
   description: string
-  creditAmount: number
-  messageAmount: number
-  discountPercent: number
+  creditAmount?: number
+  messageAmount?: number
+  discountPercent?: number
+  type?: string
+  packageId?: number
+  packageName?: string
+  duration?: number
+  messageLimit?: number
+  price?: number
+  subscriptionId?: string
 }
 
 interface RedemptionResult {
@@ -65,6 +72,7 @@ interface RedemptionResult {
     userId: string
     userEmail: string
   }
+  warnings?: string[]
 }
 
 export default function VoucherRedemption() {
@@ -346,6 +354,34 @@ export default function VoucherRedemption() {
                   </Group>
                 )}
 
+                {lastRedemption.benefit.type === 'package' && lastRedemption.benefit.packageName && (
+                  <>
+                    <Divider />
+                    <Group justify="space-between">
+                      <Text fw={600}>Package Activated:</Text>
+                      <Text c="green.6" fw={600}>{lastRedemption.benefit.packageName}</Text>
+                    </Group>
+                    {lastRedemption.benefit.duration && (
+                      <Group justify="space-between">
+                        <Text fw={600}>Duration:</Text>
+                        <Text>{lastRedemption.benefit.duration} days</Text>
+                      </Group>
+                    )}
+                    {lastRedemption.benefit.messageLimit && (
+                      <Group justify="space-between">
+                        <Text fw={600}>Message Limit:</Text>
+                        <Text>{lastRedemption.benefit.messageLimit.toLocaleString()} messages</Text>
+                      </Group>
+                    )}
+                    {lastRedemption.benefit.price && (
+                      <Group justify="space-between">
+                        <Text fw={600}>Package Value:</Text>
+                        <Text c="green.6" fw={600}>₹{lastRedemption.benefit.price}</Text>
+                      </Group>
+                    )}
+                  </>
+                )}
+
                 <Group justify="space-between">
                   <Text fw={600}>Redeemed At:</Text>
                   <Text size="sm" c="dimmed">
@@ -354,6 +390,16 @@ export default function VoucherRedemption() {
                 </Group>
               </Stack>
             </Card>
+
+            {lastRedemption.warnings && lastRedemption.warnings.length > 0 && (
+              <Alert icon={<FiInfo size={16} />} color="orange" variant="light">
+                <Stack gap="xs">
+                  {lastRedemption.warnings.map((warning, index) => (
+                    <Text key={index} size="sm">{warning}</Text>
+                  ))}
+                </Stack>
+              </Alert>
+            )}
 
             <Button fullWidth onClick={closeSuccess}>
               Continue

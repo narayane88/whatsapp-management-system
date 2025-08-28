@@ -95,7 +95,7 @@ export async function checkPagePermission(request: NextRequest): Promise<NextRes
       logSecurityEvent(token.email as string, 'unauthorized_page_access', {
         path: pathname,
         requiredPermissions,
-        ip: request.ip || request.headers.get('x-forwarded-for'),
+        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent')
       }).catch(err => console.error('Logging failed:', err))
 

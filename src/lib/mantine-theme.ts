@@ -116,7 +116,7 @@ export const lightTheme = createTheme({
           },
         },
       },
-      variants: {
+      // variants: {
         primary: (theme) => ({
           root: {
             backgroundColor: theme.colors.brand[6],
@@ -391,7 +391,7 @@ export const darkTheme = createTheme({
           },
         },
       },
-      variants: {
+      // variants: {
         primary: (theme) => ({
           root: {
             backgroundColor: theme.colors.brand[5],

@@ -72,10 +72,21 @@ interface VoucherStats {
   creditValueUsed: number
 }
 
+interface Package {
+  id: number
+  name: string
+  description: string
+  price: number
+  duration: number
+  messageLimit: number
+  isActive: boolean
+}
+
 export default function VouchersPage() {
   const { data: session } = useSession()
   const { hasPermission } = useDynamicPermissions()
   const [vouchers, setVouchers] = useState<Voucher[]>([])
+  const [packages, setPackages] = useState<Package[]>([])
   const [stats, setStats] = useState<VoucherStats>({
     totalVouchers: 0,
     activeVouchers: 0,
@@ -83,6 +94,7 @@ export default function VouchersPage() {
     creditValueUsed: 0
   })
   const [loading, setLoading] = useState(false)
+  const [packagesLoading, setPackagesLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [filterType, setFilterType] = useState('')
@@ -96,13 +108,21 @@ export default function VouchersPage() {
       description: '',
       type: '',
       value: 0,
+      packageId: '',
       usage_limit: '',
       expires_at: '',
     },
     validate: {
       code: (value) => (!value ? 'Voucher code is required' : null),
       type: (value) => (!value ? 'Voucher type is required' : null),
-      value: (value) => (value <= 0 ? 'Value must be greater than 0' : null),
+      value: (value, values) => {
+        if (values.type === 'package') return null // Skip validation for package type
+        return value <= 0 ? 'Value must be greater than 0' : null
+      },
+      packageId: (value, values) => {
+        if (values.type === 'package' && !value) return 'Package selection is required'
+        return null
+      },
     },
   })
 
@@ -110,8 +130,16 @@ export default function VouchersPage() {
   useEffect(() => {
     if (session?.user) {
       loadVouchers()
+      loadPackages()
     }
   }, [session, searchTerm, filterStatus, filterType])
+
+  // Load packages when create modal opens
+  useEffect(() => {
+    if (isCreateModalOpen && packages.length === 0) {
+      loadPackages()
+    }
+  }, [isCreateModalOpen])
 
   const loadVouchers = async () => {
     try {
@@ -151,6 +179,32 @@ export default function VouchersPage() {
     }
   }
 
+  const loadPackages = async () => {
+    try {
+      setPackagesLoading(true)
+      const response = await fetch('/api/packages?is_active=true')
+      const data = await response.json()
+
+      if (response.ok) {
+        setPackages(data.packages || [])
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: data.error || 'Failed to load packages',
+          color: 'red'
+        })
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to load packages',
+        color: 'red'
+      })
+    } finally {
+      setPackagesLoading(false)
+    }
+  }
+
   const handleCreateVoucher = async (values: typeof form.values) => {
     try {
       const response = await fetch('/api/vouchers', {
@@ -160,6 +214,7 @@ export default function VouchersPage() {
         },
         body: JSON.stringify({
           ...values,
+          packageId: values.packageId || null,
           usage_limit: values.usage_limit ? parseInt(values.usage_limit) : null,
           expires_at: values.expires_at || null
         })
@@ -761,14 +816,29 @@ export default function VouchersPage() {
                   ]}
                   {...form.getInputProps('type')}
                 />
-                <NumberInput
-                  label="Value"
-                  placeholder="Enter value"
-                  required
-                  min={0}
-                  decimalScale={2}
-                  {...form.getInputProps('value')}
-                />
+                {form.values.type === 'package' ? (
+                  <Select
+                    label="Package"
+                    placeholder="Select package"
+                    required
+                    disabled={packagesLoading}
+                    data={packages.map(pkg => ({
+                      value: pkg.id.toString(),
+                      label: `${pkg.name} - ₹${pkg.price} (${pkg.duration} days, ${pkg.messageLimit.toLocaleString()} messages)`
+                    }))}
+                    {...form.getInputProps('packageId')}
+                    rightSection={packagesLoading ? <Loader size="xs" /> : null}
+                  />
+                ) : (
+                  <NumberInput
+                    label="Value"
+                    placeholder="Enter value"
+                    required
+                    min={0}
+                    decimalScale={2}
+                    {...form.getInputProps('value')}
+                  />
+                )}
               </SimpleGrid>
 
               <SimpleGrid cols={2} spacing="md">

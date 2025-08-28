@@ -139,7 +139,7 @@ export async function GET(request: NextRequest) {
         WHERE "userId" = $1
       `, [userId]),
       
-      // Active package with full details
+      // Active package with full details including user message balance
       pool.query(`
         SELECT 
           p.name, 
@@ -150,9 +150,11 @@ export async function GET(request: NextRequest) {
           cp."isActive",
           cp."messagesUsed",
           cp."createdAt" as "startDate",
-          EXTRACT(DAYS FROM (cp."endDate" - NOW())) as days_remaining
+          EXTRACT(DAYS FROM (cp."endDate" - NOW())) as days_remaining,
+          u.message_balance
         FROM customer_packages cp
         JOIN packages p ON cp."packageId" = p.id
+        JOIN users u ON cp."userId" = u.id::text
         WHERE cp."userId" = $1::text AND cp."isActive" = true
         ORDER BY cp."createdAt" DESC
         LIMIT 1
@@ -210,8 +212,9 @@ export async function GET(request: NextRequest) {
         duration: packageData.duration,
         messageLimit: packageData.messageLimit,
         messagesUsed: parseInt(packageData.messagesUsed || '0'),
+        messageBalance: parseInt(packageData.message_balance || '0'),
         remainingMessages: packageData.messageLimit ? 
-          Math.max(0, packageData.messageLimit - parseInt(packageData.messagesUsed || '0')) : null,
+          Math.max(0, packageData.messageLimit - parseInt(packageData.messagesUsed || '0')) + parseInt(packageData.message_balance || '0') : null,
         startDate: packageData.startDate,
         expiryDate: packageData.endDate,
         daysRemaining: daysRemaining,

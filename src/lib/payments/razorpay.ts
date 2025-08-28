@@ -59,7 +59,10 @@ class RazorpayService {
         notes: orderData.notes || {}
       })
 
-      return order
+      return {
+        ...order,
+        amount: Number(order.amount)
+      }
     } catch (error: any) {
       console.error('Error creating Razorpay order:', error)
       

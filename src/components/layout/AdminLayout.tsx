@@ -685,6 +685,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       <AppShell.Main>
         {children}
+        
+        {/* Footer */}
+        <div style={{ 
+          marginTop: 'auto',
+          padding: '16px 0',
+          borderTop: '1px solid var(--mantine-color-gray-2)',
+          textAlign: 'center'
+        }}>
+          <Text size="xs" c="dimmed">
+            Powered by bizflash.in
+          </Text>
+        </div>
       </AppShell.Main>
     </AppShell>
   )

@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
       body = await request.json()
     }
     
-    const { to, message, deviceName, instanceId, priority = 0, scheduledAt, mediaUrl, messageType } = body
+    const { to, message, deviceName, instanceId, priority = 0, scheduledAt, mediaUrl, filename, messageType } = body
     
     // Use deviceName if provided, fallback to instanceId for backwards compatibility
     const actualInstanceId = deviceName || instanceId
@@ -281,6 +281,7 @@ export async function POST(request: NextRequest) {
         messageId: messageId,
         mediaUrl: mediaUrl || null,
         attachmentUrl: mediaUrl || null,
+        filename: filename || null,
         messageType: finalMessageType
       })
     ])

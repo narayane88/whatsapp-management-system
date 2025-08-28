@@ -673,6 +673,62 @@ export default function BulkMessagePage() {
                   Refresh
                 </Button>
               </Group>
+              
+              {((subscriptionStatus as any).subscription || (subscriptionStatus as any).voucher) && (
+                <Grid>
+                  {(subscriptionStatus as any).subscription && (
+                    <>
+                      <Grid.Col span={4}>
+                        <Text size="xs" c="dimmed">Subscription Used</Text>
+                        <Text fw={500}>
+                          {(subscriptionStatus as any).subscription.messagesUsed || 0} / {(subscriptionStatus as any).subscription.messageLimit || 0}
+                        </Text>
+                        <Text size="xs" c="dimmed">
+                          ({(subscriptionStatus as any).subscription.remainingMessages || 0} left)
+                        </Text>
+                      </Grid.Col>
+                      <Grid.Col span={4}>
+                        <Text size="xs" c="dimmed">Days Remaining</Text>
+                        <Text fw={500}>
+                          {(subscriptionStatus as any).subscription.daysRemaining || 0} days
+                        </Text>
+                      </Grid.Col>
+                    </>
+                  )}
+                  {(subscriptionStatus as any).voucher && (
+                    <Grid.Col span={4}>
+                      <Text size="xs" c="dimmed">Voucher Messages</Text>
+                      <Text fw={500} c="orange">
+                        {(subscriptionStatus as any).voucher.messagesUsed || 0} used / {(subscriptionStatus as any).voucher.totalRedeemed || 0} redeemed
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        ({(subscriptionStatus as any).voucher.messageBalance || 0} left)
+                      </Text>
+                    </Grid.Col>
+                  )}
+                </Grid>
+              )}
+              
+              {(subscriptionStatus as any).voucher && (
+                <Alert 
+                  color="orange" 
+                  variant="light" 
+                  mt="sm"
+                  style={{ fontSize: '14px' }}
+                >
+                  <Text size="sm" fw={600}>
+                    Total Available: {(subscriptionStatus as any).voucher.totalAvailable || 0} messages
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    Consumption order: {(subscriptionStatus as any).voucher.messageBalance || 0} voucher messages first, then {(subscriptionStatus as any).subscription?.remainingMessages || 0} subscription messages
+                  </Text>
+                  {((subscriptionStatus as any).voucher.messagesUsed || 0) > 0 && (
+                    <Text size="xs" c="orange.6" mt="xs">
+                      ✓ You've already used {(subscriptionStatus as any).voucher.messagesUsed} voucher messages
+                    </Text>
+                  )}
+                </Alert>
+              )}
             </Card>
           )}
           

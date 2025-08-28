@@ -295,6 +295,23 @@ export default function SignInPage() {
         </Flex>
       </Container>
       
+      {/* Footer */}
+      <Box 
+        style={{ 
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: '16px 0',
+          textAlign: 'center',
+          zIndex: 1
+        }}
+      >
+        <Text size="xs" c="rgba(255, 255, 255, 0.8)">
+          Powered by bizflash.in
+        </Text>
+      </Box>
+      
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }

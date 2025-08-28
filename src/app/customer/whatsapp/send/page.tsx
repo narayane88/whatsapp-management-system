@@ -680,24 +680,60 @@ export default function SendMessagePage() {
                 </Button>
               </Group>
               
-              {subscriptionStatus.subscription && (
+              {(subscriptionStatus.subscription || subscriptionStatus.voucher) && (
                 <Grid>
-                  <Grid.Col span={6}>
-                    <Text size="xs" c="dimmed">Messages Used</Text>
-                    <Text fw={500}>
-                      {subscriptionStatus.subscription.messagesUsed || 0}
-                      {subscriptionStatus.subscription.messageLimit && 
-                        ` / ${subscriptionStatus.subscription.messageLimit}`
-                      }
-                    </Text>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Text size="xs" c="dimmed">Days Remaining</Text>
-                    <Text fw={500}>
-                      {subscriptionStatus.subscription.daysRemaining || 0} days
-                    </Text>
-                  </Grid.Col>
+                  {subscriptionStatus.subscription && (
+                    <>
+                      <Grid.Col span={4}>
+                        <Text size="xs" c="dimmed">Subscription Used</Text>
+                        <Text fw={500}>
+                          {subscriptionStatus.subscription.messagesUsed || 0} / {subscriptionStatus.subscription.messageLimit || 0}
+                        </Text>
+                        <Text size="xs" c="dimmed">
+                          ({subscriptionStatus.subscription.remainingMessages || 0} left)
+                        </Text>
+                      </Grid.Col>
+                      <Grid.Col span={4}>
+                        <Text size="xs" c="dimmed">Days Remaining</Text>
+                        <Text fw={500}>
+                          {subscriptionStatus.subscription.daysRemaining || 0} days
+                        </Text>
+                      </Grid.Col>
+                    </>
+                  )}
+                  {subscriptionStatus.voucher && (
+                    <Grid.Col span={4}>
+                      <Text size="xs" c="dimmed">Voucher Messages</Text>
+                      <Text fw={500} c="orange">
+                        {subscriptionStatus.voucher.messagesUsed || 0} used / {subscriptionStatus.voucher.totalRedeemed || 0} redeemed
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        ({subscriptionStatus.voucher.messageBalance || 0} left)
+                      </Text>
+                    </Grid.Col>
+                  )}
                 </Grid>
+              )}
+              
+              {subscriptionStatus.voucher && (
+                <Alert 
+                  color="orange" 
+                  variant="light" 
+                  mt="sm"
+                  style={{ fontSize: '14px' }}
+                >
+                  <Text size="sm" fw={600}>
+                    Total Available: {subscriptionStatus.voucher.totalAvailable || 0} messages
+                  </Text>
+                  <Text size="xs" c="dimmed">
+                    Consumption order: {subscriptionStatus.voucher.messageBalance || 0} voucher messages first, then {subscriptionStatus.subscription?.remainingMessages || 0} subscription messages
+                  </Text>
+                  {(subscriptionStatus.voucher.messagesUsed || 0) > 0 && (
+                    <Text size="xs" c="orange.6" mt="xs">
+                      ✓ You've already used {subscriptionStatus.voucher.messagesUsed} voucher messages
+                    </Text>
+                  )}
+                </Alert>
               )}
             </Card>
           )}
