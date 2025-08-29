@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1756382936684_eh1jo2soo",
+  "packageId": "basic_plan_001",
+  "customerId": "8",
+  "customerEmail": "nagesh_shree@hotmail.com",
+  "customerName": "Nagesh Swami",
+  "customerPhone": "+1234567890",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-28T12:07:29.532Z",
+  "status": "pending"
+}

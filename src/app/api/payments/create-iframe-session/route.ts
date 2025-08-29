@@ -145,30 +145,65 @@ export async function POST(request: NextRequest) {
       ? packageData.offer_price 
       : packageData.price
 
-    // Get real user ID from session
+    // Determine if this is an admin creating payment for another customer
+    let isAdminPayment = false
+    let adminUserId = null
     let realUserId = customerId
     let realUserEmail = customerEmail  
     let realUserName = 'Customer'
     
     if (session?.user?.email) {
       try {
-        const userResult = await pool.query(
+        // Get session user details
+        const sessionUserResult = await pool.query(
           'SELECT id, name, email FROM users WHERE email = $1',
           [session.user.email]
         )
-        if (userResult.rows.length > 0) {
-          const user = userResult.rows[0]
-          realUserId = user.id.toString()
-          realUserEmail = user.email
-          realUserName = user.name
-          console.log('🔍 Using real user data:', { 
-            userId: realUserId, 
-            email: realUserEmail, 
-            name: realUserName 
-          })
+        
+        if (sessionUserResult.rows.length > 0) {
+          const sessionUser = sessionUserResult.rows[0]
+          adminUserId = sessionUser.id.toString()
+          
+          // Check if session user is different from requested customer
+          if (customerId && customerId !== sessionUser.id.toString()) {
+            // This is an admin creating payment for another customer
+            isAdminPayment = true
+            
+            // Verify the target customer exists and get their details
+            const customerResult = await pool.query(
+              'SELECT id, name, email FROM users WHERE id = $1',
+              [parseInt(customerId)]
+            )
+            
+            if (customerResult.rows.length > 0) {
+              const customer = customerResult.rows[0]
+              realUserId = customer.id.toString()
+              realUserEmail = customer.email
+              realUserName = customer.name
+              
+              console.log('🔧 Admin payment detected:', {
+                admin: { id: adminUserId, name: sessionUser.name, email: sessionUser.email },
+                customer: { id: realUserId, name: realUserName, email: realUserEmail }
+              })
+            } else {
+              return NextResponse.json({ error: 'Target customer not found' }, { status: 404 })
+            }
+          } else {
+            // Normal customer payment (session user = customer)
+            realUserId = sessionUser.id.toString()
+            realUserEmail = sessionUser.email
+            realUserName = sessionUser.name
+            
+            console.log('👤 Customer self-payment:', { 
+              userId: realUserId, 
+              email: realUserEmail, 
+              name: realUserName 
+            })
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error)
+        return NextResponse.json({ error: 'Failed to validate user context' }, { status: 500 })
       }
     }
 
@@ -183,7 +218,9 @@ export async function POST(request: NextRequest) {
       amount: finalAmount,
       currency: packageData.currency,
       createdAt: new Date().toISOString(),
-      status: 'pending'
+      status: 'pending',
+      isAdminPayment,
+      adminUserId: isAdminPayment ? adminUserId : null
     }
 
     // Save session to temporary storage (in production, use database)
@@ -252,7 +289,9 @@ export async function POST(request: NextRequest) {
         originalPrice: packageData.price,
         finalAmount: finalAmount,
         offerApplied: packageData.offer_enabled,
-        paymentMethod: 'iframe'
+        paymentMethod: 'iframe',
+        isAdminPayment: isAdminPayment,
+        adminUserId: isAdminPayment ? adminUserId : null
       }
     }
 
@@ -275,7 +314,9 @@ export async function POST(request: NextRequest) {
       orderId: razorpayOrder.id,
       amount: finalAmount,
       currency: packageData.currency,
-      customerId: customerId
+      customerId: realUserId,
+      customerName: realUserName,
+      isAdminPayment: isAdminPayment
     })
 
     return NextResponse.json({

@@ -1,0 +1,12 @@
+{
+  "sessionId": "session_1756398634165_141aj33y4",
+  "packageId": "basic_plan_001",
+  "customerId": "1",
+  "customerEmail": "narayane88@gmail.com",
+  "customerName": "Nitin Narayane",
+  "customerPhone": "+919960589622",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-28T16:30:36.656Z",
+  "status": "pending"
+}

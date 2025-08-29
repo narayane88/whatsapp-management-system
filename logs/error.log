@@ -413,3 +413,257 @@
     at async k (.next/server/app/api/admin/email/templates/route.js:11:5366)
     at async g (.next/server/app/api/admin/email/templates/route.js:11:6369)
     at async x (.next/server/app/api/admin/email/templates/route.js:11:7491)
+2025-08-28 15:22:16 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 15:23:24 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 15:23:50 +05:30: Error processing message 2647cd15-1742-44b6-9784-78d5252d137e: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '127.0.0.1',
+      localPort: 36790,
+      remoteAddress: '127.0.0.1',
+      remotePort: 3110,
+      remoteFamily: 'IPv4',
+      timeout: undefined,
+      bytesWritten: 725,
+      bytesRead: 1260
+    }
+  }
+}
+2025-08-28 15:25:22 +05:30: Error processing message 6232aaa1-50cd-47a5-870d-cd40adfa1d5d: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '127.0.0.1',
+      localPort: 43412,
+      remoteAddress: '127.0.0.1',
+      remotePort: 3110,
+      remoteFamily: 'IPv4',
+      timeout: undefined,
+      bytesWritten: 1124,
+      bytesRead: 1257
+    }
+  }
+}
+2025-08-28 15:26:07 +05:30: Error processing message 0fcb7d57-38ac-4d1c-8b79-bef409e677a5: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '127.0.0.1',
+      localPort: 35800,
+      remoteAddress: '127.0.0.1',
+      remotePort: 3110,
+      remoteFamily: 'IPv4',
+      timeout: undefined,
+      bytesWritten: 718,
+      bytesRead: 1257
+    }
+  }
+}
+2025-08-28 15:26:28 +05:30: Error processing message a9db51af-d182-41aa-be04-2b15ea4a9738: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '127.0.0.1',
+      localPort: 51852,
+      remoteAddress: '127.0.0.1',
+      remotePort: 3110,
+      remoteFamily: 'IPv4',
+      timeout: undefined,
+      bytesWritten: 713,
+      bytesRead: 1257
+    }
+  }
+}
+2025-08-28 15:37:28 +05:30: Error processing message 5b7db95e-37c9-4f3e-a9fd-562339221ee3: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: [Error [SocketError]: other side closed] {
+    code: 'UND_ERR_SOCKET',
+    socket: {
+      localAddress: '127.0.0.1',
+      localPort: 48510,
+      remoteAddress: '127.0.0.1',
+      remotePort: 3110,
+      remoteFamily: 'IPv4',
+      timeout: undefined,
+      bytesWritten: 529,
+      bytesRead: 0
+    }
+  }
+}
+2025-08-28 15:37:28 +05:30: Error processing message 4abf517d-ac77-4bcb-8059-1d1e8895cb6e: TypeError: fetch failed
+    at async y (.next/server/app/api/customer/whatsapp/queue/route.js:98:2268)
+    at async w (.next/server/app/api/customer/whatsapp/queue/route.js:63:156)
+    at async Timeout._onTimeout (.next/server/app/api/customer/whatsapp/queue/route.js:50:692) {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:3110
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:3110) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 3110
+  }
+}
+2025-08-28 17:38:23 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 17:38:23 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 17:47:01 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 17:47:01 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 18:05:14 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:06:51 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:09:34 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:10:12 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:13:12 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:16:11 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:17:43 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:18:56 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 18:20:46 +05:30: Send message API error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at async j (.next/server/app/api/v1/messages/send/route.js:7:671)
+    at async k (.next/server/app/api/v1/messages/send/route.js:43:3718)
+2025-08-28 20:30:11 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 20:30:11 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 20:31:56 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 20:31:56 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 21:52:24 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 21:52:24 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 22:14:16 +05:30: ❌ Error activating subscription: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-28 22:14:16 +05:30: Error verifying payment: Error: Package undefined not found or inactive
+    at s (.next/server/app/api/payments/verify/route.js:3:39)
+    at async t (.next/server/app/api/payments/verify/route.js:29:1636)
+    at async k (.next/server/app/api/payments/verify/route.js:39:5856)
+    at async g (.next/server/app/api/payments/verify/route.js:39:6859)
+    at async x (.next/server/app/api/payments/verify/route.js:39:7981)
+2025-08-29 08:45:09 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:09 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:10 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:10 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:11 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:12 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:12 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:13 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:13 +05:30:  ⨯ Failed to start server
+2025-08-29 08:45:14 +05:30:  ⨯ Failed to start server
+2025-08-29 08:47:29 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:29 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:30 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:31 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:32 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:33 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:34 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:35 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:36 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:47:37 +05:30: [TypeError: routesManifest.dataRoutes is not iterable]
+2025-08-29 08:55:21 +05:30: Failed to fetch data for server Wa-Server-1: TypeError: fetch failed
+    at async (.next/server/app/api/customer/host/servers/route.js:11:13166)
+    at async k (.next/server/app/api/customer/host/servers/route.js:11:14230)
+    at async k (.next/server/app/api/customer/host/servers/route.js:11:9480) {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:3110
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:3110) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 3110
+  }
+}
+2025-08-29 08:55:21 +05:30: Failed to get real-time status for 7_bizflashindevice202508231137_1755949014045: fetch failed
+2025-08-29 08:55:30 +05:30: Failed to get real-time status for 7_bizflashindevice202508231137_1755949014045: fetch failed

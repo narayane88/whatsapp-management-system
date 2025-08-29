@@ -1,0 +1,16 @@
+{
+  "sessionId": "bizcoins_1756438101980_326thtgix47",
+  "purchaseType": "BIZCOINS",
+  "userId": 6,
+  "userName": "Reshama Nitinkumar Narayane",
+  "userEmail": "reshma@gmail.com",
+  "userLevel": 3,
+  "baseAmount": 1000,
+  "commissionRate": "30.00",
+  "commissionBonus": 300,
+  "totalCoins": 1300,
+  "description": "Self purchase of BizCoins",
+  "currency": "INR",
+  "createdAt": "2025-08-29T03:28:22.935Z",
+  "status": "pending"
+}

@@ -280,8 +280,14 @@ export async function POST(request: NextRequest) {
       razorpay_signature,
       customerId,
       packageId,
+      customer_id,
+      package_id,
       bizcoinPayment
     } = body
+
+    // Handle both snake_case (from frontend) and camelCase (from other sources) parameter names
+    const finalCustomerId = customerId || customer_id
+    const finalPackageId = packageId || package_id
 
     // Validate required fields
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -340,18 +346,52 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
+    // Get order details from Razorpay to extract customer info from notes
+    let orderCustomerId = finalCustomerId
+    let orderPackageId = finalPackageId
+
+    try {
+      const orderResponse = await fetch(`https://api.razorpay.com/v1/orders/${razorpay_order_id}`, {
+        headers: {
+          'Authorization': `Basic ${Buffer.from(
+            `${razorpayMethod.config.keyId}:${razorpayMethod.config.keySecret}`
+          ).toString('base64')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (orderResponse.ok) {
+        const orderData = await orderResponse.json()
+        const notes = orderData.notes || {}
+        
+        // Use customer ID from order notes (more reliable for admin payments)
+        if (notes.customerId) {
+          orderCustomerId = notes.customerId
+          console.log('🎯 Using customerId from order notes:', orderCustomerId)
+        }
+        
+        // Use package ID from order notes (more reliable)
+        if (notes.packageId) {
+          orderPackageId = notes.packageId
+          console.log('📦 Using packageId from order notes:', orderPackageId)
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not fetch order details, using request data:', error)
+    }
+
     // Log successful payment
     await logPaymentSuccess({
       razorpay_payment_id,
       razorpay_order_id,
-      customer_id: customerId,
-      package_id: packageId,
+      customer_id: orderCustomerId,
+      package_id: orderPackageId,
       amount: paymentDetails.amount / 100, // Convert from paise
       currency: paymentDetails.currency
     })
 
     // Activate subscription
-    const subscription = await activateSubscription(customerId, packageId, {
+    const subscription = await activateSubscription(orderCustomerId, orderPackageId, {
       razorpay_payment_id,
       razorpay_order_id,
       amount: paymentDetails.amount / 100,

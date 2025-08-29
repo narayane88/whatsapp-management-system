@@ -1,0 +1,14 @@
+{
+  "sessionId": "session_1756400593053_jsffb7orm",
+  "packageId": "basic_plan_001",
+  "customerId": "3",
+  "customerEmail": "subdealer@demo.com",
+  "customerName": "Demo SubDealer",
+  "customerPhone": "+1234567892",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-28T17:03:14.191Z",
+  "status": "pending",
+  "isAdminPayment": true,
+  "adminUserId": "1"
+}

@@ -1,0 +1,14 @@
+{
+  "sessionId": "session_1756400413840_zry01j9rj",
+  "packageId": "basic_plan_001",
+  "customerId": "5",
+  "customerEmail": "customer@demo.com",
+  "customerName": "Demo Customer",
+  "customerPhone": "+919960589622",
+  "amount": 1000,
+  "currency": "INR",
+  "createdAt": "2025-08-28T17:00:15.763Z",
+  "status": "pending",
+  "isAdminPayment": true,
+  "adminUserId": "1"
+}
